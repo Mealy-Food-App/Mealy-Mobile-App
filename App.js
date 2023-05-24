@@ -1,20 +1,114 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import * as Font from 'expo-font';
+import { StyleSheet, Text, View} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack'
+import {useFonts,Poppins_400Regular,Poppins_500Medium,Poppins_700Bold} from '@expo-google-fonts/poppins'
+
+import SplashScreen from './src/screens/SplashScreen';
+import OnboardingScreen from './src/screens/OnboardingScreen';
+
+const Stack = createStackNavigator();
 
 export default function App() {
+  const [isAppReady, setIsAppReady] = React.useState(false);
+  const [userOnboarded, setUserOnboarded]= React.useState(false);
+  React.useEffect(() =>{
+    checkOnboardingStatus();
+  }, []);
+
+  const checkOnboardingStatus = async () => {
+    try {
+      const onboardingStatus = await AsyncStorage.getItem('onboardingStatus');
+      if (onboardingStatus !== null && onboardingStatus === 'completed') {
+        setUserOnboarded(true);
+      }
+    } catch (error) {
+      console.log(error);
+    } 
+  };
+
+  const updateOnboardingStatus = async () => {
+    try {
+      await AsyncStorage.setItem('onboardingStatus', 'completed');
+    } catch (error) {
+      // Handle the error if AsyncStorage access fails
+    }
+  };
+
+  const [fontsReady] = useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_700Bold,
+  });
+  
+  React.useEffect(() => {
+      setTimeout(() => {
+        setIsAppReady(true);
+      },6000);
+  }, [fontsReady]);
+ 
+
+  if (!isAppReady) {
+    // Render the custom loading screen
+    return(
+      <NavigationContainer>
+      <Stack.Navigator>
+      <Stack.Screen
+          name="Splash"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+    );
+  }
+  if (!userOnboarded){
+    return(
+      <OnboardingScreen/>
+    );
+  }
+
+
+  // Render the actual app content once the loading is complete
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View style={styles.appContainer}>
+      {/* Add your app components here */}
+      <Text>Your App Content</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor:'#e69f14'
   },
+  image: {
+    width: 240,
+    height: 240,
+    resizeMode: 'contain',
+  },
+  image2: {
+    width: 160,
+    height: 56,
+    resizeMode: 'contain',
+  },
+  text: {
+    fontSize: 56,
+    fontWeight: 'bold',
+    marginTop: 20,
+    color:'#00205C',
+    fontFamily:'Lobster-Regular',
+    fontWeight:'400'
+  },
+  appContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor:'white'
+  }
 });
