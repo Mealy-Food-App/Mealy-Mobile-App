@@ -8,6 +8,8 @@ import {useFonts,Poppins_400Regular,Poppins_500Medium,Poppins_700Bold} from '@ex
 
 import SplashScreen from './src/screens/SplashScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen';
+import StackScreens from './src/navigation/StackScreens';
+import WelcomeScreen from './src/screens/WelcomeScreen';
 
 const Stack = createStackNavigator();
 
@@ -42,7 +44,8 @@ export default function App() {
     Poppins_500Medium,
     Poppins_700Bold,
   });
-  
+
+
   React.useEffect(() => {
       setTimeout(() => {
         setIsAppReady(true);
@@ -54,11 +57,10 @@ export default function App() {
     // Render the custom loading screen
     return(
       <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen
           name="Splash"
           component={SplashScreen}
-          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -66,17 +68,27 @@ export default function App() {
   }
   if (!userOnboarded){
     return(
-      <OnboardingScreen/>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{headerShown:false}}>
+          <Stack.Screen
+            name = "OnboardingScreen"
+            component={OnboardingScreen}
+          />
+          <Stack.Screen
+            name = "WelcomeScreen"
+            component={WelcomeScreen}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     );
   }
 
 
   // Render the actual app content once the loading is complete
   return (
-    <View style={styles.appContainer}>
-      {/* Add your app components here */}
-      <Text>Your App Content</Text>
-    </View>
+    <NavigationContainer>
+      <StackScreens/>
+    </NavigationContainer>
   );
 };
 

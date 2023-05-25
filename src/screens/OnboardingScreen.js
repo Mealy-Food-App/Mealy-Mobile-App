@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet, Dimensions, View, StatusBar, FlatList,Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import OnboardingSlide from '../components/OnboardingSlide';
 
@@ -28,29 +29,16 @@ const slides =[
         subtitle:'Sit back and relax while we take care of the rest. Track your order in real time from preparation to delivery.'
     }
 ]
-const OnboardingFooter = () => {
-    return(
-        <View style={{marginBottom:40, paddingHorizontal:'5%',width:'100%', flexDirection:'column'}}>
-            <TouchableOpacity>
-                <View style={{backgroundColor:COLORS.btnPrimary, borderRadius:8, justifyContent:'center',height:56}}>
-                    <Text style={{color:COLORS.primary, textAlign:'center', fontSize:18, fontFamily:'Poppins_500Medium'}}>
-                        Get Started
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <View style={{marginTop:12}}>
-                    <Text style={{color:COLORS.primary, textAlign:'center', fontSize:14, fontFamily:'Poppins_400Regular'}}>
-                        Continue as Guest
-                    </Text>
-                </View>
-            </TouchableOpacity>
 
+const OnboardingScreen =() => {
+    const onNavigate = useNavigation();
 
-        </View>
-    );
-}
-const OnboardingScreen =({navigation}) => {
+    const onNavigationWelcome = () => {
+        onNavigate.navigate("WelcomeScreen");
+    };
+    const onNavigationContinue = () => {
+        onNavigate.navigate("HomeScreen");
+    }
     return(
         <SafeAreaView style ={{flex: 1, backgroundColor:COLORS.bgPrimary}}>
            <StatusBar backgroundColor={COLORS.bgPrimary} />
@@ -65,7 +53,22 @@ const OnboardingScreen =({navigation}) => {
 
                 }
             />
-            <OnboardingFooter/>
+            <View style={{marginBottom:40, paddingHorizontal:24,width:'100%', flexDirection:'column'}}>
+                <TouchableOpacity onPress={() => onNavigationWelcome()} >
+                    <View style={{backgroundColor:COLORS.btnPrimary, borderRadius:8, justifyContent:'center',height:56}}>
+                        <Text style={{color:COLORS.primary, textAlign:'center', fontSize:18, fontFamily:'Poppins_500Medium'}}>
+                            Get Started
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity >
+                    <View style={{marginTop:12}}>
+                        <Text style={{color:COLORS.primary, textAlign:'center', fontSize:14, fontFamily:'Poppins_400Regular'}}>
+                            Continue as Guest
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
         
         </SafeAreaView>
     )
