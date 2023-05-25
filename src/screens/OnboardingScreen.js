@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useCallback, useEffect, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet, Dimensions, View, StatusBar, FlatList,Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -31,6 +31,10 @@ const slides =[
 ]
 
 const OnboardingScreen =() => {
+    const imageRef = useRef();
+    const [active, setActive] = useState(0);
+    const indexRef = useRef(active);
+    indexRef.current = active;
     const onNavigate = useNavigation();
 
     const onNavigationWelcome = () => {
@@ -39,6 +43,29 @@ const OnboardingScreen =() => {
     const onNavigationContinue = () => {
         onNavigate.navigate("HomeScreen");
     }
+    useInterval(() => {
+        if (active < Number(slides?.length) - 1) {
+            setActive(active + 1);
+        } else {
+            setActive(0);
+        }
+    }, 2000);
+
+    useEffect(() => {
+        imageRef.current.scrollToIndex({ index: active, animated: true });
+    }, [active]);
+
+    const viewabilityConfigCallbackPairs = useRef([
+        { onViewableItemsChanged },
+      ]);
+    const onViewableItemsChanged = (
+        ({ viewableItems, changed }) => {
+            if (active != 0) {
+                setActive(viewableItems[0].index);
+            }
+        },
+        []
+    );
     return(
         <SafeAreaView style ={{flex: 1, backgroundColor:COLORS.bgPrimary}}>
            <StatusBar backgroundColor={COLORS.bgPrimary} />
@@ -46,7 +73,12 @@ const OnboardingScreen =() => {
                 data= {slides}
                 contentContainerStyle={{height: height * 0.75, paddingTop:height*0.1}}
                 horizontal
-                pagingEnabled                
+                pagingEnabled   
+                viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
+                viewabilityConfig={{
+                    itemVisiblePercentThreshold: 50,
+                }}   
+                ref={imageRef}          
                 showsHorizontalScrollIndicator= {false}
                 scrollToEnd
                 renderItem={({item}) => <OnboardingSlide item ={item}/>
@@ -73,4 +105,22 @@ const OnboardingScreen =() => {
         </SafeAreaView>
     )
 }
-export default OnboardingScreen
+export default OnboardingScreen;
+
+const useInterval = (callback, delay) => {
+    const savedCallback = useRef();
+
+    useEffect(() => {
+        savedCallback.current = callback;
+    }, [callback]);
+
+    useEffect(() => {
+        const tick = () => {
+            savedCallback.current();
+        };
+        if (delay !== null) {
+            let id = setInterval(tick, delay);
+            return () => clearInterval(id);
+        }
+    }, [delay]);
+};

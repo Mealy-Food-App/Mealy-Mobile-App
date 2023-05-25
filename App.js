@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
-import { StyleSheet, Text, View} from 'react-native';
+import { Alert, StyleSheet, Text, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack'
@@ -10,6 +10,9 @@ import SplashScreen from './src/screens/SplashScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen';
 import StackScreens from './src/navigation/StackScreens';
 import WelcomeScreen from './src/screens/WelcomeScreen';
+import LogInScreen from './src/screens/LogInScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
+import HomeScreen from './src/screens/HomeScreen';
 
 const Stack = createStackNavigator();
 
@@ -27,16 +30,8 @@ export default function App() {
         setUserOnboarded(true);
       }
     } catch (error) {
-      console.log(error);
+      Alert.alert(error.message)
     } 
-  };
-
-  const updateOnboardingStatus = async () => {
-    try {
-      await AsyncStorage.setItem('onboardingStatus', 'completed');
-    } catch (error) {
-      // Handle the error if AsyncStorage access fails
-    }
   };
 
   const [fontsReady] = useFonts({
@@ -77,6 +72,18 @@ export default function App() {
           <Stack.Screen
             name = "WelcomeScreen"
             component={WelcomeScreen}
+          />
+          <Stack.Screen
+            name = "LoginScreen"
+            component={LogInScreen}
+          />
+          <Stack.Screen
+            name = "SignUpScreen"
+            component={SignUpScreen}
+          />
+          <Stack.Screen
+            name = "HomeScreen"
+            component={HomeScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>
