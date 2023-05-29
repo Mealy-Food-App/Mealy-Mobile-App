@@ -4,7 +4,7 @@ import { Alert, StyleSheet, Text, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack'
-import {useFonts,Poppins_400Regular,Poppins_500Medium,Poppins_700Bold} from '@expo-google-fonts/poppins'
+import {useFonts,Poppins_400Regular,Poppins_500Medium,Poppins_700Bold, Poppins_600SemiBold} from '@expo-google-fonts/poppins'
 
 import SplashScreen from './src/screens/SplashScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen';
@@ -26,7 +26,7 @@ export default function App() {
   const checkOnboardingStatus = async () => {
     try {
       const onboardingStatus = await AsyncStorage.getItem('onboardingStatus');
-      if (onboardingStatus !== null && onboardingStatus === 'completed') {
+      if (onboardingStatus !== null && onboardingStatus === 'completed3') {
         setUserOnboarded(true);
       }
     } catch (error) {
@@ -37,6 +37,7 @@ export default function App() {
   const [fontsReady] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
+    Poppins_600SemiBold,
     Poppins_700Bold,
   });
 

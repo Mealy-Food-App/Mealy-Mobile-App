@@ -36,11 +36,11 @@ const WelcomeScreen = () => {
       <Text style={styles.title}>Welcome to Mealy</Text>
       <Text style= {styles.subtitle}>Would you like to</Text>
       <TouchableOpacity style = {{width:'100%'}} onPressIn={onPressLoginHandler}>
-        <BigButton props={{color:'#E69f14', title: "Log In"}} />
+        <BigButton props={{color:'#E69f14', borderColor:"#E69f14", title: "Log In", fontFamily: "Poppins_500Medium", fontSize:18 }} />
       </TouchableOpacity>
       <Text style = {styles.alternative}> or </Text>
       <TouchableOpacity style={{width:'100%'}} onPressIn={onPressSignUpHandler}>
-        <BigButton props={{color:'transparent', title: "Sign Up"}}/>
+        <BigButton props={{color:'transparent', borderColor:"#E69f14", title: "Sign Up", fontFamily: "Poppins_500Medium", fontSize:18 }}/>
       </TouchableOpacity>
       
       <Text style = {styles.alternative}> or </Text>
