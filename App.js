@@ -4,8 +4,9 @@ import { Alert, StyleSheet, Text, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack'
-import {useFonts,Poppins_400Regular,Poppins_500Medium,Poppins_700Bold, Poppins_600SemiBold} from '@expo-google-fonts/poppins'
-
+import { useFonts } from 'expo-font';
+import { Poppins_400Regular, Poppins_500Medium, Poppins_700Bold , Poppins_600SemiBold} from '@expo-google-fonts/poppins';
+import {Montserrat_400Regular} from '@expo-google-fonts/montserrat';
 import SplashScreen from './src/screens/SplashScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen';
 import StackScreens from './src/navigation/StackScreens';
@@ -13,6 +14,8 @@ import WelcomeScreen from './src/screens/WelcomeScreen';
 import LogInScreen from './src/screens/LogInScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import HomeScreen from './src/screens/HomeScreen';
+import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
+import { AuthContext, AuthProvider } from './src/contexts/AuthContext';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +42,7 @@ export default function App() {
     Poppins_500Medium,
     Poppins_600SemiBold,
     Poppins_700Bold,
+    Montserrat_400Regular,
   });
 
 
@@ -64,39 +68,48 @@ export default function App() {
   }
   if (!userOnboarded){
     return(
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerShown:false}}>
-          <Stack.Screen
-            name = "OnboardingScreen"
-            component={OnboardingScreen}
-          />
-          <Stack.Screen
-            name = "WelcomeScreen"
-            component={WelcomeScreen}
-          />
-          <Stack.Screen
-            name = "LoginScreen"
-            component={LogInScreen}
-          />
-          <Stack.Screen
-            name = "SignUpScreen"
-            component={SignUpScreen}
-          />
-          <Stack.Screen
-            name = "HomeScreen"
-            component={HomeScreen}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <AuthProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{headerShown:false}}>
+            <Stack.Screen
+              name = "OnboardingScreen"
+              component={OnboardingScreen}
+            />
+            <Stack.Screen
+              name = "WelcomeScreen"
+              component={WelcomeScreen}
+            />
+            <Stack.Screen
+              name = "LogInScreen"
+              component={LogInScreen}
+            />
+            <Stack.Screen
+              name = "SignUpScreen"
+              component={SignUpScreen}
+            />
+            <Stack.Screen
+              name = "ForgotPasswordScreen"
+              component={ForgotPasswordScreen}
+            />
+            <Stack.Screen
+              name = "HomeScreen"
+              component={HomeScreen}
+            />
+
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AuthProvider>
     );
   }
 
 
   // Render the actual app content once the loading is complete
   return (
-    <NavigationContainer>
-      <StackScreens/>
-    </NavigationContainer>
+    <AuthProvider>
+      <NavigationContainer>
+        <StackScreens/>
+      </NavigationContainer>
+    </AuthProvider>
   );
 };
 
