@@ -1,0 +1,1 @@
+export const BASE_URL = 'https://mealy-backend-app.onrender.com/api/mealy';

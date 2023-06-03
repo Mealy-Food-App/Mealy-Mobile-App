@@ -49,7 +49,7 @@ const OnboardingScreen =() => {
         } else {
             setActive(0);
         }
-    }, 6000);
+    }, 4000);
 
     useEffect(() => {
         imageRef.current.scrollToIndex({ index: active, animated: true });

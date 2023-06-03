@@ -1,15 +1,34 @@
-import { Button, StyleSheet, Text, TextInput, View, Image, TouchableOpacity, TouchableHighlight, ScrollView} from 'react-native'
-import React, { useState } from 'react'
+import { Button, StyleSheet, Text, TextInput, View, Image, TouchableOpacity, TouchableHighlight, ScrollView,Alert, Pressable} from 'react-native'
+import React, { useState, useContext } from 'react'
 import { Formik, yupToFormErrors } from 'formik'
 import * as yup from 'yup'
 import BigButton from '../components/BigButton'
 import Checkbox from 'expo-checkbox';
 import { StatusBar } from 'expo-status-bar'
 
-const COLORS ={primary:'#00205C', btnPrimary:'#f5f5f5', bgPrimary:'#F5F5F5' }
+import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from '../contexts/AuthContext'
+
+const COLORS ={primary:'#00205C', btnPrimary:'#E69F14', bgPrimary:'#F5F5F5', }
 
 
 const SignUpScreen = () => {
+  const onNavigate = useNavigation();
+  const { register } = useContext(AuthContext);
+
+  const handleRegistration = (values) => {
+    const userData = {
+      userName: values.username,
+      email: values.email.toLowerCase(),
+      password: values.password
+    }
+    register(values.username, values.email, values.password)
+    console.log(userData);
+  }
+
+  const onPressSignInHandler = () => {
+    onNavigate.navigate('LogInScreen')
+  };
   const userInput = {
     width:'100%',
     borderWidth: 2,
@@ -31,8 +50,24 @@ const SignUpScreen = () => {
     height:22,
     resizeMode:'contain'
   };
-  const [isChecked, setChecked] = useState(false);
+  const validButton ={
+    color:COLORS.btnPrimary,
+    fontFamily: "Poppins_600SemiBold",
+    fontSize:14 ,borderColor:"rgba(230, 159, 20, 0.5)",
+    title: "Sign Up"
+  }
+  const invalidButton ={
+    color:'rgba(230, 159, 20, 0.5)',
+    fontFamily: "Poppins_600SemiBold",
+    fontSize:14 ,borderColor:"rgba(230, 159, 20, 0.5)",
+    title: "Sign Up"
+  }
+  const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const [isChecked, setIsChecked] = useState(false)
   
+  const managePasswordVisiblity = () => {
+    setPasswordVisibility(!passwordVisibility)
+  };
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
@@ -44,7 +79,7 @@ const SignUpScreen = () => {
           password: '',
           agree: false,
         }}
-        // onSubmit={console.log( values => (values))}
+        onSubmit={values => handleRegistration(values)}
         validationSchema={yup.object().shape({
           username: yup
             .string()
@@ -59,10 +94,10 @@ const SignUpScreen = () => {
             .required('Password is required.'),
           agree: yup
             .boolean()
-            .oneOf([true])
+            .oneOf([true],  'You must accept the terms and conditions')
         })}
       >
-        {({ values, handleChange, errors, setFieldTouched, touched, isValid, handleSubmit }) => (
+        {({ values, handleChange,setFieldValue, errors, setFieldTouched, touched, isValid, handleSubmit }) => (
           <View style = {styles.formContainer}>
             <Text style= {styles.label}>Full Name</Text>
             <View style = {userInput}>
@@ -109,8 +144,11 @@ const SignUpScreen = () => {
                   onChangeText={handleChange('password')}
                   placeholder='. . . . . .'
                   onBlur={() => setFieldTouched('password')}
-                  secureTextEntry ={true}
+                  secureTextEntry ={passwordVisibility}
                 />
+                <TouchableOpacity style={{position:'absolute', top: 12, left: 276, height:40}} onPressIn= {managePasswordVisiblity}>
+                  <Image source = {passwordVisibility ? require('../assets/icons/openeye.png') : require('../assets/icons/eye-off.png')} style={{width: 18, height:18, tintColor: COLORS.primary}}/>
+                </TouchableOpacity>
               </View>
 
               {touched.password && errors.password &&
@@ -120,16 +158,35 @@ const SignUpScreen = () => {
                 <Checkbox
                           style={styles.checkbox}
                           value={values.agree}
-                          onValueChange={handleChange('agree')}
+                          onBlur={() => setFieldTouched('agree')}
+                          onValueChange={(value) => setFieldValue('agree', value)}
                           color={isChecked ? COLORS.primary : COLORS.primary}
                 />
-                <Text style={(touched.agree && errors.agree) ? styles.checkboxTextError: styles.checkboxText }>
-                    By clicking on this you have agreed to the Terms and Conditions and Privacy Policy
-                  </Text>
+                <View style={styles.checkboxTextView}>
+                    <Text numberOfLines ={2} style={styles.checkboxText }>
+                      By clicking on this you have agreed to the 
+                    </Text>
+                    <View style={{flexDirection:'row'}}>
+                      <Pressable>
+                      <Text style ={styles.checkboxLink}>Terms and Conditions</Text>
+                      </Pressable>
+                      <Text style={styles.checkboxLinkand}>
+                        &nbsp;
+                        and
+                        &nbsp;
+                      </Text>
+                      <Pressable >
+                        <Text style ={styles.checkboxLink}>Privacy Policy.</Text>
+                      </Pressable>
+                    </View>
+                </View>
               </View>
+              {touched.agree && errors.agree &&
+                <Text style = {styles.formerror}>{errors.agree}</Text>
+              }
             
               <TouchableOpacity disabled = {!isValid} style = {{width:'100%'}} onPressIn={handleSubmit}>
-                <BigButton props={{color:'rgba(230, 159, 20, 0.5)', fontFamily: "Poppins_600SemiBold", fontSize:14 ,borderColor:"rgba(230, 159, 20, 0.5)'", title: "Sign Up"}} />
+                <BigButton props={isValid ? validButton : invalidButton} />
               </TouchableOpacity>
             </View>
         )}
@@ -154,8 +211,9 @@ const SignUpScreen = () => {
           <Text style = {styles.footerText} >
             Already have an Account?
           </Text>
-          <TouchableHighlight >
+          <TouchableHighlight onPressIn={onPressSignInHandler} >
             <Text style = {styles.footerTextBold}>
+                &nbsp;
                Sign In
             </Text>
             </TouchableHighlight>
@@ -243,13 +301,33 @@ const styles = StyleSheet.create({
     marginBottom:8,
     flexDirection: 'row'
   },
+  checkboxTextView:{
+    width: 280,
+    paddingLeft:8,
+  },
   checkboxText:{
     textDecorationLine: "none",
-    width: 280,
-    paddingHorizontal:8,
     color:COLORS.primary,
     fontFamily: 'Poppins_400Regular',
     fontSize:12,
+    textAlign:'justify',
+    lineHeight:18
+  },
+  checkboxLinkand:{
+    textDecorationLine: "none",
+    color:COLORS.primary,
+    fontFamily: 'Poppins_400Regular',
+    fontSize:12,
+    textAlign:'auto',
+    lineHeight:24
+  },
+  checkboxLink:{
+    lineHeight:24,
+    fontFamily: 'Poppins_500Medium',
+    fontSize:12,
+    textDecorationStyle:'solid',
+    textDecorationLine:'underline',
+    color:COLORS.primary,
   },
   checkboxTextError:{
     textDecorationLine: "none",

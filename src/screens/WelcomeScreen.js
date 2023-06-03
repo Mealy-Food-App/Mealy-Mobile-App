@@ -20,7 +20,7 @@ const WelcomeScreen = () => {
     };
     const onPressLoginHandler = () => {
         updateOnboardingStatus();
-        onNavigate.navigate('LoginScreen')
+        onNavigate.navigate('LogInScreen')
     };
     const onPressSignUpHandler = () => {
         updateOnboardingStatus();
