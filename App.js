@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { useFonts } from 'expo-font';
 import { Poppins_400Regular, Poppins_500Medium, Poppins_700Bold , Poppins_600SemiBold} from '@expo-google-fonts/poppins';
 import {Montserrat_400Regular} from '@expo-google-fonts/montserrat';
+
 import SplashScreen from './src/screens/SplashScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen';
 import StackScreens from './src/navigation/StackScreens';
@@ -22,6 +23,7 @@ const Stack = createStackNavigator();
 export default function App() {
   const [isAppReady, setIsAppReady] = React.useState(false);
   const [userOnboarded, setUserOnboarded]= React.useState(false);
+;
   React.useEffect(() =>{
     checkOnboardingStatus();
   }, []);
@@ -69,6 +71,7 @@ export default function App() {
   if (!userOnboarded){
     return(
       <AuthProvider>
+
         <NavigationContainer>
           <Stack.Navigator screenOptions={{headerShown:false}}>
             <Stack.Screen
@@ -94,6 +97,7 @@ export default function App() {
             <Stack.Screen
               name = "HomeScreen"
               component={HomeScreen}
+
             />
 
           </Stack.Navigator>

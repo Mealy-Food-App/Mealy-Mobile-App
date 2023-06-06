@@ -1,35 +1,56 @@
+
 import React, { createContext, useState } from 'react';
 import axios from 'axios';
-import { BASE_URL } from '../config';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
+const BASE_URL= 'https://mealy-backend-app.onrender.com/api/mealy'
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
 
-  const login = (userData) => {
+  const login = async(email, password) => {
     // Perform login logic and set the user state
-    setUser(userData);
+    try {
+      // Make the API call to register the user
+      const response = await axios.post(`${BASE_URL}/user/signin`, {
+        // Include any required registration data
+        email,
+        password
+      });
+
+      // Update the user state if registration is successful
+      setUser(response.data.user);
+
+      // Return the API response
+      return response.data;
+    } catch (error) {
+      // Handle any errors that occur during registration
+      console.error('Sign in failed:', error);
+      throw error;
+    }
   };
 
-  const register = (fullName, email, password) => {
-    axios
-      .post(`${BASE_URL}/user/signup`,{
+  const register = async (fullName, email, password) => {
+    try {
+      // Make the API call to register the user
+      const response = await axios.post(`${BASE_URL}/user/signup`, {
+        // Include any required registration data
         fullName,
         email,
         password
-      })
-      .then(res => {
-        let userInfo = res.data;
-        setUser(userInfo);
-        AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
-        console.log(userInfo);
-      })
-      .catch(e => {
-        console.log(`register error ${e}`);
-      })
+      });
+
+      // Update the user state if registration is successful
+      setUser(response.data.user);
+
+      // Return the API response
+      return response.data;
+    } catch (error) {
+      // Handle any errors that occur during registration
+      console.error('Sign up failed:', error);
+      throw error;
+    }
   };
 
   const logout = () => {

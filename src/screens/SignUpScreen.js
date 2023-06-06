@@ -1,10 +1,14 @@
-import { Button, StyleSheet, Text, TextInput, View, Image, TouchableOpacity, TouchableHighlight, ScrollView,Alert, Pressable} from 'react-native'
+import { Button, StyleSheet, Text, TextInput, View, Image, TouchableOpacity, TouchableHighlight, ScrollView,Alert, Pressable, ToastAndroid} from 'react-native'
 import React, { useState, useContext } from 'react'
 import { Formik, yupToFormErrors } from 'formik'
 import * as yup from 'yup'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import BigButton from '../components/BigButton'
 import Checkbox from 'expo-checkbox';
 import { StatusBar } from 'expo-status-bar'
+import Spinner from 'react-native-loading-spinner-overlay';
+
 
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../contexts/AuthContext'
@@ -13,17 +17,40 @@ const COLORS ={primary:'#00205C', btnPrimary:'#E69F14', bgPrimary:'#F5F5F5', }
 
 
 const SignUpScreen = () => {
+  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+  const [spinner, setSpinner] = useState(false)
   const onNavigate = useNavigation();
   const { register } = useContext(AuthContext);
 
-  const handleRegistration = (values) => {
-    const userData = {
-      userName: values.username,
-      email: values.email.toLowerCase(),
-      password: values.password
+  const handleRegistration = async (values) => {
+    setSpinner(true);
+    try {
+      const response = await register(values.username, values.email, values.password) ;
+      console.log('bhfgywetftftywettyeyy12345')
+      console.log(response)
+      if(response){
+        const status = response.status;
+        console.log(status)
+        ToastAndroid.show(status, ToastAndroid.SHORT);
+        if (status === 'Success')
+        {
+          try {
+            
+            await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
+            
+          } catch (error) {
+            // Handle the error if AsyncStorage access fails
+            console.log(error);
+            
+          }
+          onNavigate.navigate('HomeScreen', { user: response.data.user})
+        }
+      }
     }
-    register(values.username, values.email, values.password)
-    console.log(userData);
+    catch (error) {
+      console.error('Sign up failed:', error);
+    }
+    setSpinner(false);   
   }
 
   const onPressSignInHandler = () => {
@@ -70,6 +97,12 @@ const SignUpScreen = () => {
   };
   return (
     <ScrollView style={styles.container}>
+        <Spinner
+          visible={spinner}
+          color ={COLORS.btnPrimary}
+          textStyle={styles.loadingText}
+          overlayColor ='rgba(0, 6, 20, 0.75)'
+        />
       <Text style={styles.title}>Sign Up</Text>
       <Text style= {styles.subtitle}>Kindly provide the following details to create an account.</Text>
       <Formik
@@ -79,7 +112,15 @@ const SignUpScreen = () => {
           password: '',
           agree: false,
         }}
-        onSubmit={values => handleRegistration(values)}
+        onSubmit={(values, {resetForm}) => {
+          handleRegistration(values)
+          // resetForm(
+          //   values.username = '',
+          //   values.email ='',
+          //   values.password = '',
+          //   values.agree = false
+          // )
+        }}
         validationSchema={yup.object().shape({
           username: yup
             .string()
@@ -90,6 +131,8 @@ const SignUpScreen = () => {
             .required('Email address required.'),
           password: yup
             .string()
+            .matches(PWD_REGEX,
+            "Password must contain one uppercase, one lowercase, one number, one special case character")
             .min(8, 'Password less than 8 characters.')
             .required('Password is required.'),
           agree: yup
@@ -241,6 +284,13 @@ const styles = StyleSheet.create({
       fontSize: 32,
       fontFamily: 'Poppins_400Regular',
       lineHeight: 48
+  },
+  loadingText:{
+    color:COLORS.btnPrimary,
+    fontFamily: 'Poppins_400Regular',
+    fontSize:18,
+    textAlign:'justify',
+    lineHeight:20
   },
   subtitle:{
       marginTop: 8,

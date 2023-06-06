@@ -1,10 +1,11 @@
-import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity, TouchableHighlight, ScrollView,Alert, Pressable} from 'react-native'
+import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity, TouchableHighlight, ScrollView,Alert, Pressable, ToastAndroid} from 'react-native'
 import React, { useState, useContext } from 'react'
 import { Formik, yupToFormErrors } from 'formik'
 import * as yup from 'yup'
 import BigButton from '../components/BigButton'
 import Checkbox from 'expo-checkbox';
 import { StatusBar } from 'expo-status-bar'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { AuthContext } from '../contexts/AuthContext'
 import { useNavigation } from '@react-navigation/native';
@@ -15,13 +16,36 @@ const COLORS ={primary:'#00205C', btnPrimary:'#E69F14', bgPrimary:'#F5F5F5', }
 export default LogInScreen = () => {
   const onNavigate = useNavigation();
   const { login} = useContext(AuthContext);
+  const [spinner, setSpinner] = useState(false)
 
-  const handleLogin = (values) => {
-    const userData = {
-      email: values.email.toLowerCase(),
-      password: values.password
+  const handleLogin= async (values) => {
+    setSpinner(true);
+    try {
+      const response = await login(values.email, values.password) ;
+      console.log('bhfgywetftftywettyeyy12345')
+      console.log(response)
+      if(response){
+        const status = response.status;
+        console.log(status)
+        ToastAndroid.show(status, ToastAndroid.SHORT);
+        if (status === 'success')
+        {
+          try {
+            
+            await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
+          } catch (error) {
+            // Handle the error if AsyncStorage access fails
+            console.log(error);
+            
+          }
+          onNavigate.navigate('HomeScreen', { user: response.data.user})
+        }
+      }
     }
-    console.log(userData);
+    catch (error) {
+      console.error('Sign in failed:', error);
+    }
+    setSpinner(false);   
   }
 
   const onPressSignUpHandler = () => {
@@ -71,6 +95,12 @@ export default LogInScreen = () => {
   };
   return (
     <ScrollView style={styles.container}>
+      <Spinner
+        visible={spinner}
+        color ={COLORS.btnPrimary}
+        textStyle={styles.loadingText}
+        overlayColor ='rgba(0, 6, 20, 0.75)'
+      />
       <Text style={styles.title}>Sign In</Text>
       <Text style= {styles.subtitle}>Kindly provide the following details to sign in.</Text>
       <Formik

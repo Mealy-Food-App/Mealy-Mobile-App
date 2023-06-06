@@ -6,12 +6,7 @@ export default function SplashScreen() {
     <View style={styles.container}>
       {/* Your splash screen content */}
         <Image source={require('../assets/splash.png')} style={styles.image} />
-        <Image source={require('../assets/Mealy.png')} style={styles.image2}/> 
-        <TouchableWithoutFeedback>
-          <Text style={styles.textTap}>
-              Tap to continue
-          </Text>
-        </TouchableWithoutFeedback>   
+        <Image source={require('../assets/Mealy.png')} style={styles.image2}/>   
     </View>
   );
 }

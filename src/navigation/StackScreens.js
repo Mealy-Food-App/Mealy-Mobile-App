@@ -28,9 +28,10 @@ const StackScreens = () => {
           <Stack.Screen
             name = "ForgotPasswordScreen"
             component={ForgotPasswordScreen}
-          />        
+          />    
     </Stack.Navigator>
   )
 }
 
 export default StackScreens
+
