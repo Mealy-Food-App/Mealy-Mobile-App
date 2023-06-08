@@ -28,7 +28,7 @@ const WelcomeScreen = () => {
     };
     const onPressGuestHandler = () => {
         updateOnboardingStatus();
-        onNavigate.navigate('HomeScreen')
+        onNavigate.navigate('Main')
     }
 
   return (
