@@ -1,12 +1,11 @@
-import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity, TouchableHighlight, ScrollView,Alert, Pressable, ToastAndroid} from 'react-native'
+import { StyleSheet,StatusBar, Text, TextInput, View, Button, Image, TouchableOpacity, TouchableHighlight, ScrollView,Alert, Pressable, ToastAndroid} from 'react-native'
 import React, { useState, useContext } from 'react'
 import { Formik, yupToFormErrors } from 'formik'
 import * as yup from 'yup'
 import BigButton from '../components/BigButton'
 import Checkbox from 'expo-checkbox';
-import { StatusBar } from 'expo-status-bar'
 import Spinner from 'react-native-loading-spinner-overlay';
-
+import CustomAlert from '../components/Alert'
 import { AuthContext } from '../contexts/AuthContext'
 import { useNavigation } from '@react-navigation/native';
 
@@ -15,37 +14,13 @@ const COLORS ={primary:'#00205C', btnPrimary:'#E69F14', bgPrimary:'#F5F5F5', }
 
 export default LogInScreen = () => {
   const onNavigate = useNavigation();
-  const { login} = useContext(AuthContext);
+  const {isLoggedIn, userData, status,login} = useContext(AuthContext);
   const [spinner, setSpinner] = useState(false)
 
   const handleLogin= async (values) => {
     setSpinner(true);
-    try {
-      const response = await login(values.email, values.password) ;
-      console.log('bhfgywetftftywettyeyy12345')
-      console.log(response)
-      if(response){
-        const status = response.status;
-        console.log(status)
-        ToastAndroid.show(status, ToastAndroid.SHORT);
-        if (status === 'success')
-        {
-          try {
-            
-            await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
-          } catch (error) {
-            // Handle the error if AsyncStorage access fails
-            console.log(error);
-            
-          }
-          onNavigate.navigate('HomeScreen', { user: response.data.user})
-        }
-      }
-    }
-    catch (error) {
-      console.error('Sign in failed:', error);
-    }
-    setSpinner(false);   
+    await login(values.email, values.password) ;
+    setSpinner(false);
   }
 
   const onPressSignUpHandler = () => {
@@ -69,6 +44,7 @@ export default LogInScreen = () => {
     fontFamily:'Poppins_400Regular',    
     paddingHorizontal: 16,
     paddingVertical:10,
+    color:COLORS.primary
   };
 
   const inputIcon = {
@@ -88,13 +64,20 @@ export default LogInScreen = () => {
     fontSize:14 ,borderColor:"rgba(230, 159, 20, 0.5)",
     title: "Sign In"
   }
-  const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [isChecked, setIsChecked] = useState(false)
   const managePasswordVisiblity = () => {
     setPasswordVisibility(!passwordVisibility)
   };
   return (
     <ScrollView style={styles.container}>
+    {status !== '' && <CustomAlert props ={{title:'Sign In', message:status}}/>}
+    {isLoggedIn ? (
+      <>
+        <Text>Welcome, {userData?.fullName}!</Text>
+      </>
+    ) :(
+      <>
       <Spinner
         visible={spinner}
         color ={COLORS.btnPrimary}
@@ -211,6 +194,8 @@ export default LogInScreen = () => {
             </TouchableHighlight>
         </View>
       </View>
+    </>
+    )}
     </ScrollView>
   )
 }

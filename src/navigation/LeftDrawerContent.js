@@ -1,60 +1,75 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
-
-import { StatusBar } from 'expo-status-bar';
+import { View, Text, TouchableOpacity,StatusBar, Image, StyleSheet } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
 
 const LeftDrawerContent = ({ navigation }) => {
+  const {isLoggedIn,userData,logout, status} = useContext(AuthContext);
   const navigateToScreen = (screenName) => {
     navigation.navigate(screenName);
   };
+  const handleLogout = async() =>{
+    logout();
+  }
 
   return (
     <View style = {styles.drawer}>
       <View style={styles.header}>
         <Image style = {styles.profileImage} source={require('../assets/images/user.png')}/>
-        <Text style = {styles.profileName}> Fawz</Text>
+        {isLoggedIn === true  &&  userData !== null  ? (
+          <Text style = {styles.profileName}>{userData.fullName.split(' ')[0].charAt(0).toUpperCase() + userData.fullName.split(' ')[0].slice(1)}</Text>):(
+          <Text style = {styles.profileName}>Hello </Text>
+        )}
       </View>
 
       <View style={styles.menu}>
+      {!isLoggedIn && status !== '' && <CustomAlert props ={{title:'Logout', message:status}}/>}
           <TouchableOpacity style= {styles.account} onPress={() => navigateToScreen('AccountScreen')}>
             <View style={styles.accountContainer}>
               <Image source={require('../assets/icons/user.png')} style ={styles.containerIcon}/>
               <Text style ={styles.containerText}>My Account</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style= {styles.button} onPress={() => navigateToScreen('AccountScreen')}>
+          <TouchableOpacity style= {styles.button} onPress={() => navigateToScreen('CartScreen')}>
             <View style={styles.buttonContainer}>
               <Image source={require('../assets/icons/cartdrawer.png')} style ={styles.containerIcon}/>
               <Text style ={styles.containerText}>My Cart</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style= {styles.button} onPress={() => navigateToScreen('AccountScreen')}>
+          <TouchableOpacity style= {styles.button} onPress={() => navigateToScreen('HistoryScreen')}>
             <View style={styles.buttonContainer}>
               <Image source={require('../assets/icons/historydrawer.png')} style ={styles.containerIcon}/>
               <Text style ={styles.containerText}>History</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style= {styles.button} onPress={() => navigateToScreen('AccountScreen')}>
+          <TouchableOpacity style= {styles.button} onPress={() => navigateToScreen('SettingsScreen')}>
             <View style={styles.buttonContainer}>
               <Image source={require('../assets/icons/settings.png')} style ={styles.containerIcon}/>
               <Text style ={styles.containerText}>Settings</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style= {styles.button} onPress={() => navigateToScreen('AccountScreen')}>
+          <TouchableOpacity style= {styles.button} onPress={() => navigateToScreen('HelpScreen')}>
             <View style={styles.buttonContainer}>
               <Image source={require('../assets/icons/help.png')} style ={styles.containerIcon}/>
               <Text style ={styles.containerText}>Help</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style= {styles.button} onPress={() => navigateToScreen('AccountScreen')}>
+          <TouchableOpacity style= {styles.button} onPress={() => navigateToScreen('AboutScreen')}>
             <View style={styles.buttonContainer}>
               <Image source={require('../assets/icons/help.png')} style ={styles.containerIcon}/>
               <Text style ={styles.containerText}>About</Text>
             </View>
           </TouchableOpacity>
       </View>
-      <TouchableOpacity>
-        <Text style ={styles.containerText}>Login</Text>
+      {isLoggedIn === true  &&  userData !== null  ? (
+      <TouchableOpacity style= {styles.buttonLogin} onPress={handleLogout} >
+        <Text style ={styles.containerText}>Logout</Text>
       </TouchableOpacity>
+      ):(
+        <TouchableOpacity style= {styles.buttonLogin} onPress={() => navigateToScreen('LogInScreen')} >
+        <Text style ={styles.containerText}>Log In</Text>
+        </TouchableOpacity>
+      )}
+
 
 
     </View>
@@ -114,6 +129,9 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     marginBottom:24
   },
+  button:{
+    width:155,
+  },
   containerIcon:{
     marginRight:8,
     width: 22,
@@ -124,6 +142,13 @@ const styles = StyleSheet.create({
     fontSize:16,
     lineHeight:24,
     color:'#00205c'
+  },
+  buttonLogin:{
+    justifyContent:'center',
+    width:56,
+    height:40,
+    marginLeft:40,
+    marginTop:120
   }
 })
 

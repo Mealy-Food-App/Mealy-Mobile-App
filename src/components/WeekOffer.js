@@ -4,14 +4,13 @@ import ItemHeader from './ItemHeader';
 import ItemFooter from './ItemFooter';
 
 const WeekOffer = ({data}) => {
-    console.log(data.image);
   return (
     <View style={styles.meal}>
       <Text style = {styles.title}>Meal of the week</Text>
       <View style={styles.mealContent}>  
         <ImageBackground source={data.image}
-          style={{height: 224, width:327, borderRadius: 8,}}
-          resizeMode='cover'
+          style={{width:310, height:224,position:'absolute', borderRadius: 8, overflow:'visible'}}
+          resizeMode='contain'
         >
           <ItemHeader data={data}/> 
           <View style={styles.contentText}>
@@ -19,7 +18,6 @@ const WeekOffer = ({data}) => {
             <Text style={styles.contentTextPrice}>#{data.price}</Text>
           </View>
           <ItemFooter data={data}/>
-
         </ImageBackground> 
       </View>
     </View>
@@ -30,9 +28,9 @@ export default WeekOffer
 
 const styles = StyleSheet.create({
     meal:{
-        marginTop:32,
-        height:264,
-        alignItems:'center',
+        marginTop:8,
+        width:'100%',
+        height:264
     },
     title:{
         textAlign:'center',
@@ -43,11 +41,15 @@ const styles = StyleSheet.create({
         marginBottom:8
     },
     mealContent:{
-      marginVertical:8
+      marginVertical:8,
+      position:'relative',
+      height:224,
+      width:320,
+      padding:0
     },
     contentText:{
       position:'absolute',
-      top:88,
+      top:70,
       alignSelf:'center',
     },
     contentTextTitle:{      

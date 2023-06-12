@@ -18,11 +18,11 @@ export default ItemFooter
 
 const styles = StyleSheet.create({
     ItemFooter:{
-        width:'100%',
+        width:310,
         flexDirection:'row',
         justifyContent:'space-between',
         position:'absolute',
-        bottom:8
+        bottom:16
 
     },
     ItemFooterButton1:{
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         width:44,
         height:44,
         position:'absolute',
-        bottom:-8,
+        bottom:-10,
         right:0,
         justifyContent:'center',
         flexDirection:'row'

@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, TextInput, View, Image, TouchableOpacity, TouchableHighlight, ScrollView,Alert, Pressable, ToastAndroid} from 'react-native'
+import { Button, StyleSheet,StatusBar, Text, TextInput, View, Image, TouchableOpacity, TouchableHighlight, ScrollView,Alert, Pressable, ToastAndroid} from 'react-native'
 import React, { useState, useContext } from 'react'
 import { Formik, yupToFormErrors } from 'formik'
 import * as yup from 'yup'
@@ -6,8 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import BigButton from '../components/BigButton'
 import Checkbox from 'expo-checkbox';
-import { StatusBar } from 'expo-status-bar'
 import Spinner from 'react-native-loading-spinner-overlay';
+import CustomAlert from '../components/Alert';
 
 
 import { useNavigation } from '@react-navigation/native';
@@ -20,36 +20,11 @@ const SignUpScreen = () => {
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
   const [spinner, setSpinner] = useState(false)
   const onNavigate = useNavigation();
-  const { register } = useContext(AuthContext);
+  const {isLoggedIn,register, userData, status} = useContext(AuthContext);
 
   const handleRegistration = async (values) => {
     setSpinner(true);
-    try {
-      const response = await register(values.username, values.email, values.password) ;
-      console.log('bhfgywetftftywettyeyy12345')
-      console.log(response)
-      if(response){
-        const status = response.status;
-        console.log(status)
-        ToastAndroid.show(status, ToastAndroid.SHORT);
-        if (status === 'Success')
-        {
-          try {
-            
-            await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
-            
-          } catch (error) {
-            // Handle the error if AsyncStorage access fails
-            console.log(error);
-            
-          }
-          onNavigate.navigate('HomeScreen', { user: response.data.user})
-        }
-      }
-    }
-    catch (error) {
-      console.error('Sign up failed:', error);
-    }
+    await register(values.username, values.email, values.password) ;
     setSpinner(false);   
   }
 
@@ -70,6 +45,9 @@ const SignUpScreen = () => {
     fontFamily:'Poppins_400Regular',    
     paddingHorizontal: 16,
     paddingVertical:10,
+    color:COLORS.primary
+
+
   };
 
   const inputIcon = {
@@ -89,7 +67,7 @@ const SignUpScreen = () => {
     fontSize:14 ,borderColor:"rgba(230, 159, 20, 0.5)",
     title: "Sign Up"
   }
-  const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [isChecked, setIsChecked] = useState(false)
   
   const managePasswordVisiblity = () => {
@@ -97,6 +75,7 @@ const SignUpScreen = () => {
   };
   return (
     <ScrollView style={styles.container}>
+        {status !== '' && <CustomAlert props ={{title:'Sign In', message:status}}/>}
         <Spinner
           visible={spinner}
           color ={COLORS.btnPrimary}

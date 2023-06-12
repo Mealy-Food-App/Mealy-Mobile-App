@@ -9,7 +9,7 @@ export default function HomeHeader() {
   return (
     <View style={styles.header}>
       <TouchableOpacity style={styles.headerIconContainer}>
-        <Image source = {require('../assets/icons/profile.png')} style = {styles.headerIcons}/>
+        <Image source = {require('../assets/images/user.png')} style = {styles.headerIcons}/>
       </TouchableOpacity>
       <View style= {styles.rightNav}>
         <TouchableOpacity style={styles.headerIconContainer}>
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         marginTop:8,
         width: '100%',
         height:32,
-        backgroundColor:COLORS.bgPrimary,
+        backgroundColor:'#ffffff',
         flexDirection:'row',
         justifyContent:'space-between'
     },

@@ -7,7 +7,8 @@ const Section = ({ onPress, title, view, myStyle }) => {
       style={{
         flexDirection: "row",
         justifyContent: 'space-between',
-        marginTop: 25,
+        marginTop: 16,
+        marginBottom:16,
         ...myStyle,
       }}
     >

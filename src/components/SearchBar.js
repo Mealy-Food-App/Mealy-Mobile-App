@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         width:'100%',
         borderRadius:8,
-        marginVertical:8
+        marginTop:8,
+        marginBottom:16
     },
     searchIcon:{
       width:24,

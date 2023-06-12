@@ -29,8 +29,11 @@ const ForgotPasswordScreen = () => {
     fontFamily:'Poppins_400Regular',
     flexDirection: 'row',
     height:48,
+    color:COLORS.primary
+
   };
   const userInputText = {
+    color:COLORS.primary,
     width:274,
     fontFamily:'Poppins_400Regular',    
     paddingHorizontal: 16,

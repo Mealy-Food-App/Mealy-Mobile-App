@@ -26,9 +26,3 @@ export default function BigButton({props}) {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-    text:{
-
-    },
-})

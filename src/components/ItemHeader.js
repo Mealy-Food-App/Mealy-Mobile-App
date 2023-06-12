@@ -16,9 +16,10 @@ export default ItemHeader
 
 const styles = StyleSheet.create({
     headerContainer:{
-        top :8 ,
+        top :16 ,
         right:8,
-        justifyContent:'flex-end',
-        flexDirection:'row'
+        width:32,
+        height:32,
+        position:'absolute'
     }
 })

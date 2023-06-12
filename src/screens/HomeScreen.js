@@ -1,96 +1,204 @@
-import { StyleSheet, Alert, Text, View, Image,StatusBar } from 'react-native'
-import React, {useContext, useState} from 'react';
-import { AuthContext } from '../contexts/AuthContext';
-import HomeHeader from '../components/HomeHeader';
+import React, { useContext, useState } from 'react';
+import { View, FlatList,ScrollView, Text, StyleSheet, Image, StatusBar } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import  {mealOfTheDay} from '../dummyData'
+import { mealOfTheDay, categories, aroundYou, recommended, featured, topDeals } from '../dummyData';
 import WeekOffer from '../components/WeekOffer';
 import Section from '../components/Section';
-
-
+import CategoryItem from '../components/CategoryItem';
+import PopularItem from '../components/PopularItem';
+import RecommendedItem from '../components/RecommendedItem';
+import FeaturedItem from '../components/FeaturedItem';
+import TopDealItem from '../components/TopDealItem';
 import SearchBar from '../components/SearchBar';
-import { ScrollView } from 'react-native-gesture-handler';
+import { AuthContext } from '../contexts/AuthContext';
+import HomeHeader from '../components/HomeHeader';
+import CustomAlert from '../components/Alert';
 
-const COLORS ={primary:'#00205C', btnPrimary:'#E69F14', bgPrimary:'#F5F5F5', }
+const COLORS = {
+  primary: '#00205C',
+  btnPrimary: '#E69F14',
+  bgPrimary: '#F5F5F5',
+};
 
 const HomeScreen = () => {
   const route = useRoute();
   const [searchPhrase, setSearchPhrase] = useState("");
   const [clicked, setClicked] = useState(false);
-  const [user, setUser] = useState(null)
-  // const { user } = route.params;
-  // console.log(user.fullName)
-  // const userName = user.fullName.split(' ')[0].charAt(0).toUpperCase() + user.fullName.split(' ')[0].slice(1)
-  console.log(mealOfTheDay)
-return (
-    <View style= {styles.container}>
-      {user !== null ?
-      <View style = {styles.headerContent}>
-        <HomeHeader/>
-        <View style ={styles.titleContainer}>
-          <Text style={styles.title} >Hello {userName}</Text> 
+  const {isLoggedIn, userData, status} = useContext(AuthContext);
+  return (
+    <View style={styles.container}>
+      {isLoggedIn === true  &&  userData !== null  ? (
+        <View style={styles.headerContent}>
+          <HomeHeader />
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>Hello {userData.fullName.split(' ')[0].charAt(0).toUpperCase() + userData.fullName.split(' ')[0].slice(1)}</Text>
+          </View>
         </View>
-      </View> :
-      <View style = {styles.headerContent}>
-        <View style ={styles.titleContainer}>
-          <Text style={styles.title} >Hello There</Text> 
-          <Image source={require('../assets/icons/wave.png')} style = {{width:36, height:34, resizeMode:'contain', alignSelf:'center',marginLeft:8}}/>
+      ) : (
+        <View style={styles.headerContent}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>Hello There</Text>
+            <Image
+              source={require('../assets/icons/wave.png')}
+              style={{ width: 36, height: 34, resizeMode: 'contain', alignSelf: 'center', marginLeft: 8 }}
+            />
+          </View>
         </View>
-      </View>}
-      <View style= {styles.location}>
-      </View>
-      <Text numberOfLines={2} style = {styles.subtitle}>What would you like to eat today?</Text>
+      )}
+      <View style={styles.location}></View>
+      <Text numberOfLines={2} style={styles.subtitle}>
+        What would you like to eat today?
+      </Text>
       <SearchBar
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
         clicked={clicked}
         setClicked={setClicked}
       />
-      <WeekOffer data ={mealOfTheDay}/>
-      <ScrollView style={styles.homeScroll}>        
-        <Section title="Explore Categories" view='Show all' />
+
+      <ScrollView style={styles.homeScroll} contentInset={{ bottom: 138 }} showsVerticalScrollIndicator={false}>
+        <WeekOffer style={{ width: '100%' }} data={mealOfTheDay} />
+        <Section title="Explore Categories" view="Show all" />
+        <View>
+          <FlatList
+            data={categories}
+            nestedScrollEnabled={true}
+            horizontal
+            keyExtractor={(item) => item.id}
+            renderItem={({ item, index }) => (
+              <CategoryItem
+                item={item}
+                marginLeft={index === 0 ? 0 : 12}
+                marginRight={index === categories.length - 1 ? 0 : 0}
+                onPressItem={() => onNavigation(item)}
+              />
+            )}
+          />
+        </View>
+        <Section title="Popular Around You" view="View more" />
+        <View>
+          <FlatList
+            data={aroundYou}
+            nestedScrollEnabled={true}
+            horizontal
+            keyExtractor={(item) => item.id}
+            style={{
+              backgroundColor: '#ebebeb',
+              borderRadius: 10,
+            }}
+            renderItem={({ item, index }) => (
+              <PopularItem
+                data={item}
+                marginLeft={index === 0 ? 0 : 16}
+                marginRight={index === aroundYou.length - 1 ? 0 : 0}
+                onPressItem={() => onNavigation(item)}
+              />
+            )}
+          />
+        </View>
+        <Section title="Recommended For You" view="Show all" />
+        <View>
+          <FlatList
+            data={recommended}
+            horizontal
+            nestedScrollEnabled={true}
+            keyExtractor={(item) => item.id}
+            style={{
+              backgroundColor: '#ffffff',
+              paddingVertical: 8,
+              borderRadius: 8,
+            }}
+            renderItem={({ item, index }) => (
+              <RecommendedItem
+                data={item}
+                marginLeft={index === 0 ? 0 : 16}
+                marginRight={index === recommended.length - 1 ? 0 : 0}
+                onPressItem={() => onNavigation(item)}
+              />
+            )}
+          />
+        </View>
+        <Section title="Featured Restaurants" view="Show all" />
+        <View>
+          <FlatList
+            nestedScrollEnabled={true}
+            data={featured}
+            numColumns={2}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            style={{
+              backgroundColor: '#ffffff',
+            }}
+            renderItem={({ item, index }) => (
+              <FeaturedItem
+                data={item}
+                marginLeft={index === 0 || index % 2 === 0 ? 0 : 20}
+                onPressItem={() => onNavigation(item)}
+              />
+            )}
+          />
+        </View>
+        <Section title="Top Deals" view="Show all" />
+        <View>
+          <FlatList
+            nestedScrollEnabled={true}   
+            data={topDeals}
+            horizontal
+            keyExtractor={(item) => item.id}
+            style={{
+              backgroundColor: '#ffffff',
+              borderRadius: 10,
+              marginBottom: 32,
+            }}
+            renderItem={({ item, index }) => (
+              <TopDealItem
+                data={item}
+                marginLeft={index === 0 ? 0 : 16}
+                marginRight={index === topDeals.length - 1 ? 0 : 0}
+                onPressItem={() => onNavigation(item)}
+              />
+            )}
+        />
+        </View>
       </ScrollView>
     </View>
+  );
+};
 
-  )
-}
-
-export default HomeScreen
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
     paddingTop: StatusBar.currentHeight,
     flex: 1,
-    paddingHorizontal:24,
+    paddingHorizontal: 24,
     width: '100%',
-    backgroundColor:"#FFFFFF",
+    backgroundColor: '#FFFFFF',
   },
-  headerContent:{
-    
+  headerContent: {},
+  titleContainer: {
+    marginTop: 24,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginTop: 16,
+    marginBottom: 8,
   },
-  titleContainer:{
-    marginTop:24,
-    flexDirection:'row',
-    justifyContent:'flex-start',
-    marginTop:16,
-    marginBottom:8
-  },
-  title:{
-    color:COLORS.primary,
+  title: {
+    color: COLORS.primary,
     fontSize: 32,
     fontFamily: 'Poppins_400Regular',
-    lineHeight: 48
+    lineHeight: 48,
   },
-  subtitle:{
-    width:240,
-    marginVertical:8,
-    color:'rgba(0, 32, 92, 0.50)',
+  subtitle: {
+    width: 240,
+    marginVertical: 8,
+    color: 'rgba(0, 32, 92, 0.50)',
     fontFamily: 'Poppins_400Regular',
     fontSize: 22,
-    lineHeight:33
+    lineHeight: 33,
   },
-  homeScroll:{
-    width:'100%',
-  }
-})
+  homeScroll: {
+    width: '100%',
+  },
+});

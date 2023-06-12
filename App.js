@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
+import 'react-native-gesture-handler';
 import { Alert, StyleSheet, Text, View, StatusBar} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack'
 import { useFonts } from 'expo-font';
 import { Poppins_400Regular, Poppins_500Medium, Poppins_700Bold , Poppins_600SemiBold} from '@expo-google-fonts/poppins';
-import {Montserrat_400Regular} from '@expo-google-fonts/montserrat';
+import {Montserrat_400Regular,Montserrat_500Medium,Montserrat_600SemiBold,Montserrat_700Bold} from '@expo-google-fonts/montserrat';
 
 
 import SplashScreen from './src/screens/SplashScreen';
 import { AppStackScreens, OnboardingStackScreens } from './src/navigation/StackScreens';
-import { AuthContext, AuthProvider } from './src/contexts/AuthContext';
+import { AuthProvider } from './src/contexts/AuthContext';
 
 
 const Stack = createStackNavigator();
@@ -43,6 +44,9 @@ export default function App() {
     Poppins_600SemiBold,
     Poppins_700Bold,
     Montserrat_400Regular,
+    Montserrat_500Medium,
+    Montserrat_600SemiBold,
+    Montserrat_700Bold,
   });
 
 
@@ -57,33 +61,35 @@ export default function App() {
     // Render the custom loading screen
     return(
       <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen
-          name="Splash"
-          component={SplashScreen}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+        <AuthProvider>        
+          <Stack.Navigator screenOptions={{headerShown: false}}>
+          <Stack.Screen
+              name="Splash"
+              component={SplashScreen}
+            />
+          </Stack.Navigator>
+        </AuthProvider>
+      </NavigationContainer>
     );
   }
   if (!userOnboarded){
     return(
-      <AuthProvider>
-
-        <NavigationContainer>
-          <OnboardingStackScreens/>          
-        </NavigationContainer>
-      </AuthProvider>
+      <NavigationContainer>
+        <AuthProvider>        
+          <OnboardingStackScreens/> 
+        </AuthProvider>         
+      </NavigationContainer>
+      
     );
   }
 
 
   // Render the actual app content once the loading is complete
   return (
-    <AuthProvider>
-      <NavigationContainer>
+    <NavigationContainer>
+      <AuthProvider>      
         <AppStackScreens/>
-      </NavigationContainer>
-    </AuthProvider>
+      </AuthProvider>
+    </NavigationContainer>    
   );
 };
