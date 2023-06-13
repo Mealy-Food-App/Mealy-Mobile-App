@@ -32,10 +32,10 @@ const ConfirmTokenScreen = () => {
         };
       }, [resendDisabled]);
     
-    const handleConfirmToken = async (values) => {
+    const handleConfirmToken = async (token) => {
         setSpinner(true);
-         console.log(values.otpCode)
-        await confirmToken(values.otpCode)
+         console.log(token)
+        await confirmToken(token)
         setSpinner(false);
     }
     const handleResend= () => {
@@ -84,7 +84,7 @@ const ConfirmTokenScreen = () => {
             initialValues={{
               otpCode:''
             }}
-            onSubmit={values => handleConfirmToken(values)}
+            onSubmit={values => handleConfirmToken(values.otpCode)}
             validationSchema={yup.object().shape({
               otpCode:yup
               .string()

@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }) => {
         setUserData(user);
         console.log(user)
         showAlert('Login successful');
-        onNavigate.navigate('HomeScreen')
+        onNavigate.navigate('Main')
       }else{
         showAlert('Login failed');
       }
@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }) => {
         setUserData(user);
         console.log(user);
         showAlert('Account Registration successful');
-        onNavigate.navigate('HomeScreen')
+        onNavigate.navigate('Main')
       }else{
         showAlert('Account Registration failed');
       }
@@ -148,37 +148,41 @@ export const AuthProvider = ({ children }) => {
         // Include any required registration data
         token
       });
-
-      // Update the user state if registration is successful
-      setUser(response.data.user);
-
-      // Return the API response
-      return response.data;
+      const status = response.data.message
+      if (status === 'Token confirmed'){
+        showAlert('Token confirmation was succesful');
+        onNavigate.navigate('ResetPasswordScreen')
+      }else{
+        showAlert('Invalid token')
+        onNavigate.navigate('ForgotPasswordScreen')
+      }
     } catch (error) {
-      // Handle any errors that occur during registration
-      console.error('Sign in failed:', error);
-      throw error;
+      showAlert('Token confirmation was unsuccessful')
+      onNavigate.navigate('ForgotPasswordScreen')
     }
   };
-  const resetPassword = async(email,password) => {
+  const resetPassword = async(email,password, confirmPassword) => {
     // Perform login logic and set the user state
     try {
       // Make the API call to register the user
       const response = await axios.post(`${BASE_URL}/user/resetpassword`, {
         // Include any required registration data
         email,
-        password
+        password,
+        confirmPassword
       });
 
-      // Update the user state if registration is successful
-      setUser(response.data.user);
-
-      // Return the API response
-      return response.data;
+      const status = response.data.message
+      console.log(status)
+      // if (status === 'Token confirmed'){
+      //   showAlert('Token confirmation was succesful');
+      //   onNavigate.navigate('ResetPasswordSreen')
+      // }else{
+      //   showAlert('Invalid token')
+      //   onNavigate.navigate('ForgotPasswordScreen')
+      // }
     } catch (error) {
-      // Handle any errors that occur during registration
-      console.error('Sign in failed:', error);
-      throw error;
+      showAlert('Token confirmation was unsuccessful')
     }
   };
   const updateUser = async(email,password) => {

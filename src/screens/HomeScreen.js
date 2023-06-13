@@ -55,7 +55,7 @@ const HomeScreen = () => {
         setClicked={setClicked}
       />
 
-      <ScrollView style={styles.homeScroll} contentInset={{ bottom: 138 }} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.homeScroll} contentInset={{ bottom: 138 }} showsVerticalScrollIndicator={false} >
         <WeekOffer style={{ width: '100%' }} data={mealOfTheDay} />
         <Section title="Explore Categories" view="Show all" />
         <View>
