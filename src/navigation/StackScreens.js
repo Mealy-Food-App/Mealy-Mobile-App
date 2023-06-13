@@ -15,6 +15,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 import HelpScreen from '../screens/HelpScreen';
 import AboutScreen from '../screens/AboutScreen';
 import LeftDrawerContent from './LeftDrawerContent';
+import ConfirmTokenScreen from '../screens/ConfirmTokenScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -71,6 +72,10 @@ export const OnboardingStackScreens = () => {
       component={ForgotPasswordScreen}
     />
     <Stack.Screen
+      name = "ConfirmTokenScreen"
+      component={ConfirmTokenScreen}
+    />
+    <Stack.Screen
       name = "Main"
       component={MainScreens}
     />
@@ -95,6 +100,10 @@ export const AppStackScreens = () => {
     <Stack.Screen
       name = "ForgotPasswordScreen"
       component={ForgotPasswordScreen}
+    />
+        <Stack.Screen
+      name = "ConfirmTokenScreen"
+      component={ConfirmTokenScreen}
     />
 
   </Stack.Navigator>

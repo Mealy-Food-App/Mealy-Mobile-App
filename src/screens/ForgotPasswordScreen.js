@@ -1,24 +1,24 @@
-import { StyleSheet,Text, TextInput, View, Image, TouchableOpacity, TouchableHighlight, ScrollView,Alert, Pressable } from 'react-native'
+import { StyleSheet,Text, TextInput, View, Image, TouchableOpacity, TouchableHighlight, StatusBar,ScrollView,Alert, Pressable } from 'react-native'
 import React,  { useState, useContext } from 'react'
-import { StatusBar } from 'expo-status-bar'
 import { Formik, yupToFormErrors } from 'formik'
 import * as yup from 'yup'
 import BigButton from '../components/BigButton'
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../contexts/AuthContext'
+import CustomAlert from '../components/Alert'
+import Spinner from 'react-native-loading-spinner-overlay';
 
-
-const COLORS ={primary:'#00205C', btnPrimary:'#E69F14', bgPrimary:'#F5F5F5', }
+const COLORS ={primary:'#00205C', btnPrimary:'#E69F14', bgPrimary:'#FFFFFF', }
 
 const ForgotPasswordScreen = () => {
   const onNavigate = useNavigation();
-  const {forgotpassword} = useContext(AuthContext);
+  const {forgotPassword, status} = useContext(AuthContext);
+  const [spinner, setSpinner] = useState(false)
 
-  const handleResetPassword = (values) => {
-    const userData = {
-      email: values.email.toLowerCase(),
-    }
-    console.log(userData);
+  const handleForgotPassword = async (values) => {
+    setSpinner(true);
+    await forgotPassword(values.email);
+    setSpinner(false);
   }
 
   const userInput = {
@@ -60,16 +60,21 @@ const ForgotPasswordScreen = () => {
 
   return (
     <View style={styles.container}>
+      {status !== '' && <CustomAlert props ={{title:'Forgot Password', message:status}}/>}
+      <Spinner
+        visible={spinner}
+        color ={COLORS.btnPrimary}
+        textStyle={styles.loadingText}
+        overlayColor ='rgba(0, 6, 20, 0.75)'
+      />
       <Text style={styles.title}>Reset Password</Text>
       <Text style= {styles.subtitle}>Kindly enter your account email to reset your password.</Text>
       <Image source ={require('../assets/images/amico.png')} style={styles.resetpwdImage}/>
       <Formik
         initialValues={{
           email: '',
-          password: '',
-          rememberMe:false,
         }}
-        onSubmit={values => handleResetPassword(values)}
+        onSubmit={values => handleForgotPassword(values)}
         validationSchema={yup.object().shape({
           email: yup
             .string()
@@ -156,4 +161,5 @@ inputIconContainer:{
 formerror:{
   color:'#E90808',
 },
+
 })

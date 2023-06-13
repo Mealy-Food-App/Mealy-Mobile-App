@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity,StatusBar, Image, StyleSheet } from 'react-native';
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
+import CustomAlert from '../components/Alert';
 
 const LeftDrawerContent = ({ navigation }) => {
   const {isLoggedIn,userData,logout, status} = useContext(AuthContext);

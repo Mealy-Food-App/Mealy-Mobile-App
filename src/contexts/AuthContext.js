@@ -126,16 +126,18 @@ export const AuthProvider = ({ children }) => {
         // Include any required registration data
         email
       });
-
-      // Update the user state if registration is successful
-      setUserData(response.data.user);
-
-      // Return the API response
-      return response.data;
+      const status = response.data.message
+      console.log(response);
+      console.log("hdhhdhdh", status)
+      if (status === 'Reset email sent'){
+        showAlert('Account verification code sent to email. Enter token to verify your account');
+        onNavigate.navigate('ConfirmTokenScreen')
+      }else{
+        showAlert('Account does not exist')
+      }
     } catch (error) {
       // Handle any errors that occur during registration
-      console.error('Sign in failed:', error);
-      throw error;
+      showAlert('Account verification code couldn\'t be sent to email');
     }
   };
   const confirmToken = async(token) => {
@@ -209,6 +211,7 @@ export const AuthProvider = ({ children }) => {
         userData,
         isLoggedIn,
         resetPassword,
+        confirmToken,
         forgotPassword,
         updateUser,
         login,

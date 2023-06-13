@@ -12,7 +12,6 @@ import TopDealItem from '../components/TopDealItem';
 import SearchBar from '../components/SearchBar';
 import { AuthContext } from '../contexts/AuthContext';
 import HomeHeader from '../components/HomeHeader';
-import CustomAlert from '../components/Alert';
 
 const COLORS = {
   primary: '#00205C',
