@@ -1,13 +1,16 @@
 import { StyleSheet, Text, View,Image } from 'react-native'
 import React from 'react'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
-const CategoryItem = ({item, marginLeft, marginRight, onPressItem, children}) => {
+const CategoryItem = ({item, marginLeft, marginRight, onPressCategory, children}) => {
   return (
-    <View style={[styles.container,{marginLeft: marginLeft,margin: marginRight,}]}>
-      <Image source={item.icon} style={styles.image}/>
-      <Text style={styles.label}>{item.label}</Text>
-      <Text style={styles.restaurants}>{item.restaurants}&nbsp; Places</Text>
-    </View>
+    <TouchableOpacity onPress={onPressCategory} style={[styles.container,{marginLeft: marginLeft,margin: marginRight,}]}>
+      <View>
+        <Image source={require('../assets/images/dummy/food.png')} style={styles.image}/>
+        <Text style={styles.label}>{item.name}</Text>
+        <Text style={styles.restaurants}>{item.totalPlaces}</Text>
+      </View>
+    </TouchableOpacity>
   )
 }
 

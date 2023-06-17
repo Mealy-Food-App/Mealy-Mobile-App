@@ -1,13 +1,15 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { useState,useEffect,useContext } from 'react';
 
 import React from "react";
 import HomeScreen from "../screens/HomeScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import CartScreen from "../screens/CartScreen";
 import DeliveryScreen from '../screens/DeliveryScreen';
+import { AuthContext } from '../contexts/AuthContext';
 
-import { Image, View, Text, StyleSheet } from "react-native";
+import { Image, View, Text, StyleSheet, BackHandler } from "react-native";
 import { color } from 'react-native-reanimated';
 
 const Tab = createBottomTabNavigator();
@@ -15,6 +17,22 @@ const Drawer = createDrawerNavigator();
 
 
 const BottomTabs = () => {
+    const {isLoggedIn,userData,logout, status} = useContext(AuthContext);
+    // useEffect(() => {
+    //     const backAction = () => {
+    //         if (isLoggedIn){
+    //             return true; 
+    //         }
+    //         return false;
+    //       // Logic to prevent going back to the login screen
+      
+    //       // Return 'true' to prevent default back button behavior
+    //     };
+      
+    //     const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+      
+    //     return () => backHandler.remove(); // Cleanup the event listener on unmount
+    //   }, []);
     return (
         <Tab.Navigator
             initialRouteName='Home'

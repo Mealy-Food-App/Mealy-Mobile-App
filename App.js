@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import 'react-native-gesture-handler';
 import { Alert, StyleSheet, Text, View, StatusBar} from 'react-native';
@@ -13,6 +13,8 @@ import {Montserrat_400Regular,Montserrat_500Medium,Montserrat_600SemiBold,Montse
 import SplashScreen from './src/screens/SplashScreen';
 import { AppStackScreens, OnboardingStackScreens } from './src/navigation/StackScreens';
 import { AuthProvider } from './src/contexts/AuthContext';
+import { CartProvider } from './src/contexts/CartContext';
+import { ProductsProvider } from './src/contexts/ProductsContext';
 
 
 const Stack = createStackNavigator();
@@ -21,16 +23,15 @@ const Stack = createStackNavigator();
 export default function App() {
   const [isAppReady, setIsAppReady] = React.useState(false);
   const [userOnboarded, setUserOnboarded]= React.useState(false);
- 
 
-  React.useEffect(() =>{
+  useEffect(() =>{
     checkOnboardingStatus();
   }, []);
 
   const checkOnboardingStatus = async () => {
     try {
       const onboardingStatus = await AsyncStorage.getItem('onboardingStatus');
-      if (onboardingStatus !== null && onboardingStatus === 'completed') {
+      if (onboardingStatus !== null && onboardingStatus === 'completed7') {
         setUserOnboarded(true);
       }
     } catch (error) {
@@ -61,23 +62,31 @@ export default function App() {
     // Render the custom loading screen
     return(
       <NavigationContainer>
-        <AuthProvider>        
-          <Stack.Navigator screenOptions={{headerShown: false}}>
-          <Stack.Screen
-              name="Splash"
-              component={SplashScreen}
-            />
-          </Stack.Navigator>
-        </AuthProvider>
+        <ProductsProvider>
+          <AuthProvider>
+            <CartProvider>   
+              <Stack.Navigator screenOptions={{headerShown: false}}>
+              <Stack.Screen
+                  name="Splash"
+                  component={SplashScreen}
+                />
+              </Stack.Navigator>
+            </CartProvider>   
+          </AuthProvider>
+        </ProductsProvider>
       </NavigationContainer>
     );
   }
   if (!userOnboarded){
     return(
       <NavigationContainer>
-        <AuthProvider>        
-          <OnboardingStackScreens/> 
-        </AuthProvider>         
+        <ProductsProvider>
+          <AuthProvider>   
+            <CartProvider>  
+              <OnboardingStackScreens/> 
+            </CartProvider>
+          </AuthProvider>
+        </ProductsProvider>     
       </NavigationContainer>
       
     );
@@ -87,9 +96,13 @@ export default function App() {
   // Render the actual app content once the loading is complete
   return (
     <NavigationContainer>
-      <AuthProvider>      
-        <AppStackScreens/>
-      </AuthProvider>
+      <ProductsProvider>
+        <AuthProvider> 
+          <CartProvider>    
+            <AppStackScreens/>
+          </CartProvider>
+        </AuthProvider>
+      </ProductsProvider>
     </NavigationContainer>    
   );
 };

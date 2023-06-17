@@ -129,7 +129,7 @@ export default ConfirmTokenScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: StatusBar.currentHeight,
+        paddingTop: 16,
         paddingHorizontal:24,
         width: '100%',
         backgroundColor:COLORS.bgPrimary,

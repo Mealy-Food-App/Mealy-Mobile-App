@@ -1,10 +1,13 @@
 import { StatusBar, StyleSheet, ScrollView,FlatList, View, Dimensions} from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import React from 'react'
+import React, {useContext} from 'react'
 import {orderHistories} from '../dummyData';
 import CustomTopTabs from '../components/CustomTopTabs';
 import ScreenHeader from '../components/ScreenHeader';
 import OrderHistoryItem from "../components/OrderHistoryItem";
+import { AuthContext } from '../contexts/AuthContext';
+import Unauth from '../components/Unauth';
+
 
 const orderHistoryItems = orderHistories.flatMap((history) => history.data);
 console.log(orderHistoryItems)
@@ -152,10 +155,16 @@ const HistoryTabs =()=> {
   );
 }
 const HistoryScreen = () => {
+  const {isLoggedIn, userData, status,login} = useContext(AuthContext);
+
   return (
       <View style={styles.container}>
         <ScreenHeader props={{title:'Order History'}}/>
-        <HistoryTabs/>
+        {isLoggedIn ? (
+          <HistoryTabs/>
+        ):(
+          <Unauth props={{message: "View your order history. By logging in you can access your order history"}}/>
+        )}
       </View>
   )
 }
@@ -164,7 +173,8 @@ export default HistoryScreen;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: StatusBar.currentHeight,
+    paddingTop: 16,
+    // StatusBar.currentHeight,
     flex: 1,
     paddingHorizontal: 24,
     width: '100%',

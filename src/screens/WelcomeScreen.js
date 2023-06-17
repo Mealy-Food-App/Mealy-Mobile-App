@@ -2,14 +2,17 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from '../contexts/AuthContext';
 
 import BigButton from '../components/BigButton'
+import { useContext } from 'react'
 
 const COLORS ={primary:'#00205C', btnPrimary:'#f5f5f5', bgPrimary:'#F5F5F5' }
 
 
 
 const WelcomeScreen = () => {
+    const {isLoggedIn,userData,logout, status} = useContext(AuthContext);
     const onNavigate = useNavigation();
     const updateOnboardingStatus = async () => {
         try {
@@ -19,14 +22,17 @@ const WelcomeScreen = () => {
         }
     };
     const onPressLoginHandler = () => {
+        logout()
         updateOnboardingStatus();
         onNavigate.navigate('LogInScreen')
     };
     const onPressSignUpHandler = () => {
+        logout()
         updateOnboardingStatus();
         onNavigate.navigate('SignUpScreen')
     };
     const onPressGuestHandler = () => {
+        logout();
         updateOnboardingStatus();
         onNavigate.navigate('Main')
     }
@@ -44,7 +50,7 @@ const WelcomeScreen = () => {
       </TouchableOpacity>
       
       <Text style = {styles.alternative}> or </Text>
-      <TouchableOpacity onPressIn={onPressGuestHandler} style={{height:48,marginBottom:276}}>
+      <TouchableOpacity onPressIn={onPressGuestHandler} style={{height:48, width:'100%', marginBottom:276}}>
         <Text style={styles.guestbtn}> Continue as a guest</Text>
       </TouchableOpacity>
     </View>

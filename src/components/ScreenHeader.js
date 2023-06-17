@@ -1,12 +1,19 @@
-import { StyleSheet,Image, Text, View, TouchableWithoutFeedback  } from 'react-native'
+import { StyleSheet,Image, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native';
+
 
 const ScreenHeader = ({props}) => {
+  const onNavigate = useNavigation();
+  
+  const onNavigationHome = () => {
+    onNavigate.navigate("Home");
+}
   return (
     <View style={styles.header}>
-      <TouchableWithoutFeedback style={styles.arrowLeft}>
+      <TouchableOpacity style={styles.arrowLeftContainer} onPress={() => onNavigationHome()}>
         <Image source={require('../assets/icons/arrow-left.png')} style={styles.arrowLeft}/>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
       <Text style={styles.headerText}>
         {props.title}
       </Text>
@@ -19,7 +26,6 @@ export default ScreenHeader
 const styles = StyleSheet.create({
     header:{
         flexDirection:'row',
-        alignItems:'center',
         gap:25,
     },
     arrowLeft:{
@@ -27,10 +33,15 @@ const styles = StyleSheet.create({
         height:24,
         borderRadius:24,
     },
+    arrowLeftContainer:{
+      width:48,
+      alignContent:'center',
+      justifyContent:'center'
+    },
     headerText:{
         fontFamily:'Poppins_400Regular',
         fontSize:28,
         lineHeight:42,
-        color:'#00205C'
+        color:'#00205C',
     }
 })

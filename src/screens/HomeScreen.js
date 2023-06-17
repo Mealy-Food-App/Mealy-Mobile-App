@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, FlatList,ScrollView, Text, StyleSheet, Image, StatusBar } from 'react-native';
-import { useRoute } from '@react-navigation/native';
-import { mealOfTheDay, categories, aroundYou, recommended, featured, topDeals } from '../dummyData';
+import { useNavigation} from '@react-navigation/native';
+import { mealOfTheDay, aroundYou, recommended, featured, topDeals } from '../dummyData';
 import WeekOffer from '../components/WeekOffer';
 import Section from '../components/Section';
 import CategoryItem from '../components/CategoryItem';
@@ -11,6 +11,7 @@ import FeaturedItem from '../components/FeaturedItem';
 import TopDealItem from '../components/TopDealItem';
 import SearchBar from '../components/SearchBar';
 import { AuthContext } from '../contexts/AuthContext';
+import { ProductsContext } from '../contexts/ProductsContext';
 import HomeHeader from '../components/HomeHeader';
 
 const COLORS = {
@@ -20,10 +21,21 @@ const COLORS = {
 };
 
 const HomeScreen = () => {
-  const route = useRoute();
+  const onNavigate = useNavigation();
   const [searchPhrase, setSearchPhrase] = useState("");
   const [clicked, setClicked] = useState(false);
   const {isLoggedIn, userData, status} = useContext(AuthContext);
+  const {categories} = useContext(ProductsContext);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchPhrase !== '') {
+        onNavigate.navigate('SearchScreen',  searchPhrase );
+      }
+    }, 4000); // 1000 milliseconds (1 second) delay
+
+    return () => clearTimeout(timer);
+  }, [searchPhrase, onNavigate]);
   return (
     <View style={styles.container}>
       {isLoggedIn === true  &&  userData !== null  ? (
@@ -56,109 +68,111 @@ const HomeScreen = () => {
       />
 
       <ScrollView style={styles.homeScroll} contentInset={{ bottom: 138 }} showsVerticalScrollIndicator={false} >
-        <WeekOffer style={{ width: '100%' }} data={mealOfTheDay} />
-        <Section title="Explore Categories" view="Show all" />
         <View>
-          <FlatList
-            data={categories}
-            nestedScrollEnabled={true}
-            horizontal
-            keyExtractor={(item) => item.id}
-            renderItem={({ item, index }) => (
-              <CategoryItem
-                item={item}
-                marginLeft={index === 0 ? 0 : 12}
-                marginRight={index === categories.length - 1 ? 0 : 0}
-                onPressItem={() => onNavigation(item)}
-              />
-            )}
+          <WeekOffer style={{ width: '100%' }} data={mealOfTheDay} />
+          <Section title="Explore Categories" view="Show all" />
+          <View>
+            <FlatList
+              data={categories}
+              nestedScrollEnabled={true}
+              horizontal
+              keyExtractor={(item) => item._id}
+              renderItem={({ item, index }) => (
+                <CategoryItem
+                  item={item}
+                  marginLeft={index === 0 ? 0 : 8}
+                  marginRight={index === categories.length - 1 ? 0 : 0}
+                  onPressCategory={() => onNavigateToCategory(item)}
+                />
+              )}
+            />
+          </View>
+          <Section title="Popular Around You" view="View more" />
+          <View>
+            <FlatList
+              data={aroundYou}
+              nestedScrollEnabled={true}
+              horizontal
+              keyExtractor={(item) => item.id}
+              style={{
+                backgroundColor: '#ebebeb',
+                borderRadius: 10,
+              }}
+              renderItem={({ item, index }) => (
+                <PopularItem
+                  data={item}
+                  marginLeft={index === 0 ? 0 : 16}
+                  marginRight={index === aroundYou.length - 1 ? 0 : 0}
+                  onPressItem={() => onNavigation(item)}
+                />
+              )}
+            />
+          </View>
+          <Section title="Recommended For You" view="Show all" />
+          <View>
+            <FlatList
+              data={recommended}
+              horizontal
+              nestedScrollEnabled={true}
+              keyExtractor={(item) => item.id}
+              style={{
+                backgroundColor: '#ffffff',
+                paddingVertical: 8,
+                borderRadius: 8,
+              }}
+              renderItem={({ item, index }) => (
+                <RecommendedItem
+                  data={item}
+                  marginLeft={index === 0 ? 0 : 16}
+                  marginRight={index === recommended.length - 1 ? 0 : 0}
+                  onPressItem={() => onNavigation(item)}
+                />
+              )}
+            />
+          </View>
+          <Section title="Featured Restaurants" view="Show all" />
+          <View>
+            <FlatList
+              nestedScrollEnabled={true}
+              data={featured}
+              numColumns={2}
+              keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              style={{
+                backgroundColor: '#ffffff',
+              }}
+              renderItem={({ item, index }) => (
+                <FeaturedItem
+                  data={item}
+                  marginLeft={index === 0 || index % 2 === 0 ? 0 : 20}
+                  onPressItem={() => onNavigation(item)}
+                />
+              )}
+            />
+          </View>
+          <Section title="Top Deals" view="Show all" />
+          <View>
+            <FlatList
+              nestedScrollEnabled={true}   
+              data={topDeals}
+              horizontal
+              keyExtractor={(item) => item.id}
+              style={{
+                backgroundColor: '#ffffff',
+                borderRadius: 10,
+                marginBottom: 32,
+              }}
+              renderItem={({ item, index }) => (
+                <TopDealItem
+                  data={item}
+                  marginLeft={index === 0 ? 0 : 16}
+                  marginRight={index === topDeals.length - 1 ? 0 : 0}
+                  onPressItem={() => onNavigation(item)}
+                />
+              )}
           />
-        </View>
-        <Section title="Popular Around You" view="View more" />
-        <View>
-          <FlatList
-            data={aroundYou}
-            nestedScrollEnabled={true}
-            horizontal
-            keyExtractor={(item) => item.id}
-            style={{
-              backgroundColor: '#ebebeb',
-              borderRadius: 10,
-            }}
-            renderItem={({ item, index }) => (
-              <PopularItem
-                data={item}
-                marginLeft={index === 0 ? 0 : 16}
-                marginRight={index === aroundYou.length - 1 ? 0 : 0}
-                onPressItem={() => onNavigation(item)}
-              />
-            )}
-          />
-        </View>
-        <Section title="Recommended For You" view="Show all" />
-        <View>
-          <FlatList
-            data={recommended}
-            horizontal
-            nestedScrollEnabled={true}
-            keyExtractor={(item) => item.id}
-            style={{
-              backgroundColor: '#ffffff',
-              paddingVertical: 8,
-              borderRadius: 8,
-            }}
-            renderItem={({ item, index }) => (
-              <RecommendedItem
-                data={item}
-                marginLeft={index === 0 ? 0 : 16}
-                marginRight={index === recommended.length - 1 ? 0 : 0}
-                onPressItem={() => onNavigation(item)}
-              />
-            )}
-          />
-        </View>
-        <Section title="Featured Restaurants" view="Show all" />
-        <View>
-          <FlatList
-            nestedScrollEnabled={true}
-            data={featured}
-            numColumns={2}
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            style={{
-              backgroundColor: '#ffffff',
-            }}
-            renderItem={({ item, index }) => (
-              <FeaturedItem
-                data={item}
-                marginLeft={index === 0 || index % 2 === 0 ? 0 : 20}
-                onPressItem={() => onNavigation(item)}
-              />
-            )}
-          />
-        </View>
-        <Section title="Top Deals" view="Show all" />
-        <View>
-          <FlatList
-            nestedScrollEnabled={true}   
-            data={topDeals}
-            horizontal
-            keyExtractor={(item) => item.id}
-            style={{
-              backgroundColor: '#ffffff',
-              borderRadius: 10,
-              marginBottom: 32,
-            }}
-            renderItem={({ item, index }) => (
-              <TopDealItem
-                data={item}
-                marginLeft={index === 0 ? 0 : 16}
-                marginRight={index === topDeals.length - 1 ? 0 : 0}
-                onPressItem={() => onNavigation(item)}
-              />
-            )}
-        />
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -169,7 +183,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: StatusBar.currentHeight,
+    paddingTop: 16,
     flex: 1,
     paddingHorizontal: 24,
     width: '100%',

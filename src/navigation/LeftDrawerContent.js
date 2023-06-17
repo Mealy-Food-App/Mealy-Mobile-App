@@ -30,13 +30,13 @@ const LeftDrawerContent = ({ navigation }) => {
               <Text style ={styles.containerText}>My Account</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style= {styles.button} onPress={() => navigateToScreen('CartScreen')}>
+          <TouchableOpacity style= {styles.button} onPress={() => navigateToScreen('Cart')}>
             <View style={styles.buttonContainer}>
               <Image source={require('../assets/icons/cartdrawer.png')} style ={styles.containerIcon}/>
               <Text style ={styles.containerText}>My Cart</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style= {styles.button} onPress={() => navigateToScreen('HistoryScreen')}>
+          <TouchableOpacity style= {styles.button} onPress={() => navigateToScreen('History')}>
             <View style={styles.buttonContainer}>
               <Image source={require('../assets/icons/historydrawer.png')} style ={styles.containerIcon}/>
               <Text style ={styles.containerText}>History</Text>
@@ -80,7 +80,7 @@ export default LeftDrawerContent;
 
 const styles = StyleSheet.create({
   drawer:{
-    paddingTop: StatusBar.currentHeight,
+    paddingTop: 16,
     height: '100%',
     width:'100%',
     backgroundColor:'#F0C572',

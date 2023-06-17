@@ -12,8 +12,6 @@ export const CartProvider = ({ children }) => {
           tempPrice += cartItems[i].total ;
       }      
     }
-    console.log('temp')
-    console.log(tempPrice)
     return (tempPrice);
   }
   const [finalTotal, setFinalTotal] = useState(getTotalPrice());

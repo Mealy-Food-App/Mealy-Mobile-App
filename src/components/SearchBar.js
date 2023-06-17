@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View ,Image, TouchableOpacity,TextInput} from 'react-native'
+import { StyleSheet, Text, View ,Image, TouchableOpacity,TextInput, Keyboard} from 'react-native'
 import React from 'react'
 
 const COLORS ={primary:'#00205C', btnPrimary:'#E69F14', bgPrimary:'#F5F5F5' }
@@ -15,12 +15,18 @@ const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked,setShowFi
         onFocus={() => {
           setClicked(true);
         }}
+        onBlur={() => {
+          setClicked(false);
+        }}
       />
-      {clicked && (
-        <TouchableOpacity onPress={() => {setSearchPhrase('')}}>
+      {clicked &&
+        (<TouchableOpacity style ={styles.cancel} onPress={() => {
+          Keyboard.dismiss();
+          setSearchPhrase('');          
+          setClicked(false);
+        }}>
           <Image source = {require('../assets/icons/cancel.png')} style={styles.smallIcon}/>
-        </TouchableOpacity>
-      )}
+        </TouchableOpacity>)}
       <TouchableOpacity style ={styles.filter} onPress={() => {setShowFilters('')}}>
         <Image source = {require('../assets/icons/filter.png')} style={styles.smallIcon}/>          
       </TouchableOpacity> 
@@ -59,6 +65,7 @@ const styles = StyleSheet.create({
       width:24,
       height:24,
       resizeMode:'contain',
+      tintColor:COLORS.primary
     },
     filter:{
       width:48,
@@ -72,5 +79,17 @@ const styles = StyleSheet.create({
       alignItems:'center',
       flexDirection:'row',
       justifyContent:'center'
-    }
+    },
+    cancel:{
+      width:48,
+      height:44,
+      top: 1,
+      right:52,
+      bottom:1,
+      position:'absolute',
+      alignItems:'center',
+      flexDirection:'row',
+      justifyContent:'center'
+    },
+
 })

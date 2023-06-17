@@ -4,6 +4,10 @@ import { StyleSheet, Dimensions, View, StatusBar, FlatList,Text, TouchableOpacit
 import { useNavigation } from '@react-navigation/native';
 
 import OnboardingSlide from '../components/OnboardingSlide';
+import { AuthContext } from '../contexts/AuthContext';
+
+import BigButton from '../components/BigButton'
+import { useContext } from 'react'
 
 const {width, height} = Dimensions.get('window');
 
@@ -31,6 +35,7 @@ const slides =[
 ]
 
 const OnboardingScreen =() => {
+    const {isLoggedIn,userData,logout, status} = useContext(AuthContext);
     const imageRef = useRef();
     const [active, setActive] = useState(0);
     const indexRef = useRef(active);
@@ -38,10 +43,12 @@ const OnboardingScreen =() => {
     const onNavigate = useNavigation();
 
     const onNavigationWelcome = () => {
+        logout()
         onNavigate.navigate("WelcomeScreen");
     };
-    const onNavigationContinue = () => {
-        onNavigate.navigate("HomeScreen");
+    const onNavigationHome = () => {
+        logout()
+        onNavigate.navigate("Main");
     }
     useInterval(() => {
         if (active < Number(slides?.length) - 1) {
@@ -93,7 +100,7 @@ const OnboardingScreen =() => {
                         </Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity >
+                <TouchableOpacity onPress={() => onNavigationHome()} >
                     <View style={{marginTop:12}}>
                         <Text style={{color:COLORS.primary, textAlign:'center', fontSize:14, fontFamily:'Poppins_400Regular'}}>
                             Continue as Guest

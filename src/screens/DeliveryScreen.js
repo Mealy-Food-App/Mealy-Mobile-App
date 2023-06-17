@@ -1,14 +1,33 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, StatusBar } from 'react-native'
+import React, {useContext} from 'react'
+import ScreenHeader from '../components/ScreenHeader';
+import { AuthContext } from '../contexts/AuthContext';
+import Unauth from '../components/Unauth';
 
 const DeliveryScreen = () => {
+  const {isLoggedIn, userData, status,login} = useContext(AuthContext);
+
   return (
-    <View>
-      <Text>DeliveryScreen</Text>
-    </View>
+    <View style={styles.container}>
+    <ScreenHeader props={{title:'Delivery'}}/>
+    {isLoggedIn ? (
+      <Text>Delivery</Text>
+    ):(
+      <Unauth props={{message: "View and track your scheduled deliveries. By logging in you can access your scheduled deliveries"}}/>
+    )}
+  </View>
   )
 }
 
 export default DeliveryScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: 16,
+    // StatusBar.currentHeight,
+    flex: 1,
+    paddingHorizontal: 24,
+    width: '100%',
+    backgroundColor: '#FFFFFF',
+  },
+})

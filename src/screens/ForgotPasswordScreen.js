@@ -67,7 +67,7 @@ const ForgotPasswordScreen = () => {
         textStyle={styles.loadingText}
         overlayColor ='rgba(0, 6, 20, 0.75)'
       />
-      <Text style={styles.title}>Reset Password</Text>
+      <Text style={styles.title}>Forgot Password</Text>
       <Text style= {styles.subtitle}>Kindly enter your account email to reset your password.</Text>
       <Image source ={require('../assets/images/amico.png')} style={styles.resetpwdImage}/>
       <Formik
@@ -115,7 +115,7 @@ export default ForgotPasswordScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: StatusBar.currentHeight,
+    paddingTop: 16,
     paddingHorizontal:24,
     width: '100%',
     backgroundColor:COLORS.bgPrimary,
