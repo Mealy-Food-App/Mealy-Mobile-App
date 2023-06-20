@@ -27,6 +27,8 @@ const styles = StyleSheet.create({
     header:{
         flexDirection:'row',
         gap:25,
+        height:42,
+        marginVertical:16,
     },
     arrowLeft:{
         width:24,

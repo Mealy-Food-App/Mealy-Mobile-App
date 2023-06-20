@@ -29,8 +29,7 @@
       "eas": {
         "projectId": "96fc4f87-abea-4d5c-9055-032f522a3664"
       }
-    },
-    "sdkVersion": "48.0.0"
+    }
   },
   "name": "mealy_app"
 }

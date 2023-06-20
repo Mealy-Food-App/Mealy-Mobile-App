@@ -3,7 +3,7 @@ import React from 'react'
 import { StarRatingDisplay } from 'react-native-star-rating-widget'
 
 const windowWidth = Dimensions.get('window').width;
-const featuredItemWidth = (windowWidth - 68) / 2;
+const featuredItemWidth = (windowWidth - 64) / 2;
 const FeaturedItem = ({data, marginLeft, marginRight, onPressItem, children}) => {
   return (
     <View style={[styles.featured,{marginLeft: marginLeft,margin: marginRight,}]}>
@@ -12,7 +12,7 @@ const FeaturedItem = ({data, marginLeft, marginRight, onPressItem, children}) =>
         style ={{
             resizeMode:'cover',
             height:116,
-            width:featuredItemWidth,
+            width:featuredItemWidth - 12,
             borderRadius:8,
             position:'absolute',
             overflow:'visible'
@@ -36,7 +36,7 @@ const FeaturedItem = ({data, marginLeft, marginRight, onPressItem, children}) =>
             <Text style={styles.contentTextTitle}>{data.name}</Text>
             <Text style={styles.contentTextSpecialty}>{data.specialty}</Text>
         </View>
-        <StarRatingDisplay style={{position:'absolute', left:-5, bottom:6}}rating={data.rating} color={'#00205c'} starSize={13} enableHalfStar={true}/>
+        <StarRatingDisplay style={{position:'absolute', left:0, bottom:12}}rating={data.rating} color={'#00205c'} starSize={13} enableHalfStar={true}/>
     </View>
   )
 }
@@ -45,14 +45,16 @@ export default FeaturedItem
 
 const styles = StyleSheet.create({
     featured:{
-        backgroundColor:'#ffffff',
+        backgroundColor:'#f5f5f5',
         borderRadius:8,
         width:featuredItemWidth ,
-        height:189,
-        marginBottom:16
+        height:197,
+        marginBottom:16,
+        paddingVertical:6,
+        paddingHorizontal:6
     },
     ImageBackground:{
-        width:featuredItemWidth,
+        width:featuredItemWidth - 12,
         height:116,
         borderRadius:8,
     },

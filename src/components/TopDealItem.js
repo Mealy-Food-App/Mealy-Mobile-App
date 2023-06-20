@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
-const TopDealItem = ({ data, marginLeft, marginRight, onPressItem }) => {
+const TopDealItem = ({ data, marginLeft, marginRight, onPressItem, backgroundColor }) => {
   return (
-    <View style={[styles.topDeal, { marginLeft: marginLeft, marginRight: marginRight }]}>
+    <View style={[styles.topDeal, { marginLeft: marginLeft, marginRight: marginRight, backgroundColor:backgroundColor }]}>
       <View style={styles.textContent}>
         <Text style={styles.textContent1}>{data.gift}</Text>
         <View style={styles.textContent2}>
@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
   topDeal: {
     width: 214,
     height: 112,
-    backgroundColor: 'rgba(0, 0, 0, 0.07)',
     borderRadius: 10,
     flexDirection: 'row',
     padding: 9,

@@ -10,7 +10,6 @@ import Unauth from '../components/Unauth';
 
 
 const orderHistoryItems = orderHistories.flatMap((history) => history.data);
-console.log(orderHistoryItems)
 const deliveredHistoryItems =orderHistoryItems.filter((item) => item.status === "D");
 const canceledHistoryItems =orderHistoryItems.filter((item) => item.status === "C");
 const scheduledHistoryItems =orderHistoryItems.filter((item) => item.status === "P");
@@ -173,7 +172,7 @@ export default HistoryScreen;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 16,
+    paddingTop: StatusBar.currentHeight,
     // StatusBar.currentHeight,
     flex: 1,
     paddingHorizontal: 24,

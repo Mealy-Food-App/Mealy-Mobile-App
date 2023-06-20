@@ -10,16 +10,25 @@ import FoodProductItem from '../components/FoodProductItem';
 
 const Tab = createMaterialTopTabNavigator();
 
-function AllTab({searchPhrase}){
+function AllTab({props}){
   const { products } = useContext(ProductsContext);
   const [filteredItems, setFilteredItems] = useState([]);
-  const actualSearchPhrase = searchPhrase.searchPhrase.toLowerCase();
+  const actualSearchPhrase = props.searchPhrase.toLowerCase();
+  const categoryName = props.title.toLowerCase();
+
+
+  const categoryItems = products.filter(categoryItem=>{
+    const productCategory = categoryItem.category.toLowerCase();
+    return (
+      productCategory.indexOf(categoryName) !== -1
+    )
+  })
 
   useEffect(() => {
-    const filtered = products.filter((product) =>
+    const filtered = categoryItems.filter((categoryItem) =>
       {
-        const productName = product.name.toLowerCase();
-        const productCategory = product.category.toLowerCase();
+        const productName = categoryItem.name.toLowerCase();
+        const productCategory = categoryItem.category.toLowerCase();
         return (
           productName.indexOf(actualSearchPhrase) !== -1 ||
           productCategory.indexOf(actualSearchPhrase) !== -1
@@ -34,7 +43,7 @@ function AllTab({searchPhrase}){
       keyExtractor={(item) => item.id}
       showsVerticalScrollIndicator={false}
       style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: '#f5f5f5',
       }}
 
       renderItem={({ item, index }) => (
@@ -51,16 +60,25 @@ function AllTab({searchPhrase}){
     )
 }
 
-  function PopularTab({searchPhrase}){
+  function PopularTab({props}){
     const { products } = useContext(ProductsContext);
     const [filteredItems, setFilteredItems] = useState([]);
-    const actualSearchPhrase = searchPhrase.searchPhrase.toLowerCase();
+    const actualSearchPhrase = props.searchPhrase.toLowerCase();
+    const categoryName = props.title.toLowerCase();
+  
+  
+    const categoryItems = products.filter(categoryItem=>{
+      const productCategory = categoryItem.category.toLowerCase();
+      return (
+        productCategory.indexOf(categoryName) !== -1
+      )
+    })
   
     useEffect(() => {
-      const filtered = products.filter((product) =>
+      const filtered = categoryItems.filter((categoryItem) =>
         {
-          const productName = product.name.toLowerCase();
-          const productCategory = product.category.toLowerCase();
+          const productName = categoryItem.name.toLowerCase();
+          const productCategory = categoryItem.category.toLowerCase();
           return (
             productName.indexOf(actualSearchPhrase) !== -1 ||
             productCategory.indexOf(actualSearchPhrase) !== -1
@@ -68,14 +86,13 @@ function AllTab({searchPhrase}){
         })
       setFilteredItems(filtered);
     }, [actualSearchPhrase]);
-
     return(
       <FlatList
       data={filteredItems}
       keyExtractor={(item) => item.id} 
       showsVerticalScrollIndicator={false}
       style={{
-                backgroundColor: '#ffffff',
+                backgroundColor: '#f5f5f5',
       }}
 
       renderItem={({ item, index }) => (
@@ -90,16 +107,25 @@ function AllTab({searchPhrase}){
     )
 }
 
-  function TrendingTab({searchPhrase}){
+  function TrendingTab({props}){
     const { products } = useContext(ProductsContext);
     const [filteredItems, setFilteredItems] = useState([]);
-    const actualSearchPhrase = searchPhrase.searchPhrase.toLowerCase();
+    const actualSearchPhrase = props.searchPhrase.toLowerCase();
+    const categoryName = props.title.toLowerCase();
+  
+  
+    const categoryItems = products.filter(categoryItem=>{
+      const productCategory = categoryItem.category.toLowerCase();
+      return (
+        productCategory.indexOf(categoryName) !== -1
+      )
+    })
   
     useEffect(() => {
-      const filtered = products.filter((product) =>
+      const filtered = categoryItems.filter((categoryItem) =>
         {
-          const productName = product.name.toLowerCase();
-          const productCategory = product.category.toLowerCase();
+          const productName = categoryItem.name.toLowerCase();
+          const productCategory = categoryItem.category.toLowerCase();
           return (
             productName.indexOf(actualSearchPhrase) !== -1 ||
             productCategory.indexOf(actualSearchPhrase) !== -1
@@ -114,7 +140,7 @@ function AllTab({searchPhrase}){
       keyExtractor={(item) => item.id}
       showsVerticalScrollIndicator={false}
       style={{
-                backgroundColor: '#ffffff',
+                backgroundColor: '#f5f5f5',
       }}
 
       renderItem={({ item, index }) => (
@@ -129,16 +155,25 @@ function AllTab({searchPhrase}){
     )
 }
 
-  function NewestTab({searchPhrase}){
+  function NewestTab({props}){
     const { products } = useContext(ProductsContext);
     const [filteredItems, setFilteredItems] = useState([]);
-    const actualSearchPhrase = searchPhrase.searchPhrase.toLowerCase();
+    const actualSearchPhrase = props.searchPhrase.toLowerCase();
+    const categoryName = props.title.toLowerCase();
+  
+  
+    const categoryItems = products.filter(categoryItem=>{
+      const productCategory = categoryItem.category.toLowerCase();
+      return (
+        productCategory.indexOf(categoryName) !== -1
+      )
+    })
   
     useEffect(() => {
-      const filtered = products.filter((product) =>
+      const filtered = categoryItems.filter((categoryItem) =>
         {
-          const productName = product.name.toLowerCase();
-          const productCategory = product.category.toLowerCase();
+          const productName = categoryItem.name.toLowerCase();
+          const productCategory = categoryItem.category.toLowerCase();
           return (
             productName.indexOf(actualSearchPhrase) !== -1 ||
             productCategory.indexOf(actualSearchPhrase) !== -1
@@ -152,7 +187,7 @@ function AllTab({searchPhrase}){
       keyExtractor={(item) => item.id}
       showsVerticalScrollIndicator={false}
       style={{
-                backgroundColor: '#ffffff',
+                backgroundColor: '#f5f5f5',
       }}
 
       renderItem={({ item, index }) => (
@@ -166,7 +201,7 @@ function AllTab({searchPhrase}){
     />
     )
 }
-  const SearchTabs =(searchPhrase)=> {
+  const SearchTabs =({props})=> {
     return (
       <Tab.Navigator
         screenOptions={{
@@ -196,23 +231,23 @@ function AllTab({searchPhrase}){
   
           tabBarStyle: {
             justifyContent:'space-evenly',
-            backgroundColor:'#ffffff',
+            backgroundColor:'#f5f5f5',
             width:(Dimensions.get("screen").width -48),
             height:38,
             padding:0, margin:0,},
         }}
       >
         <Tab.Screen name="All">
-          {() => <AllTab searchPhrase={searchPhrase}/>}
+          {() => <AllTab props={props}/>}
         </Tab.Screen>
         <Tab.Screen name="Popular">
-          {() => <PopularTab searchPhrase={searchPhrase}/>}
+          {() => <PopularTab props={props}/>}
         </Tab.Screen>
         <Tab.Screen name="Trending">
-          {() => <TrendingTab searchPhrase={searchPhrase}/>}
+          {() => <TrendingTab props={props}/>}
         </Tab.Screen>
         <Tab.Screen name="Newest">
-          {() => <NewestTab searchPhrase={searchPhrase}/>}
+          {() => <NewestTab props={props}/>}
         </Tab.Screen>
   
       </Tab.Navigator>
@@ -220,35 +255,35 @@ function AllTab({searchPhrase}){
   }
 
 
-const SearchScreen = () => {
+const CategoryScreen = () => {
     const route = useRoute();
-    const [filteredItems, setFilteredItems] = useState([]);
-    const [searchPhrase, setSearchPhrase] = useState(route.params);
+    const [searchPhrase, setSearchPhrase] = useState(route.params.searchPhrase);
+    const title = route.params.title
     const [clicked, setClicked] = useState(false);
    
     
   return (
     <View style ={styles.container}>
-      <ScreenHeader props = {{title:searchPhrase}}/>
+      <ScreenHeader props = {{title:title}}/>
         <SearchBar
-            searchPhrase={searchPhrase}
+            props={{searchPhrase:searchPhrase, title:title}}
             setSearchPhrase={setSearchPhrase}
             clicked={clicked}
             setClicked={setClicked}
         />
-        <SearchTabs searchPhrase= {searchPhrase}/>
+        <SearchTabs props={{searchPhrase:searchPhrase, title:title}}/>
     </View>
   )
 }
 
-export default SearchScreen
+export default CategoryScreen
 const styles = StyleSheet.create({
     container: {
         paddingTop:StatusBar.currentHeight,
         flex: 1,
         paddingHorizontal: 24,
         width: '100%',
-        backgroundColor: '#ffffff',
+        backgroundColor: '#F5F5F5',
     },
     innerContainer:{
         marginTop:24,

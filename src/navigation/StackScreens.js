@@ -18,6 +18,7 @@ import LeftDrawerContent from './LeftDrawerContent';
 import ConfirmTokenScreen from '../screens/ConfirmTokenScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import SearchScreen from '../screens/SearchScreen';
+import CategoryScreen from '../screens/CategoryScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -90,6 +91,10 @@ export const OnboardingStackScreens = () => {
       name = "SearchScreen"
       component={SearchScreen}
     />
+    <Stack.Screen
+      name = "CategoryScreen"
+      component={CategoryScreen}
+    />
   </Stack.Navigator>
   )
 }
@@ -103,6 +108,10 @@ export const AppStackScreens = () => {
     <Stack.Screen
       name = "SearchScreen"
       component={SearchScreen}
+    />
+    <Stack.Screen
+      name = "CategoryScreen"
+      component={CategoryScreen}
     />
     <Stack.Screen
       name = "LogInScreen"

@@ -23,7 +23,7 @@ export default DeliveryScreen
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 16,
+    paddingTop: StatusBar.currentHeight,
     // StatusBar.currentHeight,
     flex: 1,
     paddingHorizontal: 24,

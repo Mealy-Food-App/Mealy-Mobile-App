@@ -32,10 +32,18 @@ const HomeScreen = () => {
       if (searchPhrase !== '') {
         onNavigate.navigate('SearchScreen',  searchPhrase );
       }
-    }, 4000); // 1000 milliseconds (1 second) delay
+    }, 1000); // 1000 milliseconds (1 second) delay
 
     return () => clearTimeout(timer);
   }, [searchPhrase, onNavigate]);
+
+  const onNavigateToCategory = (item) => {
+    onNavigate.navigate('CategoryScreen', {
+      title: item.name,
+      searchPhrase:item.name
+    });
+  }
+
   return (
     <View style={styles.container}>
       {isLoggedIn === true  &&  userData !== null  ? (
@@ -95,7 +103,6 @@ const HomeScreen = () => {
               horizontal
               keyExtractor={(item) => item.id}
               style={{
-                backgroundColor: '#ebebeb',
                 borderRadius: 10,
               }}
               renderItem={({ item, index }) => (
@@ -145,7 +152,7 @@ const HomeScreen = () => {
               renderItem={({ item, index }) => (
                 <FeaturedItem
                   data={item}
-                  marginLeft={index === 0 || index % 2 === 0 ? 0 : 20}
+                  marginLeft={index === 0 || index % 2 === 0 ? 0 :16}
                   onPressItem={() => onNavigation(item)}
                 />
               )}
@@ -167,6 +174,7 @@ const HomeScreen = () => {
                 <TopDealItem
                   data={item}
                   marginLeft={index === 0 ? 0 : 16}
+                  backgroundColor= {index  === 0 ? '#FFEBEB' :index  === 1 ? 'rgba(20, 1, 0, 0.1)': index  === 2 ? '#F5EFF5': '#fff1eb'}
                   marginRight={index === topDeals.length - 1 ? 0 : 0}
                   onPressItem={() => onNavigation(item)}
                 />
@@ -183,7 +191,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 16,
+    paddingTop: StatusBar.currentHeight,
     flex: 1,
     paddingHorizontal: 24,
     width: '100%',

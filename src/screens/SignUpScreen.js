@@ -252,7 +252,7 @@ export default SignUpScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 16,
+    paddingTop: StatusBar.currentHeight,
     paddingHorizontal:24,
     width: '100%',
     backgroundColor:COLORS.bgPrimary,

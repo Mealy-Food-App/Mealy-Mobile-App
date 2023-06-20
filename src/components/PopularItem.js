@@ -11,7 +11,7 @@ const PopularItem = ({data, marginLeft, marginRight, onPressItem, children}) => 
         style ={{
             resizeMode:'cover',
             height:100,
-            width:203,
+            width:199,
             borderRadius:10,
             position:'absolute',
             overflow:'visible'
@@ -46,7 +46,7 @@ export default PopularItem
 
 const styles = StyleSheet.create({
     popular:{
-        backgroundColor:'#ffffff',
+        backgroundColor:'#F5f5f5',
         borderRadius:10,
         width:219,
         height:238,
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     },
     ImageBackground:{
         height:100,
-        width:215,
+        width:199,
         borderRadius:8,
     },
     contentText:{
