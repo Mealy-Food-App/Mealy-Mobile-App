@@ -11,6 +11,7 @@ import { AuthContext } from '../contexts/AuthContext';
 
 import { Image, View, Text, StyleSheet, BackHandler } from "react-native";
 import { color } from 'react-native-reanimated';
+import { CartContext } from '../contexts/CartContext';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -18,6 +19,7 @@ const Drawer = createDrawerNavigator();
 
 const BottomTabs = () => {
     const {isLoggedIn,userData,logout, status} = useContext(AuthContext);
+    const {cartItems} = useContext(CartContext)
     // useEffect(() => {
     //     const backAction = () => {
     //         if (isLoggedIn){
@@ -98,15 +100,20 @@ const BottomTabs = () => {
                 options={{
                 headerShown: false,
                 tabBarIcon: ({focused,color, size}) => focused ?
+                    <View>
                         <Image
                         source={require("../assets/icons/cart.png")}
                         style={styles.navIconActive}
                         />
+                    </View>
                     :
+                    <View>
+                        {isLoggedIn && cartItems.length > 0 &&<Text style={styles.cartnum}>{cartItems.length}</Text>}
                         <Image
                         source={require("../assets/icons/cart.png")}
                         style={styles.navIcon}
                         />
+                    </View>
 
                 }}
             />
@@ -144,5 +151,14 @@ const styles = StyleSheet.create({
         height:24,
         tintColor:'#ffffff',       
     },
+    cartnum:{
+        color:'#00000050',
+        borderRadius:16,
+        left:24,
+        top:-4,
+        position:'absolute',
+        fontFamily:'Poppins_700Bold',
+        fontSize:10
+    }
 
 })

@@ -17,6 +17,8 @@ export const ProductsProvider = ({ children }) => {
   // Define the state for the products
   const [products, setProducts] = useState(initialProducts);
   const [categories, setCategories] = useState(initialCategories);
+  const [productsLoaded, setProductsLoaded] = useState(false);
+  const [categoriesLoaded, setCategoriesLoaded] = useState(false);
 
   useEffect(() => {
     getCategories();
@@ -27,16 +29,21 @@ export const ProductsProvider = ({ children }) => {
   const getCategories = async () => {
     const res = await axios.get(`${BASE_URL}/home/categories`);
     setCategories(res.data.data);
+    setCategoriesLoaded(true);
   }
   const getProducts = async () => {
     const res = await axios.get(`${BASE_URL}/product/products`);
     setProducts(res.data.data);
+    setProductsLoaded(true);
   }
 
   // Create the context value
   const contextValue = {
     products,
+    productsLoaded,
     categories,
+    categoriesLoaded,
+
     // restaurants,
     // mealOftheday,
     getCategories,

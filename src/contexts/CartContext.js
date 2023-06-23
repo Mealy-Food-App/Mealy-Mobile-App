@@ -25,7 +25,7 @@ export const CartProvider = ({ children }) => {
       // If the item already exists in the cart, update its quantity
       const updatedItems = cartItems.map((cartItem) => {
         if (cartItem.id === item.id) {
-          return { ...cartItem, quantity: cartItem.quantity + 1,total: (cartItem.total += cartItem.price) };
+          return { ...cartItem, quantity: item.quantity,total: (cartItem.itemPrice * item.quantity) };
         }
         return cartItem;
       });
@@ -42,7 +42,7 @@ export const CartProvider = ({ children }) => {
     if (existingItem) {
       const updatedItems = cartItems.map((cartItem) => {
         if (cartItem.id === item.id) {
-          return { ...cartItem, quantity: cartItem.quantity + 1, total: (cartItem.total += cartItem.price)};
+          return { ...cartItem, quantity: cartItem.quantity + 1, total: (cartItem.total += cartItem.itemPrice)};
         }
         return cartItem;
       });
@@ -55,7 +55,7 @@ export const CartProvider = ({ children }) => {
       const updatedItems = cartItems.map((cartItem) => {
         if (cartItem.id === item.id) {
           if (cartItem.quantity >= 2){
-            return { ...cartItem, quantity: cartItem.quantity - 1 ,total: (cartItem.total -= cartItem.price)};
+            return { ...cartItem, quantity: cartItem.quantity - 1 ,total: (cartItem.total -= cartItem.itemPrice)};
           }           
         }
         return cartItem;

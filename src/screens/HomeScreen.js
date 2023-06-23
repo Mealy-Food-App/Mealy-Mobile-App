@@ -25,14 +25,14 @@ const HomeScreen = () => {
   const [searchPhrase, setSearchPhrase] = useState("");
   const [clicked, setClicked] = useState(false);
   const {isLoggedIn, userData, status} = useContext(AuthContext);
-  const {categories} = useContext(ProductsContext);
+  const {categories, products} = useContext(ProductsContext);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchPhrase !== '') {
         onNavigate.navigate('SearchScreen',  searchPhrase );
       }
-    }, 1000); // 1000 milliseconds (1 second) delay
+    }, 500); // 1000 milliseconds (1 second) delay
 
     return () => clearTimeout(timer);
   }, [searchPhrase, onNavigate]);
@@ -42,6 +42,14 @@ const HomeScreen = () => {
       title: item.name,
       searchPhrase:item.name
     });
+  }
+  const onNavigateToProduct = (item) => {
+    onNavigate.navigate('ProductDetailScreen',{
+      productDetails:item,
+    });
+  }
+  const handleShowAllCategories = () => {
+    onNavigate.navigate('MealyCategories');
   }
 
   return (
@@ -78,7 +86,7 @@ const HomeScreen = () => {
       <ScrollView style={styles.homeScroll} contentInset={{ bottom: 138 }} showsVerticalScrollIndicator={false} >
         <View>
           <WeekOffer style={{ width: '100%' }} data={mealOfTheDay} />
-          <Section title="Explore Categories" view="Show all" />
+          <Section title="Explore Categories" view="Show all" onPress= {handleShowAllCategories}/>
           <View>
             <FlatList
               data={categories}
@@ -87,7 +95,9 @@ const HomeScreen = () => {
               keyExtractor={(item) => item._id}
               renderItem={({ item, index }) => (
                 <CategoryItem
+                  key = {item._id}
                   item={item}
+                  backgroundColor="#F8F2F1"
                   marginLeft={index === 0 ? 0 : 8}
                   marginRight={index === categories.length - 1 ? 0 : 0}
                   onPressCategory={() => onNavigateToCategory(item)}
@@ -95,7 +105,7 @@ const HomeScreen = () => {
               )}
             />
           </View>
-          <Section title="Popular Around You" view="View more" />
+          <Section title="Popular Around You" view="View more" onPress= {() => handleShowAll('PopularAroundScreen')} />
           <View>
             <FlatList
               data={aroundYou}
@@ -107,6 +117,7 @@ const HomeScreen = () => {
               }}
               renderItem={({ item, index }) => (
                 <PopularItem
+                  key = {item.id}
                   data={item}
                   marginLeft={index === 0 ? 0 : 16}
                   marginRight={index === aroundYou.length - 1 ? 0 : 0}
@@ -115,13 +126,13 @@ const HomeScreen = () => {
               )}
             />
           </View>
-          <Section title="Recommended For You" view="Show all" />
+          <Section title="Recommended For You" view="Show all" onPress= {() => handleShowAll('RecommendedScreen')}/>
           <View>
             <FlatList
-              data={recommended}
+              data={products}
               horizontal
               nestedScrollEnabled={true}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item._id}
               style={{
                 backgroundColor: '#ffffff',
                 paddingVertical: 8,
@@ -129,15 +140,16 @@ const HomeScreen = () => {
               }}
               renderItem={({ item, index }) => (
                 <RecommendedItem
+                  key = {item.id}
                   data={item}
                   marginLeft={index === 0 ? 0 : 16}
                   marginRight={index === recommended.length - 1 ? 0 : 0}
-                  onPressItem={() => onNavigation(item)}
+                  onPressItem={() => onNavigateToProduct(item)}
                 />
               )}
             />
           </View>
-          <Section title="Featured Restaurants" view="Show all" />
+          <Section title="Featured Restaurants" view="Show all" onPress= {() => handleShowAll('FeaturedScreen')}/>
           <View>
             <FlatList
               nestedScrollEnabled={true}
@@ -152,6 +164,7 @@ const HomeScreen = () => {
               renderItem={({ item, index }) => (
                 <FeaturedItem
                   data={item}
+                  key = {item.id}
                   marginLeft={index === 0 || index % 2 === 0 ? 0 :16}
                   onPressItem={() => onNavigation(item)}
                 />
@@ -172,6 +185,7 @@ const HomeScreen = () => {
               }}
               renderItem={({ item, index }) => (
                 <TopDealItem
+                  key = {item.id}
                   data={item}
                   marginLeft={index === 0 ? 0 : 16}
                   backgroundColor= {index  === 0 ? '#FFEBEB' :index  === 1 ? 'rgba(20, 1, 0, 0.1)': index  === 2 ? '#F5EFF5': '#fff1eb'}
@@ -191,7 +205,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: StatusBar.currentHeight,
+    paddingTop: 16,
     flex: 1,
     paddingHorizontal: 24,
     width: '100%',

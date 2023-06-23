@@ -18,26 +18,11 @@ import { ProductsProvider } from './src/contexts/ProductsContext';
 
 
 const Stack = createStackNavigator();
-function ProductLoader({ children, setProductsLoaded }) {
-  const BASE_URL= 'https://mealy-backend-app.onrender.com/api/mealy'
-  useEffect(() => {
-    // Simulating an asynchronous API call to fetch products
-    axios.get(`${BASE_URL}/product/products`);
-    setTimeout(() => {
-      // Once the products are loaded, update the state
-      setProductsLoaded(true);
-    }, 2000); // Delay for 2 seconds (adjust as needed)
-  }, []);
-
-  return children;
-}
-
-
 
 export default function App() {
   const [isAppReady, setIsAppReady] = React.useState(false);
   const [userOnboarded, setUserOnboarded]= React.useState(false);
-  const [productsLoaded, setProductsLoaded] = useState(false)
+
 
   useEffect(() =>{
     checkOnboardingStatus();
@@ -46,7 +31,7 @@ export default function App() {
   const checkOnboardingStatus = async () => {
     try {
       const onboardingStatus = await AsyncStorage.getItem('onboardingStatus');
-      if (onboardingStatus !== null && onboardingStatus === 'completed') {
+      if (onboardingStatus !== null && onboardingStatus === 'completed7') {
         setUserOnboarded(true);
       }
     } catch (error) {
@@ -67,19 +52,18 @@ export default function App() {
 
 
   React.useEffect(() => {
-    if(fontsReady && productsLoaded){
+    if(fontsReady){
       setTimeout(() => {
         setIsAppReady(true);
       },12000);
     }
-  }, [fontsReady,productsLoaded]);
+  }, [fontsReady]);
  
 
   if (!isAppReady) {
     // Render the custom loading screen
     return(
       <NavigationContainer>
-        <ProductLoader setProductsLoaded={setProductsLoaded}>
           <ProductsProvider>
             <AuthProvider>
               <CartProvider>   
@@ -92,7 +76,6 @@ export default function App() {
               </CartProvider>   
             </AuthProvider>
           </ProductsProvider>
-        </ProductLoader>
       </NavigationContainer>
     );
   }

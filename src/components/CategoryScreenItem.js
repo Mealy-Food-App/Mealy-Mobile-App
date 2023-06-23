@@ -1,11 +1,20 @@
 import { StyleSheet, Text, View,Image, Dimensions } from 'react-native'
 import React from 'react'
+import { useNavigation} from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { Pressable } from 'react-native';
 
 const itemWidth = (Dimensions.get("screen").width - 80) / 3 
-const CategoryItem = ({item, marginLeft, marginVertical, marginRight, onPressCategory, backgroundColor, children}) => {
+const CategoryScreenItem = ({item, marginLeft, marginVertical, marginRight, backgroundColor, children}) => {
+    const onNavigate = useNavigation();
+    const onPressCategory = (item) => {
+        onNavigate.navigate('CategoryScreen',  {
+            title: item.name,
+            searchPhrase:item.name
+        });
+    }
   return (
-    <TouchableOpacity onPress={onPressCategory} 
+    <Pressable onPressIn={() => onPressCategory(item)} 
       style={{
           width: itemWidth,
           height:120,        
@@ -23,11 +32,11 @@ const CategoryItem = ({item, marginLeft, marginVertical, marginRight, onPressCat
         <Text style={styles.label}>{item.name}</Text>
         <Text style={styles.restaurants}>{item.totalPlaces}</Text>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   )
 }
 
-export default CategoryItem
+export default CategoryScreenItem
 
 const styles = StyleSheet.create({
     image:{

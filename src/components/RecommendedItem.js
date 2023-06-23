@@ -1,14 +1,15 @@
-import { StyleSheet, Text, View, ImageBackground } from 'react-native'
+import { StyleSheet, Text, View, ImageBackground, Pressable } from 'react-native'
 import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import SmallButton from './SmallButton'
 import ItemHeader from './ItemHeader'
+import ItemFooterPrice from './ItemFooterPrice'
 
 const RecommendedItem = ({data, marginLeft, marginRight, onPressItem, children}) => {
   return (
-    <View style={[styles.recommended,{marginLeft: marginLeft,margin: marginRight,}]}>
+    <Pressable style={[styles.recommended,{marginLeft: marginLeft,margin: marginRight,}]} onPress={onPressItem}>
         <View style={styles.ImageBackground}>
-        <ImageBackground source={data.image}
+        <ImageBackground source={require('../assets/images/chicken.png')}
         style ={{
             resizeMode:'cover',
             height:113,
@@ -20,6 +21,7 @@ const RecommendedItem = ({data, marginLeft, marginRight, onPressItem, children})
         imageStyle={{borderRadius:8}}
         >
           <ItemHeader data={data}/> 
+          <ItemFooterPrice data = {data}/>
         </ImageBackground>        
         </View>
         <View style={styles.content}>
@@ -32,7 +34,7 @@ const RecommendedItem = ({data, marginLeft, marginRight, onPressItem, children})
                 <SmallButton props={{borderColor:'#E69f14',color:'#E69f14', title: "Add to Cart", fontFamily: "Poppins_500Medium", fontSize:14 }}/>
         </TouchableOpacity>
 
-    </View>
+    </Pressable>
   )
 }
 
@@ -69,6 +71,7 @@ const styles = StyleSheet.create({
         marginTop:8
     },
     contentTextDescription:{
+        height:24,
         lineHeight:12,
         fontSize:8,
         fontFamily:'Poppins_400Regular',

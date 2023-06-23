@@ -1,8 +1,9 @@
+
 const recommended = [
   {
     id: 0,
     name: 'Burger Large',
-    description: 'Freshly grilled chicken and chilled lorem ipsum',
+    description: 'Freshly grilled chicken and chilled Lorem ipsum dolor sit amet, consectetur adipiscing elit Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
     price: 2500,
     image: require('./assets/images/burger.png'),
     restaurant:'Burger King',
@@ -20,7 +21,7 @@ const recommended = [
   {
     id: 1,
     name: 'Pizza Large',
-    description: 'Freshly grilled chicken and chilled lorem ipsum',
+    description: 'Freshly grilled chicken and chilled Lorem ipsum dolor sit amet, consectetur adipiscing elit Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
     price: 2500,
     image: require('./assets/images/pizza.png'),
     restaurant:'Burger King',
@@ -38,7 +39,7 @@ const recommended = [
   {
     id: 3,
     name: 'Mama Silver',
-    description: 'Freshly grilled chicken and chilled lorem ipsum',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
     price: 2500,
     image: require('./assets/images/fish.png'),
     restaurant:'Burger King',

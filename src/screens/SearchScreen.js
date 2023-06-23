@@ -244,7 +244,7 @@ const SearchScreen = () => {
 export default SearchScreen
 const styles = StyleSheet.create({
     container: {
-        paddingTop:StatusBar.currentHeight,
+        paddingTop:16,
         flex: 1,
         paddingHorizontal: 24,
         width: '100%',

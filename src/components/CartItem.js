@@ -2,7 +2,7 @@ import { View, Image, Text, TouchableOpacity, StyleSheet, TouchableWithoutFeedba
 import { React,useState, useCallback, useContext } from "react";
 import { CartContext } from "../contexts/CartContext";
 
-const CartItem = ({ children, props}) =>{
+const CartItem = ({ OrderItem, children, props}) =>{
     const {decreaseQuantity} = useContext(CartContext);
     const {increaseQuantity} = useContext(CartContext);
     const {removeFromCart} = useContext(CartContext);
@@ -26,32 +26,34 @@ const CartItem = ({ children, props}) =>{
             <View
                 style={styles.item}>
                 <View style={styles.itemImageContainer}>
-                    <Image source={OrderItem.image}   style={styles.itemImage}/>
+                    <Image source={require('../assets/images/chicken.png')}   style={styles.itemImage}/>
                 </View>
-                <View style = {{ display: 'flex', flex:0.5, flexDirection:'column', height:96, alignSelf:'center',justifyContent:"space-between"}}>
-                    <Text style={styles.OrderItemTitle}>Fried Rice</Text>
-                    <Text style={styles.Price}>N800</Text>
-                    <Text style={OrderItemDetails}>Prepared with Unsalted butter and fresh vegetables</Text>
+                <View style = {{ display: 'flex', flex:0.4, flexDirection:'column', paddingHorizontal:12,height:70, alignSelf:'center',justifyContent:"space-between"}}>
+                    <Text style={styles.OrderItemTitle}>{OrderItem.name}</Text>
+                    <Text style={styles.OrderItemPrice}>Debonairs Buruburu</Text>
+                    <Text style={styles.OrderItemDetails} numberOfLines={2}>{OrderItem.itemDesc}</Text>
                 </View>
 
-                <View style={{justifyContent:"space-between", alignContent:'center', flex:0.2}}>
-                        <View>
-                            <Text>4.7</Text>
-                        </View>
-                        <View style= {{width:64, height:40, borderRadius:8, display:'flex', flexDirection:"row", justifyContent:'space-between'}}>
-                                <TouchableOpacity onPress={handleDecrease} style={increaseContainer}>
-                                    <Image
-                                        source={require('../assets/icons/subtract.png')}
-                                        style={styles.increase}
-                                    />
-                                </TouchableOpacity>
-                                <Text style={{ fontSize: 14, fontWeight: "700" , marginHorizontal:4}}>1</Text>
-                                <TouchableOpacity onPress={handleIncrease} style={increaseContainer}>                  
-                                    <Image
-                                        source={require('../assets/icons/add.png')}
-                                        style={styles.increase}
-                                    />
-                                </TouchableOpacity>
+                <View style={styles.cartTotal}>
+                        <Text style={styles.OrderItemPrice}>{OrderItem.total}</Text>
+                        <View style= {styles.cartShortcut}> 
+                            <TouchableOpacity
+                                    style ={styles.add}
+                                    onPressIn = {handleDecrease}>                  
+                                <Image
+                                    source={require('../assets/icons/minus.png')}
+                                    style={styles.cartShortcutIcon}
+                                />
+                            </TouchableOpacity>
+                            <Text style={styles.cartShortcutText}>{OrderItem.quantity}</Text>
+                            <TouchableOpacity 
+                                style ={styles.add}
+                                onPressIn = {handleIncrease}>
+                            <Image
+                                source={require('../assets/icons/plus.png')}
+                                style={styles.cartShortcutIcon}
+                            />
+                            </TouchableOpacity>
                         </View>
                 </View>
             </View>
@@ -62,18 +64,18 @@ export default CartItem;
 
 const styles = StyleSheet.create({
     item:{
-        backgroundColor: "#F0F0F0",
-        marginTop: 4,
-        marginBottom: 0,
+        backgroundColor: "#E6ECEF",
+        marginTop: 8,
+        marginBottom: 6,
         padding: 8,
         borderRadius: 10,
         width:"100%",
-        height: 112,
+        height: 100,
         flexDirection:'row'
     },
     itemContainer:{
         width:"100%",
-        height: 112,
+        height: 100,
         borderRadius: 10,
     },
     increase:{
@@ -98,6 +100,66 @@ const styles = StyleSheet.create({
     itemImage:{ 
         width: 64,
         height: 64,
-        borderRadius: 8 }
+        borderRadius: 8
+    },
+    OrderItemTitle:{
+        fontFamily:"Poppins_400Regular",
+        color:'#00205C',
+        fontSize:14,
+        lineHeight:21
+    },
+    OrderItemPrice:{
+        fontFamily:"Poppins_400Regular",
+        color:'#00205C',
+        fontSize:12,
+        lineHeight:18 
+    },
+    OrderItemDetails:{
+        fontFamily:"Poppins_400Regular",
+        color:'#00205C',
+        fontSize:8,
+        lineHeight:12 
+    },
+    cartTotal:{
+        justifyContent:"space-between",
+        alignItems:'flex-end',
+        flex:0.35,
+    },
+
+
+
+
+
+
+    
+    cartShortcut:{
+        width:72,
+        flexDirection:'row',
+        backgroundColor:'#d6d6d6',
+        height:38,
+        borderRadius:8,
+        justifyContent:'space-between',
+        alignItems:'center',
+        alignSelf:'flex-end'
+    },
+    cartShortcutIcon:{
+        width:20,
+        height:20,
+        tintColor:'#00205C',
+    },
+    cartShortcutText:{
+        fontSize: 14,
+        fontFamily:'Poppins_500Medium',
+        color:"#00205C",
+        lineHeight:30,
+        marginHorizontal:4
+    },
+    add:{
+        width:30,
+        height:32,
+        alignItems:'center',
+        justifyContent:'center', 
+        padding:6
+    }
 })
 

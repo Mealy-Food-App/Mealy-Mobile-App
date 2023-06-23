@@ -19,6 +19,8 @@ import ConfirmTokenScreen from '../screens/ConfirmTokenScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import SearchScreen from '../screens/SearchScreen';
 import CategoryScreen from '../screens/CategoryScreen';
+import AllCategoriesScreen from '../screens/AllCategoriesScreen';
+import ProductDetailScreen from '../screens/ProductDetailScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -95,6 +97,14 @@ export const OnboardingStackScreens = () => {
       name = "CategoryScreen"
       component={CategoryScreen}
     />
+    <Stack.Screen
+      name = "MealyCategories"
+      component={AllCategoriesScreen}
+    />
+    <Stack.Screen
+      name = "ProductDetailScreen"
+      component={ProductDetailScreen}
+    />
   </Stack.Navigator>
   )
 }
@@ -112,6 +122,14 @@ export const AppStackScreens = () => {
     <Stack.Screen
       name = "CategoryScreen"
       component={CategoryScreen}
+    />
+    <Stack.Screen
+      name = "MealyCategories"
+      component={AllCategoriesScreen}
+    />
+    <Stack.Screen
+      name = "ProductDetailScreen"
+      component={ProductDetailScreen}
     />
     <Stack.Screen
       name = "LogInScreen"

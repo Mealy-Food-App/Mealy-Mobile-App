@@ -17,7 +17,7 @@ const Section = ({ onPress, title, view, myStyle }) => {
           {title}
         </Text>
       </View>
-      <TouchableOpacity style={{ justifyContent: "center" }} onPress={onPress}>
+      <TouchableOpacity style={{ justifyContent: "center",alignContent:'center', height:32}} onPress={onPress}>
         <Text style={styles.view}>{view}</Text>
       </TouchableOpacity>
     </View>

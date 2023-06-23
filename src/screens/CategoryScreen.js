@@ -279,7 +279,7 @@ const CategoryScreen = () => {
 export default CategoryScreen
 const styles = StyleSheet.create({
     container: {
-        paddingTop:StatusBar.currentHeight,
+        paddingTop:16,
         flex: 1,
         paddingHorizontal: 24,
         width: '100%',
