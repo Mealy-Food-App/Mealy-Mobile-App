@@ -168,7 +168,7 @@ const SignUpScreen = () => {
                   onBlur={() => setFieldTouched('password')}
                   secureTextEntry ={passwordVisibility}
                 />
-                <TouchableOpacity style={{position:'absolute', top: 12, left: 276, height:40}} onPressIn= {managePasswordVisiblity}>
+                <TouchableOpacity style={{position:'absolute', top: 12, right:16, height:40}} onPressIn= {managePasswordVisiblity}>
                   <Image source = {passwordVisibility ? require('../assets/icons/openeye.png') : require('../assets/icons/eye-off.png')} style={{width: 18, height:18, tintColor: COLORS.primary}}/>
                 </TouchableOpacity>
               </View>
@@ -229,7 +229,7 @@ const SignUpScreen = () => {
             <Image style={{width:48, height: 48}} source={require('../assets/icons/google.png')}/>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection:'row', justifyContent:'center'}}>
+        <View style={{flexDirection:'row', justifyContent:'center', marginBottom:40}}>
           <Text style = {styles.footerText} >
             Already have an Account?
           </Text>

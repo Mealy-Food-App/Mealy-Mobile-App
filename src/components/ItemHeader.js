@@ -16,8 +16,8 @@ export default ItemHeader
 
 const styles = StyleSheet.create({
     headerContainer:{
-        top :8,
-        right:2,
+        top :16,
+        right:16,
         width:32,
         height:32,
         position:'absolute'

@@ -37,11 +37,12 @@ const CartScreen = () => {
             </View>
             <SwipeListView
             data= {cartItems}
-            showsVerticalScrollIndicator={false}
+            showsVerticalScrollIndicator={true}
             disableRightSwipe={true}
             rightOpenValue={-75}
             style={{
-              height:360,
+              minHeight:250,
+              maxHeight:'40%',
               backgroundColor:'#ffffff',
               marginHorizontal: 4,
               borderBottomRightRadius: 12,

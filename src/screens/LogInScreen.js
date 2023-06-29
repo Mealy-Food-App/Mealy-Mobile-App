@@ -136,7 +136,7 @@ export default LogInScreen = () => {
                   onBlur={() => setFieldTouched('password')}
                   secureTextEntry ={passwordVisibility}
                 />
-                <TouchableOpacity style={{position:'absolute', top: 12, left: 276, height:40}} onPressIn= {managePasswordVisiblity}>
+                <TouchableOpacity style={{position:'absolute', top: 12, right:16, height:40}} onPressIn= {managePasswordVisiblity}>
                   <Image source = {passwordVisibility ? require('../assets/icons/openeye.png') : require('../assets/icons/eye-off.png')} style={{width: 18, height:18, tintColor: COLORS.primary}}/>
                 </TouchableOpacity>
               </View>

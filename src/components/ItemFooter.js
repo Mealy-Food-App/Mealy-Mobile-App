@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View,Image, Pressable } from 'react-native'
+import { StyleSheet, Text, View,Image, Pressable, Dimensions} from 'react-native'
 import React from 'react'
 
+const width = Dimensions.get('window').width - 72;
 const ItemFooter = ({data}) => {
   return (
     <View style={styles.ItemFooter}>
@@ -18,11 +19,12 @@ export default ItemFooter
 
 const styles = StyleSheet.create({
     ItemFooter:{
-        width:310,
+        width:width,
         flexDirection:'row',
         justifyContent:'space-between',
         position:'absolute',
-        bottom:16
+        bottom:12,
+        left:16
 
     },
     ItemFooterButton1:{

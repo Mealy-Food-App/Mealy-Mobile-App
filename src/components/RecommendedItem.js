@@ -6,7 +6,8 @@ import ItemHeader from './ItemHeader'
 import ItemFooterPrice from './ItemFooterPrice'
 
 const RecommendedItem = ({data, marginLeft, marginRight, onPressItem, children}) => {
-  return (
+    console.log(data);
+    return (
     <Pressable style={[styles.recommended,{marginLeft: marginLeft,margin: marginRight,}]} onPress={onPressItem}>
         <View style={styles.ImageBackground}>
         <ImageBackground source={require('../assets/images/chicken.png')}

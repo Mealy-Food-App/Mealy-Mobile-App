@@ -1,15 +1,17 @@
-import { StyleSheet, Text, View, ImageBackground  } from 'react-native'
+import { StyleSheet,Dimensions, Text, View, ImageBackground  } from 'react-native'
 import React from 'react'
 import ItemHeader from './ItemHeader';
 import ItemFooter from './ItemFooter';
 
+
+const width = Dimensions.get('window').width -48;
 const WeekOffer = ({data}) => {
   return (
     <View style={styles.meal}>
       <Text style = {styles.title}>Meal of the week</Text>
       <View style={styles.mealContent}>  
         <ImageBackground source={data.image}
-          style={{width:310, height:224,position:'absolute', borderRadius: 8, overflow:'visible'}}
+          style={{width:width, height:224, borderRadius: 8, overflow:'visible'}}
           resizeMode='contain'
         >
           <ItemHeader data={data}/> 
@@ -44,7 +46,7 @@ const styles = StyleSheet.create({
       marginVertical:8,
       position:'relative',
       height:224,
-      width:320,
+      width:width,
       padding:0
     },
     contentText:{

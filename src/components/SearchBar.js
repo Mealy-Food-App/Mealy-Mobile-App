@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View ,Image, TouchableOpacity,TextInput, Keyboard} from 'react-native'
-import React from 'react'
+import React, {useState} from 'react'
 
 const COLORS ={primary:'#00205C', btnPrimary:'#E69F14', bgPrimary:'#F5F5F5' }
 
 const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked,setShowFilters}) => {
+  const [showFilterModal, setShowFilterModal] = useState(false);
   return (
     <View style= {styles.searchContainer}>
       <Image  source={require('../assets/icons/search.png')} style={styles.searchIcon}/>
@@ -27,9 +28,14 @@ const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked,setShowFi
         }}>
           <Image source = {require('../assets/icons/cancel.png')} style={styles.smallIcon}/>
         </TouchableOpacity>)}
-      <TouchableOpacity style ={styles.filter} onPress={() => {setShowFilters('')}}>
+      <TouchableOpacity style ={styles.filter} onPress={() => {setShowFilterModal(true)}}>
         <Image source = {require('../assets/icons/filter.png')} style={styles.smallIcon}/>          
       </TouchableOpacity> 
+      {/* {showFilterModal &&
+      <FilterModal
+          isVisible={showFilterModal}
+          onClose={() => setShowFilterModal(false)}
+      />} */}
     </View>
   )
 }
