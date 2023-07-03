@@ -19,10 +19,7 @@
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#E69F14"
       },
-      "package": "com.mally13.Mealy_App",
-      "web": {
-        "browser": "chrome"
-      }
+      "package": "com.mally13.Mealy_App"
     },
     "web": {
       "favicon": "./assets/favicon.png"
