@@ -27,14 +27,29 @@ export default function App() {
   useEffect(() =>{
     checkOnboardingStatus();
   }, []);
+  const testAsyncStorage = async () => {
+    try {
+      await AsyncStorage.setItem('testKey', 'testValue');
+      const value = await AsyncStorage.getItem('testKey');
+      console.log(value); // Check if 'testValue' is logged correctly
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  
+  // Call the test function to verify AsyncStorage functionality
+  testAsyncStorage();
 
   const checkOnboardingStatus = async () => {
     try {
       const onboardingStatus = await AsyncStorage.getItem('onboardingStatus');
-      if (onboardingStatus !== null && onboardingStatus === 'completed7') {
+      console.log(onboardingStatus);
+      if (onboardingStatus !== null && onboardingStatus === 'completed') {
         setUserOnboarded(true);
+
       }
     } catch (error) {
+      console.log(error.message)
       Alert.alert(error.message)
     } 
   };

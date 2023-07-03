@@ -6,12 +6,12 @@ import ItemHeader from './ItemHeader'
 import ItemFooterPrice from './ItemFooterPrice'
 
 const RecommendedItem = ({data, marginLeft, marginRight, onPressItem, children}) => {
-    console.log(data);
     return (
     <Pressable style={[styles.recommended,{marginLeft: marginLeft,margin: marginRight,}]} onPress={onPressItem}>
         <View style={styles.ImageBackground}>
-        <ImageBackground source={require('../assets/images/chicken.png')}
+        <ImageBackground source={{ uri: data.image[0]}} height = {113} width = {142}
         style ={{
+            backgroundColor:'white',
             resizeMode:'cover',
             height:113,
             width:142,
@@ -27,7 +27,7 @@ const RecommendedItem = ({data, marginLeft, marginRight, onPressItem, children})
         </View>
         <View style={styles.content}>
             <Text style={styles.contentTextRestaurant}>{data.restaurant}</Text>
-            <Text style={styles.contentTextTitle}>{data.name}</Text>
+            <Text style={styles.contentTextTitle} numberOfLines={1}>{data.name}</Text>
             <Text style={styles.contentTextDescription} numberOfLines={2}>{data.description}</Text>
 
         </View>

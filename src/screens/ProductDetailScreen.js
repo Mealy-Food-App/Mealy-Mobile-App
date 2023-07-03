@@ -163,7 +163,7 @@ const ProductDetailScreen = () => {
             }}
             >
             <Image
-            source={require('../assets/images/chicken.png')}
+            source={{ uri: item.image[0]}}
             resizeMode="cover"
             style={{height: 280, width: imageWidth,borderBottomLeftRadius: 26, borderBottomRightRadius: 26 }}
             />

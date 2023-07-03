@@ -4,10 +4,11 @@ import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
 import ItemHeader from './ItemHeader';
 
 const PopularItem = ({data, marginLeft, marginRight, onPressItem, children}) => {
+    console.log(data);
   return (
     <View style={[styles.popular,{marginLeft: marginLeft,margin: marginRight,}]}>
         <View style={styles.ImageBackground}>
-        <ImageBackground source={data.image}
+        <ImageBackground source={require('../assets/images/starbucks.png')}
         style ={{
             resizeMode:'cover',
             height:100,
@@ -23,19 +24,19 @@ const PopularItem = ({data, marginLeft, marginRight, onPressItem, children}) => 
         
         </View>
         <View style={styles.contentText}>
-            <Text style={styles.contentTextTitle}>{data.name}</Text>
-            <Text style={styles.contentTextSpecialty}>{data.specialty}</Text>
+            <Text style={styles.contentTextTitle} numberOfLines={1}>{data.name}</Text>
+            <Text style={styles.contentTextSpecialty} numberOfLines={1}>{data.specialty}</Text>
         </View>
         <StarRatingDisplay rating={data.rating} color={'#00205c'} starSize={16} enableHalfStar={true} />
 
         <View style={styles.contentFooter}>
             <View style={styles.small}>
                 <Image source={require('../assets/icons/location.png')} style={styles.smallIcon}/>
-                <Text style={styles.smallText}>{data.distance}</Text>
+                <Text style={styles.smallText}>{data.distance}Km</Text>
             </View>
             <View style={styles.small}>
                 <Image source={require('../assets/icons/clock.png')} style={styles.smallIcon}/>
-                <Text style={styles.smallText}>{data.duration}</Text>
+                <Text style={styles.smallText}>{data.estimatedDeliveryTime}</Text>
             </View>
         </View>
     </View>

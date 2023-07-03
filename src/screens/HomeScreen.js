@@ -25,8 +25,9 @@ const HomeScreen = () => {
   const [searchPhrase, setSearchPhrase] = useState("");
   const [clicked, setClicked] = useState(false);
   const { isLoggedIn, userData, status } = useContext(AuthContext);
-  const { categories, products } = useContext(ProductsContext);
+  const { categories, products, restaurants } = useContext(ProductsContext);
 
+  console.log(products);
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchPhrase !== '') {
@@ -98,6 +99,8 @@ const HomeScreen = () => {
               <View>
                 <Section title="Explore Categories" view="Show all" onPress={handleShowAllCategories} />
                 <FlatList
+                  showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
                   data={categories}
                   horizontal
                   keyExtractor={(item) => item._id}
@@ -119,8 +122,10 @@ const HomeScreen = () => {
               <View>
                 <Section title="Popular Around You" view="View more" onPress={() => handleShowAll('PopularAroundScreen')} />
                 <FlatList
-                  data={aroundYou}
+                  data={restaurants}
                   horizontal
+                  showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
                   keyExtractor={(item) => item.id}
                   style={{
                     borderRadius: 10,
@@ -130,7 +135,7 @@ const HomeScreen = () => {
                       key={item.id}
                       data={item}
                       marginLeft={index === 0 ? 0 : 16}
-                      marginRight={index === aroundYou.length - 1 ? 0 : 0}
+                      marginRight={index === restaurants.length - 1 ? 0 : 0}
                       onPressItem={() => onNavigation(item)}
                     />
                   )}
@@ -142,6 +147,8 @@ const HomeScreen = () => {
               <View>
                 <Section title="Recommended For You" view="Show all" onPress={() => handleShowAll('RecommendedScreen')} />
                 <FlatList
+                  showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
                   data={products}
                   horizontal
                   keyExtractor={(item) => item._id}
@@ -167,7 +174,7 @@ const HomeScreen = () => {
               <View>
                 <Section title="Featured Restaurants" view="Show all" onPress={() => handleShowAll('FeaturedScreen')} />
                 <FlatList
-                  data={featured}
+                  data={restaurants}
                   numColumns={2}
                   keyExtractor={(item) => item.id}
                   showsVerticalScrollIndicator={false}
@@ -192,6 +199,8 @@ const HomeScreen = () => {
                 <Section title="Top Deals" view="Show all" />
                 <FlatList
                   data={topDeals}
+                  showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
                   horizontal
                   keyExtractor={(item) => item.id}
                   style={{

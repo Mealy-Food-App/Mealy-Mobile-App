@@ -1,10 +1,13 @@
 // CartContext.js
 import React, { createContext, useEffect, useState } from 'react';
+import { AsyncStorage } from 'react-native';
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const initialCart = [];
+
+  const [cartItems, setCartItems] = useState(initialCart);
   const getTotalPrice =()=>{
     let tempPrice = 0;
     if (cartItems.length > 0){      

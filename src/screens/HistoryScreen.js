@@ -9,11 +9,12 @@ import { AuthContext } from '../contexts/AuthContext';
 import Unauth from '../components/Unauth';
 
 
-const orderHistoryItems = orderHistories.flatMap((history) => history.data);
-const deliveredHistoryItems =orderHistoryItems.filter((item) => item.status === "D");
-const canceledHistoryItems =orderHistoryItems.filter((item) => item.status === "C");
-const scheduledHistoryItems =orderHistoryItems.filter((item) => item.status === "P");
+
 const Tab = createMaterialTopTabNavigator();
+  const orderHistoryItems = orderHistories.flatMap((history) => history.data);
+  const deliveredHistoryItems =orderHistoryItems.filter((item) => item.status === "D");
+  const canceledHistoryItems =orderHistoryItems.filter((item) => item.status === "C");
+  const scheduledHistoryItems =orderHistoryItems.filter((item) => item.status === "P");
 const renderSeparator = () => {
   return (
     <View
@@ -155,6 +156,12 @@ const HistoryTabs =()=> {
 }
 const HistoryScreen = () => {
   const {isLoggedIn, userData, status,login} = useContext(AuthContext);
+  if (isLoggedIn){
+    const orderHistoryItems = orderHistories.flatMap((history) => history.data);
+  const deliveredHistoryItems =orderHistoryItems.filter((item) => item.status === "D");
+  const canceledHistoryItems =orderHistoryItems.filter((item) => item.status === "C");
+  const scheduledHistoryItems =orderHistoryItems.filter((item) => item.status === "P");
+  }
 
   return (
       <View style={styles.container}>

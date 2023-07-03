@@ -8,7 +8,7 @@ const FeaturedItem = ({data, marginLeft, marginRight, onPressItem, children}) =>
   return (
     <View style={[styles.featured,{marginLeft: marginLeft,margin: marginRight,}]}>
         <View style={styles.ImageBackground}>
-        <ImageBackground source={data.image}
+        <ImageBackground source={require('../assets/images/rest.png')}
         style ={{
             resizeMode:'cover',
             height:116,
@@ -22,7 +22,7 @@ const FeaturedItem = ({data, marginLeft, marginRight, onPressItem, children}) =>
         <View style={styles.contentFooter}>
             <View style={styles.small}>
                 <Image source={require('../assets/icons/location.png')} style={styles.smallIcon}/>
-                <Text style={styles.smallText}>{data.distance}</Text>
+                <Text style={styles.smallText}>{data.distance}Km</Text>
             </View>
             <View style={styles.small}>
                 <Image source={require('../assets/icons/clock.png')} style={styles.smallIcon}/>
@@ -33,8 +33,8 @@ const FeaturedItem = ({data, marginLeft, marginRight, onPressItem, children}) =>
         
         </View>
         <View style={styles.contentText}>
-            <Text style={styles.contentTextTitle}>{data.name}</Text>
-            <Text style={styles.contentTextSpecialty}>{data.specialty}</Text>
+            <Text style={styles.contentTextTitle} numberOfLines={1}>{data.name}</Text>
+            <Text style={styles.contentTextSpecialty} numberOfLines={1}>{data.specialty}</Text>
         </View>
         <StarRatingDisplay style={{position:'absolute', left:0, bottom:12}}rating={data.rating} color={'#00205c'} starSize={13} enableHalfStar={true}/>
     </View>

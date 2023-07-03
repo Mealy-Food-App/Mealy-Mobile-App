@@ -6,41 +6,26 @@ const COLORS ={primary:'#00205C', btnPrimary:'#E69F14', bgPrimary:'#FFFFFF', }
 
 
 
-const Unauth = ({props}) => {
+const Empty = ({props}) => {
     const onNavigate = useNavigation();
     const handlePress = () =>{
-        onNavigate.navigate('LogInScreen')
+        onNavigate.navigate('Home')
     }
   return (
     <View style={styles.container}>
-        <Image source ={require('../assets/images/unauth.png')} style={styles.unauthImage}/>
-        <Text style = {styles.whoops}>Whoops... Not logged in!</Text>
-        <Text style= {styles.subtitle} numberOfLines={2}>{props.message}</Text>
+        <Image source ={require('../assets/images/empty_cart.png')} style={styles.unauthImage}/>
+        <Text style = {styles.whoops}>Whoops... Nothing in here!</Text>
+        <Text style= {styles.subtitle}>{props.message}</Text>
         <TouchableOpacity style={styles.buttonContainer} onPress={handlePress}>
             <View style={styles.button}>
-                <Image source={require("../assets/icons/emailauth.png")} style={styles.unauthIcon}/>
-                <Text style= {styles.buttontitle}> Login with Email</Text>
+                <Text style= {styles.buttontitle}>Go to catalogue</Text>
             </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={handlePress}>
-            <View style={styles.button}>
-                <Image source={require("../assets/icons/fb.png")} style={styles.unauthIcon} onPress={handlePress}/>
-                <Text style= {styles.buttontitle}> Login with Facebook</Text>
-            </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={handlePress}>
-            <View style={styles.button}>
-                <Image source={require("../assets/icons/google.png")} style={styles.unauthIcon} onPress={handlePress}/>
-                <Text style= {styles.buttontitle}> Login with Google</Text>
-            </View>
-        </TouchableOpacity>
-
-
     </View>
   )
 }
 
-export default Unauth
+export default Empty
 
 const styles = StyleSheet.create({
     container:{
@@ -73,21 +58,24 @@ const styles = StyleSheet.create({
     unauthImage:{
         width:200,
         height:200,
+        marginTop: 42,
         alignSelf:'center',
         resizeMode:'contain' 
     },
     button:{
         borderRadius:8,
         borderWidth:1,
-        borderColor:'rgba(0, 32, 92, 0.25)',
+        backgroundColor:'#F2C469',
+        borderColor:'#F2C469',
         flexDirection:"row",
         width:'100%',
         height:48,
+        justifyContent:'center'
     },
     buttonContainer:{
-        marginTop:40,
+        marginTop:50,
         borderRadius:8,
-        width:'100%',
+        marginHorizontal:48,
         height:48,
     },
     unauthIcon:{
@@ -100,13 +88,12 @@ const styles = StyleSheet.create({
         tintColor:"#E69F14"
     },
     buttontitle:{
+
         color:COLORS.primary,
         fontSize: 14,
         fontFamily: 'Poppins_400Regular',
         lineHeight: 18,
         alignSelf:'center',
-        position:'absolute',
-        top:12,
-        right:100
+        textAlign:'center'
     }
 })
