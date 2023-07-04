@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import * as Font from 'expo-font';
 import 'react-native-gesture-handler';
 import { Alert, StyleSheet, Text, View, StatusBar} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -31,7 +30,6 @@ export default function App() {
     try {
       await AsyncStorage.setItem('testKey', 'testValue');
       const value = await AsyncStorage.getItem('testKey');
-      console.log(value); // Check if 'testValue' is logged correctly
     } catch (error) {
       console.log(error.message);
     }
@@ -43,13 +41,11 @@ export default function App() {
   const checkOnboardingStatus = async () => {
     try {
       const onboardingStatus = await AsyncStorage.getItem('onboardingStatus');
-      console.log(onboardingStatus);
-      if (onboardingStatus !== null && onboardingStatus === 'completed') {
+      if (onboardingStatus !== null && onboardingStatus === 'completed7') {
         setUserOnboarded(true);
 
       }
     } catch (error) {
-      console.log(error.message)
       Alert.alert(error.message)
     } 
   };

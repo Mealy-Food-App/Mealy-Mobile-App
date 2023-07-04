@@ -28,7 +28,15 @@
       "eas": {
         "projectId": "96fc4f87-abea-4d5c-9055-032f522a3664"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Mealy to use your location."
+        }
+      ]
+    ]
   },
   "name": "mealy_app"
 }

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, StatusBar } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
@@ -34,7 +34,7 @@ const WelcomeScreen = () => {
     const onPressGuestHandler = () => {
         logout();
         updateOnboardingStatus();
-        onNavigate.navigate('Main')
+        onNavigate.navigate('LocationPermissionScreen')
     }
 
   return (
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
       paddingHorizontal:24,
       width: '100%',
       backgroundColor:COLORS.bgPrimary,
+      paddingTop: StatusBar.currentHeight,
     },
     title:{
         marginTop: 128,

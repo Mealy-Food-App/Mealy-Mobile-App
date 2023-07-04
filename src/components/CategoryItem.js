@@ -7,10 +7,11 @@ const CategoryItem = ({item, marginLeft, marginVertical, marginRight, onPressCat
   return (
     <TouchableOpacity onPress={onPressCategory} 
       style={{
+          elevation:1,
           width: itemWidth,
           height:120,        
           borderRadius:10,
-          paddingHorizontal:8,
+          paddingHorizontal:4,
           justifyContent:'center',
           paddingVertical:8,
           marginLeft: marginLeft,
@@ -20,7 +21,7 @@ const CategoryItem = ({item, marginLeft, marginVertical, marginRight, onPressCat
         }}>
       <View>
         <Image source={require('../assets/images/dummy/food.png')} style={styles.image}/>
-        <Text style={styles.label}>{item.name}</Text>
+        <Text style={styles.label} numberOfLines={1}>{item.name}</Text>
         <Text style={styles.restaurants}>{item.totalPlaces}</Text>
       </View>
     </TouchableOpacity>

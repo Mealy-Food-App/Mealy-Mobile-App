@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View,Image, Pressable, Dimensions} from 'react-native'
 import React from 'react'
 
-const width = Dimensions.get('window').width - 72;
+const width = Dimensions.get('window').width - 62;
 const ItemFooter = ({data}) => {
   return (
     <View style={styles.ItemFooter}>
@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'space-between',
         position:'absolute',
-        bottom:12,
-        left:16
+        bottom:16,
+        right:0
 
     },
     ItemFooterButton1:{

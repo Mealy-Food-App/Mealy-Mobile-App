@@ -135,9 +135,9 @@ const ProductDetailScreen = () => {
             name:item.name,
             itemPrice:Number(item.price),
             total:price,
-            // image: item.image,
+            image: item.image[0],
             quantity: quantity,
-            restaurant: 'Nairobi',
+            restaurant: 'Froyo Restaurant',
             itemDesc:item.description,
             customization:{
                 itemSize:foodSize,
@@ -150,6 +150,7 @@ const ProductDetailScreen = () => {
         addToCart(FoodItem);
         onNavigate.navigate('CartScreen');   
     }
+    console.log(item)
   return (
     <View style = {styles.container}>
         <ScrollView  
@@ -326,7 +327,7 @@ export default ProductDetailScreen
 
 const styles = StyleSheet.create({
     container:{
-        paddingTop: 16,
+        paddingTop: StatusBar.currentHeight,
         flex: 1,
         width: '100%',
         backgroundColor:'#F6F6F6',

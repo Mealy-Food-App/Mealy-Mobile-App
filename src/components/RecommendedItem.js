@@ -14,10 +14,11 @@ const RecommendedItem = ({data, marginLeft, marginRight, onPressItem, children})
             backgroundColor:'white',
             resizeMode:'cover',
             height:113,
-            width:142,
+            width:150,
             borderRadius:8,
-            position:'absolute',
-            overflow:'visible'
+            overflow:'visible',
+            
+
         }}
         imageStyle={{borderRadius:8}}
         >
@@ -43,12 +44,13 @@ export default RecommendedItem
 
 const styles = StyleSheet.create({
     recommended:{
+        elevation:1,
         width:158,
         height:230,
-        backgroundColor:'#F5f5f5',
+        backgroundColor:'#E7EAEE',
         borderRadius:8,
         paddingVertical:4,
-        paddingHorizontal:8
+        paddingHorizontal:4
     },
     ImageBackground:{
         height:113,

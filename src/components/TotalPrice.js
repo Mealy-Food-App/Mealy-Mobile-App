@@ -16,7 +16,7 @@ const TotalPrice = () => {
     };
     const delivery = () =>{
         if (finalTotal !== 0){
-            return (5).toFixed(2);
+            return (700).toFixed(2);
         }
         else{
             return (0).toFixed(2);
@@ -34,10 +34,12 @@ const TotalPrice = () => {
     }
     return(
         <View style= {{
+            elevation: 3,
             backgroundColor: '#f5f5f5',
             height:320,
             borderRadius:12,
-            marginVertical: 20,
+            marginTop: 20,
+            marginBottom:50,
             marginHorizontal: 10,
             paddingVertical:16,
             paddingHorizontal:8
@@ -53,7 +55,7 @@ const TotalPrice = () => {
                 </View>
                 <View style={styles.tableRow}>
                     <Text style={styles.tableCell}>Coupon Discount</Text>
-                    <Text style={styles.tableCell2}>N0</Text>  
+                    <Text style={styles.tableCell2}>N0.00</Text>  
                 </View>
                 <View style={styles.tableRow}>
                     <Text style={styles.tableCell}>Discount</Text>

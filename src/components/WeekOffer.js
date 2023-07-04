@@ -30,6 +30,7 @@ export default WeekOffer
 
 const styles = StyleSheet.create({
     meal:{
+        elevation:5,
         marginTop:8,
         width:'100%',
         height:264

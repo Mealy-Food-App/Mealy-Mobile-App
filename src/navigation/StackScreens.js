@@ -21,7 +21,8 @@ import SearchScreen from '../screens/SearchScreen';
 import CategoryScreen from '../screens/CategoryScreen';
 import AllCategoriesScreen from '../screens/AllCategoriesScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
-
+import LocationPermissionScreen from '../screens/LocationPermissionScreen';
+import LocationEnabledScreen from '../screens/LocationEnabledScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -86,6 +87,14 @@ export const OnboardingStackScreens = () => {
       component={ResetPasswordScreen}
     />
     <Stack.Screen
+      name = "LocationPermissionScreen"
+      component={LocationPermissionScreen}
+    />
+    <Stack.Screen
+      name = "LocationEnabledScreen"
+      component={LocationEnabledScreen}
+    />
+    <Stack.Screen
       name = "Main"
       component={MainScreens}
     />
@@ -111,6 +120,14 @@ export const OnboardingStackScreens = () => {
 export const AppStackScreens = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown:false}}>
+    <Stack.Screen
+      name = "LocationPermissionScreen"
+      component={LocationPermissionScreen}
+    />
+    <Stack.Screen
+      name = "LocationEnabledScreen"
+      component={LocationEnabledScreen}
+    />
     <Stack.Screen
       name = "Main"
       component={MainScreens}

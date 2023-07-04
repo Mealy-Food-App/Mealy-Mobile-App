@@ -12,7 +12,7 @@ const FeaturedItem = ({data, marginLeft, marginRight, onPressItem, children}) =>
         style ={{
             resizeMode:'cover',
             height:116,
-            width:featuredItemWidth - 12,
+            width:featuredItemWidth - 9,
             borderRadius:8,
             position:'absolute',
             overflow:'visible'
@@ -45,13 +45,14 @@ export default FeaturedItem
 
 const styles = StyleSheet.create({
     featured:{
-        backgroundColor:'#f5f5f5',
+        elevation:1,
+        backgroundColor:'#E7EAEE',
         borderRadius:8,
         width:featuredItemWidth ,
         height:197,
         marginBottom:16,
-        paddingVertical:6,
-        paddingHorizontal:6
+        paddingVertical:4,
+        paddingHorizontal:4
     },
     ImageBackground:{
         width:featuredItemWidth - 12,

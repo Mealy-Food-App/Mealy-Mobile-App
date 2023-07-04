@@ -19,6 +19,7 @@ const CartItem = ({ OrderItem, children, props}) =>{
         }
         increaseQuantity(FoodItem);
     }
+    console.log(OrderItem)
 
     
     return(
@@ -26,11 +27,11 @@ const CartItem = ({ OrderItem, children, props}) =>{
             <View
                 style={styles.item}>
                 <View style={styles.itemImageContainer}>
-                    <Image source={require('../assets/images/chicken.png')}   style={styles.itemImage}/>
+                    <Image source={{ uri: OrderItem.image}}   style={styles.itemImage}/>
                 </View>
                 <View style = {{ display: 'flex', flex:0.4, flexDirection:'column', paddingHorizontal:12,height:70, alignSelf:'center',justifyContent:"space-between"}}>
                     <Text style={styles.OrderItemTitle}>{OrderItem.name}</Text>
-                    <Text style={styles.OrderItemPrice}>Debonairs Buruburu</Text>
+                    <Text style={styles.OrderItemPrice}>{OrderItem.restaurant}</Text>
                     <Text style={styles.OrderItemDetails} numberOfLines={2}>{OrderItem.itemDesc}</Text>
                 </View>
 
@@ -64,6 +65,7 @@ export default CartItem;
 
 const styles = StyleSheet.create({
     item:{
+        elevation: 3,
         backgroundColor: "#E6ECEF",
         marginTop: 8,
         marginBottom: 6,

@@ -1,19 +1,41 @@
-import {  StyleSheet,Image, Text, View, TouchableWithoutFeedback } from 'react-native'
-import React from 'react'
+import {  StyleSheet,Image, Text, View, TouchableWithoutFeedback, TouchableOpacity, StatusBar } from 'react-native'
+import React, {useContext} from 'react'
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast, } from 'react-native-alert-notification';
+import { useNavigation } from '@react-navigation/native';
+import { CartContext } from '../contexts/CartContext';
 
 const TripletHeader = ({props}) => {
+  const onNavigate = useNavigation();
+  
+  const {clearCart} = useContext(CartContext)
+
+  const onNavigationHome = () => {
+    onNavigate.navigate("Home");
+  }
+  const onDeleteAll = () => {
+    clearCart();
+  }
   return (
+    <AlertNotificationRoot style={{top:0}}>
     <View style={styles.header}>
-      <TouchableWithoutFeedback style={styles.arrowLeft}>
+      <TouchableWithoutFeedback style={styles.arrowLeft} onPress={() => onNavigationHome()}>
         <Image source={require('../assets/icons/arrow-left.png')} style={styles.arrowLeft}/>
       </TouchableWithoutFeedback>
       <Text style={styles.headerText}>
         {props.title}
       </Text>
-      <TouchableWithoutFeedback style={styles.deleteAll}>
-        <Image source={require('../assets/icons/deleteall.png')} style={styles.deleteAll}/>
-      </TouchableWithoutFeedback>
+      <TouchableOpacity style={styles.deleteAll} onPress={() => 
+        Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Delete All',
+        textBody: 'Are you sure you want to delete all?',
+        button: 'Yes',
+        onPressButton:() => onDeleteAll()
+      })}>
+        <Image source={require('../assets/icons/delete.png')} style={styles.deleteAll}/>
+      </TouchableOpacity>
     </View>
+  </AlertNotificationRoot>
   )
 }
 
@@ -21,20 +43,22 @@ export default TripletHeader
 
 const styles = StyleSheet.create({
     header:{
+        backgroundColor:'#F5f5f5',
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-between',
-        marginVertical:16,
+        paddingVertical:0,
     },
     arrowLeft:{
-        width:24,
+      width:24,
         height:24,
         borderRadius:24,
     },
     deleteAll:{
-        width:24,
-        height:24,
-        resizeMode:'contain'
+        width:28,
+        height:34,
+        resizeMode:'contain',
+        tintColor:'#00205C'
     },
     headerText:{
         fontFamily:'Poppins_400Regular',

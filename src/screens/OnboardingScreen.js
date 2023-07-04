@@ -48,7 +48,7 @@ const OnboardingScreen =() => {
     };
     const onNavigationHome = () => {
         logout()
-        onNavigate.navigate("Main");
+        onNavigate.navigate("LocationPermissionScreen");
     }
     useInterval(() => {
         if (active < Number(slides?.length) - 1) {
@@ -75,7 +75,6 @@ const OnboardingScreen =() => {
     );
     return(
         <SafeAreaView style ={{flex: 1, backgroundColor:COLORS.bgPrimary}}>
-           <StatusBar backgroundColor={COLORS.bgPrimary} />
            <FlatList
                 data= {slides}
                 contentContainerStyle={{height: height * 0.75, paddingTop:height*0.1}}

@@ -6,7 +6,7 @@ import { AuthContext } from '../contexts/AuthContext';
 
 
 
-const ScreenHeader = ({props}) => {
+const LeftNavHeader = ({props}) => {
   const onNavigate = useNavigation();
   const {cartItems} = useContext(CartContext)
   const {isLoggedIn} = useContext(AuthContext)
@@ -27,23 +27,11 @@ const ScreenHeader = ({props}) => {
           {props.title}
         </Text>
       </View>
-      {isLoggedIn &&<TouchableOpacity style={styles.cartContainer} onPress={() => onNavigationCart()}>
-        {cartItems.length > 0 ? (
-          <>
-          <Text style={styles.cartnum}>{cartItems.length}</Text>
-          <Image source={require('../assets/icons/cart4.png')} style={styles.cart}/>
-          </>
-          ): (
-          <>
-            <Image source={require('../assets/icons/cart2.png')} style={styles.cart}/>
-          </>
-          )}
-        </TouchableOpacity>}
     </View>
   )
 }
 
-export default ScreenHeader
+export default LeftNavHeader
 
 const styles = StyleSheet.create({
     headerContainer:{

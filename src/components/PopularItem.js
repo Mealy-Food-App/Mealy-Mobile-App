@@ -8,14 +8,16 @@ const PopularItem = ({data, marginLeft, marginRight, onPressItem, children}) => 
   return (
     <View style={[styles.popular,{marginLeft: marginLeft,margin: marginRight,}]}>
         <View style={styles.ImageBackground}>
-        <ImageBackground source={require('../assets/images/starbucks.png')}
+        <ImageBackground source={require('../assets/images/burger.png')}
         style ={{
             resizeMode:'cover',
-            height:100,
-            width:199,
+            height:120,
+            width:218,
             borderRadius:10,
             position:'absolute',
-            overflow:'visible'
+            overflow:'visible',
+            left:-9,
+            top:-9
         }}
         imageStyle={{borderRadius:10}}
         >
@@ -47,7 +49,8 @@ export default PopularItem
 
 const styles = StyleSheet.create({
     popular:{
-        backgroundColor:'#F5f5f5',
+        elevation:1,
+        backgroundColor:'#E7EAEE',
         borderRadius:10,
         width:219,
         height:238,

@@ -14,6 +14,10 @@ import { AuthContext } from '../contexts/AuthContext';
 import { ProductsContext } from '../contexts/ProductsContext';
 import HomeHeader from '../components/HomeHeader';
 
+import * as Location from 'expo-location';
+import * as LocationGeocoding from 'expo-location';
+
+
 const COLORS = {
   primary: '#00205C',
   btnPrimary: '#E69F14',
@@ -26,8 +30,40 @@ const HomeScreen = () => {
   const [clicked, setClicked] = useState(false);
   const { isLoggedIn, userData, status } = useContext(AuthContext);
   const { categories, products, restaurants } = useContext(ProductsContext);
+  const [userLocation, setUserLocation] = useState(null);
+  const [userAddress, setUserAddress] = useState('');
+  console.log(restaurants)
 
-  console.log(products);
+  useEffect(() => {
+    fetchUserLocation();
+  }, []);
+
+  const fetchUserLocation = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status === 'granted') {
+      const location = await Location.getCurrentPositionAsync({});
+      setUserLocation(location.coords);
+      fetchUserAddress(location.coords);
+    }
+  };
+
+  const fetchUserAddress = async (coords) => {
+    try {
+      const address = await LocationGeocoding.reverseGeocodeAsync({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      });
+
+      if (address.length > 0) {
+        const { street, city } = address[0];
+        const formattedAddress = (street !== null && city !== null) ? `${street}, ${city}` : `${city}`
+        setUserAddress(formattedAddress);
+      }
+    } catch (error) {
+      console.log('Error fetching address:', error);
+    }
+  };
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchPhrase !== '') {
@@ -75,7 +111,11 @@ const HomeScreen = () => {
           </View>
         </View>
       )}
-      <View style={styles.location}></View>
+      <View style={styles.location}>
+      <Image source={require("../assets/icons/location.png")} style={styles.locationicon} />
+      <Text style={styles.locationtext}>{userAddress}</Text>
+      </View>
+      
       <Text numberOfLines={2} style={styles.subtitle}>
         What would you like to eat today?
       </Text>
@@ -103,6 +143,7 @@ const HomeScreen = () => {
                   showsHorizontalScrollIndicator={false}
                   data={categories}
                   horizontal
+                  style={styles.flatCont}
                   keyExtractor={(item) => item._id}
                   renderItem={({ item, index }) => (
                     <CategoryItem
@@ -129,10 +170,11 @@ const HomeScreen = () => {
                   keyExtractor={(item) => item.id}
                   style={{
                     borderRadius: 10,
+                    height:240,
                   }}
                   renderItem={({ item, index }) => (
                     <PopularItem
-                      key={item.id}
+                      key={item._id}
                       data={item}
                       marginLeft={index === 0 ? 0 : 16}
                       marginRight={index === restaurants.length - 1 ? 0 : 0}
@@ -156,6 +198,7 @@ const HomeScreen = () => {
                     backgroundColor: '#ffffff',
                     paddingVertical: 8,
                     borderRadius: 8,
+                    height:250
                   }}
                   renderItem={({ item, index }) => (
                     <RecommendedItem
@@ -176,7 +219,7 @@ const HomeScreen = () => {
                 <FlatList
                   data={restaurants}
                   numColumns={2}
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => (item._id + 'r')}
                   showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
                   style={{
@@ -263,4 +306,21 @@ const styles = StyleSheet.create({
   homeScroll: {
     width: '100%',
   },
+  location:{
+    flexDirection:'row',
+    alignItems:'center'
+  },
+  locationicon:{
+    width:16,
+    height:20,
+    marginRight:8
+  },
+  locationtext:{
+    fontFamily:"Poppins_500Medium",
+    fontSize:20,
+    lineHeight:24,
+    textAlign:'center',
+    alignSelf:'center',
+    color:'#00205C'
+  }
 });

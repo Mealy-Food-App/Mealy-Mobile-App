@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor:'#e69f14'
+      backgroundColor:'#e69f14',
+      paddingTop: StatusBar.currentHeight,
     },
     image: {
       width: 240,

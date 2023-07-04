@@ -10,10 +10,10 @@ const FoodProductItem = ({data, marginTop, marginBottom}) => {
         <Image style={styles.itemContentImage} source={require('../assets/images/fish.png')}/>
         <View style={styles.itemContentText}>
             <View style={{gap:8}}>
-            <Text style={styles.productName}>
+            <Text style={styles.productName} numberOfLines={1}>
                 {data.name}
             </Text>
-            <Text style={styles.productPrice}>
+            <Text style={styles.productPrice} numberOfLines={1}>
                 N{Number(data.price).toLocaleString()}
             </Text>
             </View>
