@@ -4,11 +4,10 @@ import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
 import ItemHeader from './ItemHeader';
 
 const PopularItem = ({data, marginLeft, marginRight, onPressItem, children}) => {
-    console.log(data);
   return (
     <View style={[styles.popular,{marginLeft: marginLeft,margin: marginRight,}]}>
         <View style={styles.ImageBackground}>
-        <ImageBackground source={require('../assets/images/burger.png')}
+        <ImageBackground source={{ uri: data.image}} 
         style ={{
             resizeMode:'cover',
             height:120,

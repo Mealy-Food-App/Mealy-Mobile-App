@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const itemWidth = (Dimensions.get("screen").width - 80) / 3 
 const CategoryItem = ({item, marginLeft, marginVertical, marginRight, onPressCategory, backgroundColor, children}) => {
+
   return (
     <TouchableOpacity onPress={onPressCategory} 
       style={{
@@ -20,7 +21,7 @@ const CategoryItem = ({item, marginLeft, marginVertical, marginRight, onPressCat
           marginVertical:marginVertical
         }}>
       <View>
-        <Image source={require('../assets/images/dummy/food.png')} style={styles.image}/>
+        <Image source={{ uri: item.image[0]}} height ={55} width ={55} style={styles.image} resizeMode='cover'/>
         <Text style={styles.label} numberOfLines={1}>{item.name}</Text>
         <Text style={styles.restaurants}>{item.totalPlaces}</Text>
       </View>
@@ -32,6 +33,7 @@ export default CategoryItem
 
 const styles = StyleSheet.create({
     image:{
+        borderRadius:55,
         width:55,
         height:55,
         marginTop:0.5,

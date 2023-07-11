@@ -23,6 +23,7 @@ import AllCategoriesScreen from '../screens/AllCategoriesScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import LocationPermissionScreen from '../screens/LocationPermissionScreen';
 import LocationEnabledScreen from '../screens/LocationEnabledScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,7 +43,7 @@ export const MainScreens = () => {
       }}
       drawerContent={({ navigation }) => <LeftDrawerContent navigation={navigation} />}>
           <Drawer.Screen
-            name = "HomeScreen"
+            name = "BottomTabScreens"
             component={BottomTabs}
           />
           <Drawer.Screen name="AccountScreen" component={AccountScreen} />
@@ -87,16 +88,12 @@ export const OnboardingStackScreens = () => {
       component={ResetPasswordScreen}
     />
     <Stack.Screen
-      name = "LocationPermissionScreen"
-      component={LocationPermissionScreen}
-    />
-    <Stack.Screen
-      name = "LocationEnabledScreen"
-      component={LocationEnabledScreen}
-    />
-    <Stack.Screen
-      name = "Main"
+      name = "MainScreens"
       component={MainScreens}
+    />
+    <Stack.Screen
+      name = "ProfileScreen"
+      component={ProfileScreen}
     />
      <Stack.Screen
       name = "SearchScreen"
@@ -121,16 +118,12 @@ export const AppStackScreens = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown:false}}>
     <Stack.Screen
-      name = "LocationPermissionScreen"
-      component={LocationPermissionScreen}
-    />
-    <Stack.Screen
-      name = "LocationEnabledScreen"
-      component={LocationEnabledScreen}
-    />
-    <Stack.Screen
-      name = "Main"
+      name = "MainScreens"
       component={MainScreens}
+    />
+    <Stack.Screen
+      name = "ProfileScreen"
+      component={ProfileScreen}
     />
     <Stack.Screen
       name = "SearchScreen"

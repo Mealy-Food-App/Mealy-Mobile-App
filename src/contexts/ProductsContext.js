@@ -1,56 +1,52 @@
-import React, { createContext, useState, useEffect} from 'react';
+import React, { createContext, useState, useEffect } from 'react';
+import { View,Text } from 'react-native';
 import axios from 'axios';
 
+const BASE_URL = 'https://mealy-backend-app.onrender.com/api/mealy';
 
-const BASE_URL= 'https://mealy-backend-app.onrender.com/api/mealy'
-
-// Create the ProductContext
 export const ProductsContext = createContext();
 
-// Create the ProductProvider component
-export const ProductsProvider = ({ children }) => {
-  // Create the initial state of the products catalog
-  const initialProducts = [];
-  const initialCategories = [];
-  const initialRestaurants = [];
-  const initialOffers = [];
+export const ProductsProvider = ({ children, initialData}) => {
 
-  // Define the state for the products
-  const [products, setProducts] = useState(initialProducts);
-  const [categories, setCategories] = useState(initialCategories);
-  const [restaurants, setRestaurants] = useState(initialRestaurants)
+  const [products, setProducts] = useState(initialData[1] || []);
+  const [categories, setCategories] = useState(initialData[0] || []);
+  const [restaurants, setRestaurants] = useState(initialData[2] || []);
   const [productsLoaded, setProductsLoaded] = useState(false);
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
   const [restaurantsLoaded, setRestaurantsLoaded] = useState(false);
 
-
   useEffect(() => {
-    getCategories();
-    getProducts();
-    getRestaurants();
+
+    if (products.length == 0 || categories.length == 0 || restaurants == 0){
+        fetchData();
+    }else{
+      setCategoriesLoaded(true);
+      setProductsLoaded(true);
+      setRestaurantsLoaded(true);
+    }
   }, []);
 
-  // Create a function to update the products
-  const getCategories = async () => {
-    const res = await axios.get(`${BASE_URL}/home/categories`);
-    setCategories(res.data.data);
-    setCategoriesLoaded(true);
-  }
-  const getProducts = async () => {
-    const res = await axios.get(`${BASE_URL}/product/products`);
-    setProducts(res.data.data);
-    setProductsLoaded(true);
-  }
-  const getRestaurants = async () => {
-    const res = await axios.get(`${BASE_URL}/home/list/restaurants`);
-    console.log(res.data.data[0])
-    setRestaurants(res.data.data);
-    setRestaurantsLoaded(true);
-    
-  }
+  const fetchData = async () => {
+    try {
+      const [categoriesResponse, productsResponse, restaurantsResponse] = await Promise.all([
+        axios.get(`${BASE_URL}/home/categories`),
+        axios.get(`${BASE_URL}/product/products`),
+        axios.get(`${BASE_URL}/home/list/restaurants`),
+      ]);
 
-  // Create the context value
-  
+      setCategories(categoriesResponse.data.data);
+      setCategoriesLoaded(true);
+
+      setProducts(productsResponse.data.data);
+      setProductsLoaded(true);
+
+      setRestaurants(restaurantsResponse.data.data);
+      setRestaurantsLoaded(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const contextValue = {
     products,
     productsLoaded,
@@ -58,18 +54,7 @@ export const ProductsProvider = ({ children }) => {
     categoriesLoaded,
     restaurants,
     restaurantsLoaded,
-
-    // restaurants,
-    // mealOftheday,
-    getRestaurants,
-    getCategories,
-    getProducts
   };
-
-  // Provide the context value to the children components
-  return (
-    <ProductsContext.Provider value={contextValue}>
-      {children}
-    </ProductsContext.Provider>
-  );
+  return <ProductsContext.Provider value={contextValue}>{children}</ProductsContext.Provider>;
+  
 };

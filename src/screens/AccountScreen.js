@@ -13,8 +13,8 @@ const AccountScreen = () => {
   const {isLoggedIn, userData, status,login} = useContext(AuthContext);
 
   const onNavigate = useNavigation();
-  const handlePress = () =>{
-      onNavigate.navigate('MoreScreen')
+  const handlePress = (screenName) =>{
+      onNavigate.navigate(screenName)
   }
   return (
     <View> 
@@ -25,52 +25,52 @@ const AccountScreen = () => {
             <Image source={require('../assets/images/user.png')} style={styles.avatar}/>
             <Text style={styles.pagetitle}>My Account</Text>
           </View>
-          <TouchableOpacity style={styles.buttonContainer} onPress={handlePress}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={(screenName)=>handlePress(screenName='ProfileScreen')}>
                 <View style={styles.button}>
-                    <Image source={require("../assets/icons/user.png")} style={styles.unauthIcon} onPress={handlePress}/>
+                    <Image source={require("../assets/icons/user.png")} style={styles.unauthIcon} />
                     <Text style= {styles.buttontitle}> Profile Details</Text>
                 </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonContainer} onPress={handlePress}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={(screenName)=>handlePress(screenName='NotificationScreen')}>
                 <View style={styles.button}>
-                    <Image source={require("../assets/icons/notification2.png")} style={styles.unauthIcon} onPress={handlePress}/>
+                    <Image source={require("../assets/icons/notification2.png")} style={styles.unauthIcon}/>
                     <Text style= {styles.buttontitle}> Notifications </Text>
                 </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonContainer} onPress={handlePress}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={(screenName)=>handlePress(screenName='PreferenceScreen')}>
                 <View style={styles.button}>
-                    <Image source={require("../assets/icons/bowl.png")} style={styles.unauthIcon} onPress={handlePress}/>
+                    <Image source={require("../assets/icons/bowl.png")} style={styles.unauthIcon} />
                     <Text style= {styles.buttontitle}> Dietary Preference</Text>
                 </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonContainer} onPress={handlePress}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={(screenName)=>handlePress(screenName='RecommendationScreen')}>
                 <View style={styles.button}>
-                    <Image source={require("../assets/icons/location.png")} style={styles.unauthIcon} onPress={handlePress}/>
+                    <Image source={require("../assets/icons/location.png")} style={styles.unauthIcon} />
                     <Text style= {styles.buttontitle}>Recommended for you</Text>
                 </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonContainer} onPress={handlePress}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={(screenName)=>handlePress(screenName='DealsScreen')}>
                 <View style={styles.button}>
-                    <Image source={require("../assets/icons/lov.png")} style={styles.unauthIcon} onPress={handlePress}/>
+                    <Image source={require("../assets/icons/lov.png")} style={styles.unauthIcon}/>
                     <Text style= {styles.buttontitle}> Deals for you </Text>
                 </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonContainer} onPress={handlePress}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={(screenName)=>handlePress(screenName='ChatScreen')}>
                 <View style={styles.button}>
-                    <Image source={require("../assets/icons/chat.png")} style={styles.unauthIcon} onPress={handlePress}/>
+                    <Image source={require("../assets/icons/chat.png")} style={styles.unauthIcon}/>
                     <Text style= {styles.buttontitle}> Live Chat</Text>
                 </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonContainer} onPress={handlePress}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={(screenName)=>handlePress(screenName='PaymentScreen')}>
                 <View style={styles.button}>
-                    <Image source={require("../assets/icons/payment.png")} style={styles.unauthIcon} onPress={handlePress}/>
+                    <Image source={require("../assets/icons/payment.png")} style={styles.unauthIcon}/>
                     <Text style= {styles.buttontitle}> Payment Information</Text>
                 </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonContainer} onPress={handlePress}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={(screenName)=>handlePress(screenName='SettingsScreen')}>
                 <View style={styles.button}>
-                    <Image source={require("../assets/icons/settings2.png")} style={styles.unauthIcon} onPress={handlePress}/>
-                    <Text style= {styles.buttontitle}> Payment Information</Text>
+                    <Image source={require("../assets/icons/setting.png")} style={styles.unauthIcon}/>
+                    <Text style= {styles.buttontitle}> Settings</Text>
                 </View>
           </TouchableOpacity>
         </View>

@@ -69,7 +69,8 @@ export const AuthProvider = ({ children }) => {
         setUserData(user);
         console.log(user)
         showAlert('Login successful');
-        onNavigate.navigate('LocationPermissionScreen')
+        onNavigate.navigate('MainScreens', { screen: 'Home' });
+
       }else{
         showAlert('Login failed');
       }
@@ -101,7 +102,7 @@ export const AuthProvider = ({ children }) => {
         setUserData(user);
         console.log(user);
         showAlert('Account Registration successful');
-        onNavigate.navigate('LocationPermissionScreen')
+        onNavigate.navigate('MainScreens', { screen: 'Home' });
       }else{
         showAlert('Account Registration failed');
       }

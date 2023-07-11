@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, FlatList, Text, StyleSheet, Image, StatusBar } from 'react-native';
+import { View, FlatList, Text, StyleSheet, Image, Pressable, StatusBar, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { mealOfTheDay, aroundYou, recommended, featured, topDeals } from '../dummyData';
 import WeekOffer from '../components/WeekOffer';
@@ -13,9 +13,8 @@ import SearchBar from '../components/SearchBar';
 import { AuthContext } from '../contexts/AuthContext';
 import { ProductsContext } from '../contexts/ProductsContext';
 import HomeHeader from '../components/HomeHeader';
-
-import * as Location from 'expo-location';
-import * as LocationGeocoding from 'expo-location';
+import { LocationContext } from '../contexts/LocationContext';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 const COLORS = {
@@ -30,40 +29,19 @@ const HomeScreen = () => {
   const [clicked, setClicked] = useState(false);
   const { isLoggedIn, userData, status } = useContext(AuthContext);
   const { categories, products, restaurants } = useContext(ProductsContext);
-  const [userLocation, setUserLocation] = useState(null);
-  const [userAddress, setUserAddress] = useState('');
-  console.log(restaurants)
+  const { showTurnOn, userAddress, isLoading,fetchUserLocation,setShowTurnOn, setIsLoading } = useContext(LocationContext);
 
-  useEffect(() => {
+
+  const handleEnableLocation = async () => {
+    if (Platform.OS === 'android') {
+      await Location.enableNetworkProviderAsync();
+    } else {
+      Linking.openURL('App-Prefs:Privacy&path=LOCATION');
+    }
+    setIsLoading(true);
+    setShowTurnOn(false);
     fetchUserLocation();
-  }, []);
-
-  const fetchUserLocation = async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status === 'granted') {
-      const location = await Location.getCurrentPositionAsync({});
-      setUserLocation(location.coords);
-      fetchUserAddress(location.coords);
-    }
   };
-
-  const fetchUserAddress = async (coords) => {
-    try {
-      const address = await LocationGeocoding.reverseGeocodeAsync({
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-      });
-
-      if (address.length > 0) {
-        const { street, city } = address[0];
-        const formattedAddress = (street !== null && city !== null) ? `${street}, ${city}` : `${city}`
-        setUserAddress(formattedAddress);
-      }
-    } catch (error) {
-      console.log('Error fetching address:', error);
-    }
-  };
-  
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchPhrase !== '') {
@@ -91,7 +69,47 @@ const HomeScreen = () => {
     onNavigate.navigate('MealyCategories');
   };
 
-  return (
+    if (isLoading) {
+    return (
+      // Render a loading screen while checking location permissions
+      <Spinner
+      visible={isLoading}
+      color = "#00205C"
+      textContent='loading'
+      textStyle={styles.loadingText}
+      overlayColor = "#f5f5f5"
+    />
+    );
+  }
+  else if (showTurnOn){
+    return(
+      <Spinner
+      visible={showTurnOn}
+      overlayColor = "#f5f5f5"
+      customIndicator={
+        <View style= {styles.mybox}>
+            <View style={styles.titleHolder}>
+                <Text style={styles.titleLocation}>Location is turned off</Text>
+            </View>
+            <View style={styles.midSection}>
+                <Image source = {require("../assets/icons/location-on-rounded.png")} width={80} height={80}/>
+                <Text style={styles.normaltext} numberOfLines={2}>To enjoy the best delivery experience, turn on location in settings</Text>
+            </View>
+            <View style={styles.btnholder}>
+                <Pressable style={styles.btn1} onPress={handleEnableLocation}>
+                    <Text style={styles.normaltext}>Yes</Text>
+                </Pressable>
+                <Pressable style={styles.btn2}>
+                    <Text style={styles.normaltext} onPress={handleEnableLocation}>No</Text>
+                </Pressable>
+            </View>
+        
+        </View>
+      }
+      />
+    )
+  } else {
+    return(
     <View style={styles.container}>
       {isLoggedIn === true && userData !== null ? (
         <View style={styles.headerContent}>
@@ -133,10 +151,10 @@ const HomeScreen = () => {
         keyExtractor={(item) => item}
         renderItem={({ item }) => {
           if (item === 'WeekOffer') {
-            return <WeekOffer style={{ width: '100%' }} data={mealOfTheDay} />;
+            return <WeekOffer style={{ width: '100%' }} data={products[0]} key = {0}/>;
           } else if (item === 'ExploreCategories') {
             return (
-              <View>
+              <View key = {1}>
                 <Section title="Explore Categories" view="Show all" onPress={handleShowAllCategories} />
                 <FlatList
                   showsVerticalScrollIndicator={false}
@@ -160,7 +178,7 @@ const HomeScreen = () => {
             );
           } else if (item === 'PopularAroundYou') {
             return (
-              <View>
+              <View key = {2}>
                 <Section title="Popular Around You" view="View more" onPress={() => handleShowAll('PopularAroundScreen')} />
                 <FlatList
                   data={restaurants}
@@ -186,7 +204,7 @@ const HomeScreen = () => {
             );
           } else if (item === 'RecommendedForYou') {
             return (
-              <View>
+              <View key = {3}>
                 <Section title="Recommended For You" view="Show all" onPress={() => handleShowAll('RecommendedScreen')} />
                 <FlatList
                   showsVerticalScrollIndicator={false}
@@ -214,7 +232,7 @@ const HomeScreen = () => {
             );
           } else if (item === 'FeaturedRestaurants') {
             return (
-              <View>
+              <View key ={4}>
                 <Section title="Featured Restaurants" view="Show all" onPress={() => handleShowAll('FeaturedScreen')} />
                 <FlatList
                   data={restaurants}
@@ -238,7 +256,7 @@ const HomeScreen = () => {
             );
           } else if (item === 'TopDeals') {
             return (
-              <View>
+              <View key={5}>
                 <Section title="Top Deals" view="Show all" />
                 <FlatList
                   data={topDeals}
@@ -268,12 +286,79 @@ const HomeScreen = () => {
         }}
       />
     </View>
-  );
-};
-
+  )}
+}
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+  container2:{
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 9999,
+    justifyContent:'center'
+
+},
+  loadingText:{
+    fontFamily:"Poppins_400Regular",
+    color:"#00205C"
+  },
+mybox:{
+    height:267,
+    elevation:4,
+    width:291,
+    alignSelf:'center',
+    backgroundColor:"#FFFFFF",
+    borderRadius:8,
+    justifyContent:'space-between'
+},
+titleHolder:{
+    borderTopLeftRadius:8,
+    borderTopRightRadius:8,
+    backgroundColor:"#E7EAEE",
+    height:42,
+    justifyContent:'center',
+    alignItems:'center'
+},
+titleLocation:{
+    color:"#00205C",
+    fontFamily:"Poppins_500Medium",
+    fontSize:16,
+    lineHeight:24,
+},
+midSection:{
+    alignItems:'center',
+    paddingVertical:20,
+    justifyContent:'space-between',
+    paddingHorizontal:16
+},
+normaltext:{
+    fontFamily:"Poppins_400Regular",
+    fontSize:14,
+    lineHeight:21,
+    textAlign:'center',
+    color:"#00205C"
+},
+btnholder:{
+    height:48,
+    flexDirection:'row',
+    justifyContent:'center'
+},
+btn1:{
+    borderTopWidth:2,
+    borderRightWidth:1,
+    borderColor:'#E7EAEE',
+    flex:0.5,
+    justifyContent:'center'
+},
+btn2:{
+    justifyContent:'center',
+    borderTopWidth:2,
+    flex:0.5,
+    borderLefttWidth:1,
+    borderColor:'#E7EAEE',
+},
   container: {
     paddingTop: StatusBar.currentHeight,
     flex: 1,

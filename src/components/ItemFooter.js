@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View,Image, Pressable, Dimensions} from 'react-native'
 import React from 'react'
 
-const width = Dimensions.get('window').width - 62;
+const width = Dimensions.get('window').width - 48;
 const ItemFooter = ({data}) => {
   return (
     <View style={styles.ItemFooter}>
         <Pressable style= {styles.ItemFooterButton1}>
-            <Text style= {styles.ItemFooterText}>{data.restaurant}</Text>
+            <Text style= {styles.ItemFooterText}>Mr. Biggs</Text>
         </Pressable>
         <Pressable style= {styles.ItemFooterButton2}>
             <Image source = {require('../assets/icons/item_desc.png')} style= {styles.ItemFooterIcon}/>
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'space-between',
         position:'absolute',
-        bottom:16,
+        bottom:11,
         right:0
 
     },

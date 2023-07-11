@@ -7,7 +7,7 @@ const itemWidth= Dimensions.get('screen').width - 48
 const FoodProductItem = ({data, marginTop, marginBottom}) => {
   return (
     <View style={[styles.item, {marginBottom:marginBottom, marginTop:marginTop}]}>
-        <Image style={styles.itemContentImage} source={require('../assets/images/fish.png')}/>
+        <Image style={styles.itemContentImage} source={{ uri: data.image[0]}} />
         <View style={styles.itemContentText}>
             <View style={{gap:8}}>
             <Text style={styles.productName} numberOfLines={1}>

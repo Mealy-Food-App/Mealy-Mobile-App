@@ -2,18 +2,25 @@ import { StyleSheet,Dimensions, Text, View, ImageBackground  } from 'react-nativ
 import React from 'react'
 import ItemHeader from './ItemHeader';
 import ItemFooter from './ItemFooter';
-
+import { BlurView } from 'expo-blur';
 
 const width = Dimensions.get('window').width -48;
 const WeekOffer = ({data}) => {
+  console.log(data.name)
   return (
     <View style={styles.meal}>
       <Text style = {styles.title}>Meal of the week</Text>
       <View style={styles.mealContent}>  
-        <ImageBackground source={data.image}
-          style={{width:width, height:224, borderRadius: 8, overflow:'visible'}}
-          resizeMode='contain'
+        <ImageBackground source={{ uri: data.image[0]}}
+          resizeMode ={'cover'}
+          borderRadius={8}
+          style={{width:width, flex: 1, height:224, borderRadius: 8,}}
         >
+          <BlurView
+            style={{ flex: 1, backgroundColor: '#f5f5f5' }}
+            tint="light"
+            intensity={55}
+          />
           <ItemHeader data={data}/> 
           <View style={styles.contentText}>
             <Text style={styles.contentTextTitle}>{data.name}</Text>
