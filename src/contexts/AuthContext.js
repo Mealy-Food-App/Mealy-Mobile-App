@@ -186,14 +186,16 @@ export const AuthProvider = ({ children }) => {
       showAlert('Token confirmation was unsuccessful')
     }
   };
-  const updateUser = async(email,password) => {
-    // Perform login logic and set the user state
+  const updateUser = async(values) => {
     try {
+      let fullName = values.fullName
+      let phoneNumber = values.phone;
+      let userAddress = values.userAddress;
       // Make the API call to register the user
-      const response = await axios.post(`${BASE_URL}/user/resetpassword`, {
-        // Include any required registration data
-        email,
-        password
+      console.log(userData._id)
+      const response = await axios.put(`${BASE_URL}/user/updateuser/${userData._id}`, {
+        phoneNumber,
+        userAddress        
       });
 
       // Update the user state if registration is successful
@@ -203,7 +205,7 @@ export const AuthProvider = ({ children }) => {
       return response.data;
     } catch (error) {
       // Handle any errors that occur during registration
-      console.error('Sign in failed:', error);
+      console.error('Update failed:', error);
       throw error;
     }
   };
