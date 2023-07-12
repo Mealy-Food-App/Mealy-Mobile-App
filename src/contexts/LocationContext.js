@@ -93,13 +93,14 @@ export const LocationProvider = ({ children }) => {
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`
       );
       console.log(response.data.results)
-      if (response.data.results.length > 0) {
-        const { formatted_address } = response.data.results[0];
+      setUserAddress('Nairobi')
+      // if (response.data.results.length > 0) {
+      //   const { formatted_address } = response.data.results[0];
 
-        setUserAddress(formatted_address);
-      } else {
-        setUserAddress('Nairobi')
-      }
+      //   setUserAddress(formatted_address);
+      // } else {
+      //   setUserAddress('Nairobi')
+      // }
     } catch (error) {
       console.log('Error fetching address:', error);
       setError('Error fetching address');
