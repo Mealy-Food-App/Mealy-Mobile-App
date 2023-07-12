@@ -15,7 +15,7 @@ import { ProductsContext } from '../contexts/ProductsContext';
 import HomeHeader from '../components/HomeHeader';
 import { LocationContext } from '../contexts/LocationContext';
 import Spinner from 'react-native-loading-spinner-overlay';
-
+import * as Location from 'expo-location';
 
 const COLORS = {
   primary: '#00205C',
@@ -29,17 +29,8 @@ const HomeScreen = () => {
   const [clicked, setClicked] = useState(false);
   const { isLoggedIn, userData, status } = useContext(AuthContext);
   const { categories, products, restaurants } = useContext(ProductsContext);
-  const { showTurnOn, userAddress, isLoading,fetchUserLocation,setShowTurnOn, setIsLoading } = useContext(LocationContext);
+  const { showTurnOn, userAddress, isLoading,checkLocationEnabled} = useContext(LocationContext);
 
-
-  const handleEnableLocation = async () => {
-    if (Platform.OS === 'android') {
-      await Location.enableNetworkProviderAsync();
-    } else {
-      Linking.openURL('App-Prefs:Privacy&path=LOCATION');
-    }
-    fetchUserLocation();
-  };
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchPhrase !== '') {

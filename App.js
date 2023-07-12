@@ -57,6 +57,7 @@ export default function App() {
   };
 
   const loadFontsAndData = async () => {
+    console.log('Trigger');
     try {
       await Font.loadAsync({
         Poppins_400Regular,
