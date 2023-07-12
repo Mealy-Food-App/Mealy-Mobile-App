@@ -74,8 +74,7 @@ export const LocationProvider = ({ children }) => {
         const location = await Location.getCurrentPositionAsync({});
         console.log([location])
         setUserLocation(location.coords);
-        await fetchUserAddress(location.coords);        
-onNavigate.navigate('Home');
+        await fetchUserAddress(location.coords);
         setIsLoading(false);
       } else {
         setError('Location permission not granted');

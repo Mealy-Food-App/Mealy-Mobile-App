@@ -1,55 +1,42 @@
-import React, { useContext, useEffect, useState } from 'react';
-import 'react-native-gesture-handler';
-import { Alert, StyleSheet, Text, View, StatusBar} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack';
 import * as Font from 'expo-font';
 import { Poppins_400Regular, Poppins_500Medium, Poppins_700Bold , Poppins_600SemiBold} from '@expo-google-fonts/poppins';
-import {Montserrat_400Regular,Montserrat_500Medium,Montserrat_600SemiBold,Montserrat_700Bold} from '@expo-google-fonts/montserrat';
+import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold, Montserrat_700Bold } from '@expo-google-fonts/montserrat';
 import axios from 'axios';
 
 import SplashScreen from './src/screens/SplashScreen';
 import { AppStackScreens, OnboardingStackScreens } from './src/navigation/StackScreens';
 import { AuthProvider } from './src/contexts/AuthContext';
 import { CartProvider } from './src/contexts/CartContext';
-import { ProductsProvider, ProductsContext } from './src/contexts/ProductsContext';
+import { ProductsProvider } from './src/contexts/ProductsContext';
 import { LocationProvider } from './src/contexts/LocationContext';
-const BASE_URL = 'https://mealy-backend-app.onrender.com/api/mealy';
 
+const BASE_URL = 'https://mealy-backend-app.onrender.com/api/mealy';
 
 const Stack = createStackNavigator();
 
 export default function App() {
-  const [isAppReady, setIsAppReady] = React.useState(false);
-  const [userOnboarded, setUserOnboarded]= React.useState(false);
-  const [products, setProducts] = useState([]);
+  const [isAppReady, setIsAppReady] = useState(false);
+  const [userOnboarded, setUserOnboarded] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
-  const [productsLoaded, setProductsLoaded] = useState(false);
-  const [categoriesLoaded, setCategoriesLoaded] = useState(false);
-  const [restaurantsLoaded, setRestaurantsLoaded] = useState(false);
-  
-  console.log(categoriesLoaded)
+
   const checkOnboardingStatus = async () => {
     try {
       const onboardingStatus = await AsyncStorage.getItem('onboardingStatus');
-      if (onboardingStatus !== null && onboardingStatus === 'completed') {
+      if (onboardingStatus === 'completed') {
         setUserOnboarded(true);
-
       }
     } catch (error) {
-      Alert.alert(error.message)
-    } 
-  };
-  const testAsyncStorage = async () => {
-    try {
-      await AsyncStorage.setItem('testKey', 'testValue');
-      const value = await AsyncStorage.getItem('testKey');
-    } catch (error) {
-      console.log(error.message);
+      console.error(error);
     }
   };
+
   const fetchData = async () => {
     try {
       const [categoriesResponse, productsResponse, restaurantsResponse] = await Promise.all([
@@ -58,94 +45,76 @@ export default function App() {
         axios.get(`${BASE_URL}/home/list/restaurants`),
       ]);
 
-      setCategories(categoriesResponse.data.data);
-      setCategoriesLoaded(true);
+      return {
+        categories: categoriesResponse.data.data,
+        products: productsResponse.data.data,
+        restaurants: restaurantsResponse.data.data,
+      };
+    } catch (error) {
+      console.error(error);
+      return {};
+    }
+  };
 
-      setProducts(productsResponse.data.data);
-      setProductsLoaded(true);
+  const loadFontsAndData = async () => {
+    try {
+      await Font.loadAsync({
+        Poppins_400Regular,
+        Poppins_500Medium,
+        Poppins_600SemiBold,
+        Poppins_700Bold,
+        Montserrat_400Regular,
+        Montserrat_500Medium,
+        Montserrat_600SemiBold,
+        Montserrat_700Bold,
+      });
 
-      setRestaurants(restaurantsResponse.data.data);
-      setRestaurantsLoaded(true);
+      await checkOnboardingStatus();
+      const data = await fetchData();
+
+      setCategories(data.categories);
+      setProducts(data.products);
+      setRestaurants(data.restaurants);
+
+      setIsAppReady(true);
     } catch (error) {
       console.error(error);
     }
-  };
-  const loadFontsAndData = async () => {
-    await testAsyncStorage();
-    await checkOnboardingStatus();
-    await fetchData();
-
-    await Font.loadAsync({
-      Poppins_400Regular,
-      Poppins_500Medium,
-      Poppins_600SemiBold,
-      Poppins_700Bold,
-      Montserrat_400Regular,
-      Montserrat_500Medium,
-      Montserrat_600SemiBold,
-      Montserrat_700Bold,
-    });
-
-    setIsAppReady(true);
   };
 
   useEffect(() => {
     loadFontsAndData();
   }, []);
 
-  const initialData = [categories, products, restaurants];
-
-  if (!isAppReady || !categoriesLoaded || !productsLoaded || !restaurantsLoaded) {
-    // Render the custom loading screen
-    return(
-      <NavigationContainer>
+  return (
+    <NavigationContainer>
+      {!isAppReady ? (
+        <SplashScreen />
+      ) : (
         <LocationProvider>
-          <ProductsProvider initialData ={initialData}>
+          <ProductsProvider initialData={{ categories, products, restaurants }}>
             <AuthProvider>
-              <CartProvider>   
-                <Stack.Navigator screenOptions={{headerShown: false}}>
-                <Stack.Screen
-                    name="Splash"
-                    component={SplashScreen}
-                  />
+              <CartProvider>
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                  {userOnboarded ? (
+                    <Stack.Screen name="AppStack" component={AppStackScreens} />
+                  ) : (
+                    <Stack.Screen name="OnboardingStack" component={OnboardingStackScreens} />
+                  )}
                 </Stack.Navigator>
-              </CartProvider>   
-            </AuthProvider>
-          </ProductsProvider>
-        </LocationProvider>
-      </NavigationContainer>
-    );
-  }
-  if (!userOnboarded){
-    return(
-      <NavigationContainer>
-        <LocationProvider>
-          <ProductsProvider initialData ={initialData}>
-            <AuthProvider>   
-              <CartProvider>  
-                <OnboardingStackScreens/> 
               </CartProvider>
             </AuthProvider>
           </ProductsProvider>
-        </LocationProvider>     
-      </NavigationContainer>
-      
-    );
-  }
-
-
-  // Render the actual app content once the loading is complete
-  return (
-    <NavigationContainer>
-      <LocationProvider>
-        <ProductsProvider initialData ={initialData}>
-          <AuthProvider> 
-            <CartProvider>    
-              <AppStackScreens/>
-            </CartProvider>
-          </AuthProvider>
-        </ProductsProvider>
-      </LocationProvider>
-    </NavigationContainer>    
+        </LocationProvider>
+      )}
+    </NavigationContainer>
   );
-};
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

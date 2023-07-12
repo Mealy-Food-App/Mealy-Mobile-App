@@ -8,9 +8,9 @@ export const ProductsContext = createContext();
 
 export const ProductsProvider = ({ children, initialData}) => {
 
-  const [products, setProducts] = useState(initialData[1] || []);
-  const [categories, setCategories] = useState(initialData[0] || []);
-  const [restaurants, setRestaurants] = useState(initialData[2] || []);
+  const [products, setProducts] = useState(initialData.products || []);
+  const [categories, setCategories] = useState(initialData.categories || []);
+  const [restaurants, setRestaurants] = useState(initialData.restaurants || []);
   const [productsLoaded, setProductsLoaded] = useState(false);
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
   const [restaurantsLoaded, setRestaurantsLoaded] = useState(false);

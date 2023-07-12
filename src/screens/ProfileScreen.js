@@ -97,7 +97,7 @@ const ProfileScreen = () => {
                     }}
                     onSubmit={values => handleSavePhonePress(values)}
                     validationSchema={yup.object().shape({
-                        phone: yup
+                        phoneNumber: yup
                         .string()
                         .matches(/^\d{10}$/, 'Please enter a valid 10-digit phone number')
                         .required('Phone number is required'),
@@ -136,7 +136,7 @@ const ProfileScreen = () => {
                                     )}
                                 </>
                             </View>
-                            {touched.phone && errors.phone &&
+                            {touched.phoneNumber && errors.phoneNumber &&
                                     <Text style ={styles.formerror} >{errors.phoneNumber}</Text>
                             } 
                         </View>
@@ -367,5 +367,6 @@ const styles = StyleSheet.create({
 
     formerror:{
         color:'#E90808',
+        alignSelf:'flex-start'
     },
 })

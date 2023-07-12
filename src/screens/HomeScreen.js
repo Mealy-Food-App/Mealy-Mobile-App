@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, FlatList, Text, StyleSheet, Image, Pressable, StatusBar, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { mealOfTheDay, aroundYou, recommended, featured, topDeals } from '../dummyData';
+import { topDeals } from '../dummyData';
 import WeekOffer from '../components/WeekOffer';
 import Section from '../components/Section';
 import CategoryItem from '../components/CategoryItem';
@@ -38,8 +38,6 @@ const HomeScreen = () => {
     } else {
       Linking.openURL('App-Prefs:Privacy&path=LOCATION');
     }
-    setIsLoading(true);
-    setShowTurnOn(false);
     fetchUserLocation();
   };
   useEffect(() => {
@@ -147,14 +145,21 @@ const HomeScreen = () => {
       <FlatList
         style={styles.homeScroll}
         showsVerticalScrollIndicator={false}
-        data={['WeekOffer', 'ExploreCategories', 'PopularAroundYou', 'RecommendedForYou', 'FeaturedRestaurants', 'TopDeals']}
-        keyExtractor={(item) => item}
+        data={[
+          { id: 'WeekOffer' },
+          { id: 'ExploreCategories' },
+          { id: 'PopularAroundYou' },
+          { id: 'RecommendedForYou' },
+          { id: 'FeaturedRestaurants' },
+          { id: 'TopDeals' },
+        ]}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
-          if (item === 'WeekOffer') {
-            return <WeekOffer style={{ width: '100%' }} data={products[0]} key = {0}/>;
-          } else if (item === 'ExploreCategories') {
+          if (item.id=== 'WeekOffer') {
+            return <WeekOffer style={{ width: '100%' }} data={products[0]} key = {item.id}/>;
+          } else if (item.id=== 'ExploreCategories') {
             return (
-              <View key = {1}>
+              <View key = {item.id}>
                 <Section title="Explore Categories" view="Show all" onPress={handleShowAllCategories} />
                 <FlatList
                   showsVerticalScrollIndicator={false}
@@ -178,7 +183,7 @@ const HomeScreen = () => {
             );
           } else if (item === 'PopularAroundYou') {
             return (
-              <View key = {2}>
+              <View key = {item.id}>
                 <Section title="Popular Around You" view="View more" onPress={() => handleShowAll('PopularAroundScreen')} />
                 <FlatList
                   data={restaurants}
@@ -202,9 +207,9 @@ const HomeScreen = () => {
                 />
               </View>
             );
-          } else if (item === 'RecommendedForYou') {
+          } else if (item.id=== 'RecommendedForYou') {
             return (
-              <View key = {3}>
+              <View key = {item.id}>
                 <Section title="Recommended For You" view="Show all" onPress={() => handleShowAll('RecommendedScreen')} />
                 <FlatList
                   showsVerticalScrollIndicator={false}
@@ -223,14 +228,14 @@ const HomeScreen = () => {
                       key={item.id}
                       data={item}
                       marginLeft={index === 0 ? 0 : 16}
-                      marginRight={index === recommended.length - 1 ? 0 : 0}
+                      marginRight={index === products.length - 1 ? 0 : 0}
                       onPressItem={() => onNavigateToProduct(item)}
                     />
                   )}
                 />
               </View>
             );
-          } else if (item === 'FeaturedRestaurants') {
+          } else if (item.id=== 'FeaturedRestaurants') {
             return (
               <View key ={4}>
                 <Section title="Featured Restaurants" view="Show all" onPress={() => handleShowAll('FeaturedScreen')} />
@@ -254,7 +259,7 @@ const HomeScreen = () => {
                 />
               </View>
             );
-          } else if (item === 'TopDeals') {
+          } else if (item.id=== 'TopDeals') {
             return (
               <View key={5}>
                 <Section title="Top Deals" view="Show all" />
@@ -286,7 +291,8 @@ const HomeScreen = () => {
         }}
       />
     </View>
-  )}
+  )
+}
 }
 export default HomeScreen;
 

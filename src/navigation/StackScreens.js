@@ -21,8 +21,6 @@ import SearchScreen from '../screens/SearchScreen';
 import CategoryScreen from '../screens/CategoryScreen';
 import AllCategoriesScreen from '../screens/AllCategoriesScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
-import LocationPermissionScreen from '../screens/LocationPermissionScreen';
-import LocationEnabledScreen from '../screens/LocationEnabledScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator();

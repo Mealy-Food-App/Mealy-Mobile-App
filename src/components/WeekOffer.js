@@ -5,7 +5,7 @@ import ItemFooter from './ItemFooter';
 import { BlurView } from 'expo-blur';
 
 const width = Dimensions.get('window').width -48;
-const WeekOffer = ({data}) => {
+const WeekOffer = ({ data}) => {
   console.log(data.name)
   return (
     <View style={styles.meal}>
