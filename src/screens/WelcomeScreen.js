@@ -34,7 +34,7 @@ const WelcomeScreen = () => {
     const onPressGuestHandler = () => {
         logout();
         updateOnboardingStatus();
-        onNavigate.navigate('LocationPermissionScreen')
+        onNavigate.navigate('Home');
     }
 
   return (

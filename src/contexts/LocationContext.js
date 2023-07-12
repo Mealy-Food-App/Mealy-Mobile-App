@@ -75,7 +75,7 @@ export const LocationProvider = ({ children }) => {
         console.log([location])
         setUserLocation(location.coords);
         await fetchUserAddress(location.coords);        
-        navigation.navigate('MainScreens', { screen: 'Home' });
+onNavigate.navigate('Home');
         setIsLoading(false);
       } else {
         setError('Location permission not granted');

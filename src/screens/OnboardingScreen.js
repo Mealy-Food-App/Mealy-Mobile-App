@@ -48,7 +48,7 @@ const OnboardingScreen =() => {
     };
     const onNavigationHome = () => {
         logout()
-        onNavigate.navigate("LocationPermissionScreen");
+        onNavigate.navigate('Home');
     }
     useInterval(() => {
         if (active < Number(slides?.length) - 1) {
