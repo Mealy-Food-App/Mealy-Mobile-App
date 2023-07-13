@@ -29,7 +29,6 @@ const HomeScreen = () => {
   const [clicked, setClicked] = useState(false);
   const { isLoggedIn, userData, status } = useContext(AuthContext);
   const { categories, products, restaurants } = useContext(ProductsContext);
-  const { showTurnOn, userAddress, isLoading,checkLocationEnabled} = useContext(LocationContext);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -57,36 +56,7 @@ const HomeScreen = () => {
   const handleShowAllCategories = () => {
     onNavigate.navigate('MealyCategories');
   };
-
-  if (showTurnOn){
-    return(
-      <Spinner
-      visible={showTurnOn}
-      overlayColor = "#f5f5f5"
-      customIndicator={
-        <View style= {styles.mybox}>
-            <View style={styles.titleHolder}>
-                <Text style={styles.titleLocation}>Location is turned off</Text>
-            </View>
-            <View style={styles.midSection}>
-                <Image source = {require("../assets/icons/location-on-rounded.png")} width={80} height={80}/>
-                <Text style={styles.normaltext} numberOfLines={2}>To enjoy the best delivery experience, turn on location in settings</Text>
-            </View>
-            <View style={styles.btnholder}>
-                <Pressable style={styles.btn1} onPress={handleEnableLocation}>
-                    <Text style={styles.normaltext}>Yes</Text>
-                </Pressable>
-                <Pressable style={styles.btn2}>
-                    <Text style={styles.normaltext} onPress={handleEnableLocation}>No</Text>
-                </Pressable>
-            </View>
-        
-        </View>
-      }
-      />
-    )
-  } else {
-    return(
+  return(
     <View style={styles.container}>
       {isLoggedIn === true && userData !== null ? (
         <View style={styles.headerContent}>
@@ -108,7 +78,7 @@ const HomeScreen = () => {
       )}
       <View style={styles.location}>
       <Image source={require("../assets/icons/location.png")} style={styles.locationicon} />
-      <Text style={!userAddress? (styles.loadingLocation) : (styles.locationtext)}>{!userAddress ? 'Loading...': userAddress}</Text>
+      <Text style={styles.locationtext}>Nairobi</Text>
       </View>
       
       <Text numberOfLines={2} style={styles.subtitle}>
@@ -272,7 +242,7 @@ const HomeScreen = () => {
     </View>
   )
 }
-}
+
 export default HomeScreen;
 
 const styles = StyleSheet.create({

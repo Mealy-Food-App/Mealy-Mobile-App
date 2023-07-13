@@ -5,6 +5,11 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
+    "splash": {
+      "backgroundColor": "#e69f14",
+      "image": "./src/assets/splash3.png",
+      "resizeMode": "contain"
+    },
     "userInterfaceStyle": "light",
     "jsEngine": "hermes",
     "assetBundlePatterns": [
