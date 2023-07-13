@@ -327,7 +327,7 @@ export default ProductDetailScreen
 
 const styles = StyleSheet.create({
     container:{
-        paddingTop: StatusBar.currentHeight,
+        
         flex: 1,
         width: '100%',
         backgroundColor:'#F6F6F6',

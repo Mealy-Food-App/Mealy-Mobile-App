@@ -33,7 +33,7 @@ const WelcomeScreen = () => {
     };
     const onPressGuestHandler = () => {
         updateOnboardingStatus();
-        onNavigate.navigate("Home");
+        onNavigate.navigate('BottomTabScreens', { screen: 'Home' });
     }
 
   return (
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
       paddingHorizontal:24,
       width: '100%',
       backgroundColor:COLORS.bgPrimary,
-      paddingTop: StatusBar.currentHeight,
+      
     },
     title:{
         marginTop: 128,

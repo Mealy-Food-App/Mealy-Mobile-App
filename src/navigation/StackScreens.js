@@ -229,7 +229,7 @@ export const AppStackScreens = () => {
 }
 const styles = StyleSheet.create({
   container: {
-    paddingTop: StatusBar.currentHeight,
+    
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',

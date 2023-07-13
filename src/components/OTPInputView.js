@@ -48,7 +48,7 @@ export default OTPInputView
 const styles = StyleSheet.create({
   container: {
       flex: 1,
-      paddingTop: StatusBar.currentHeight,
+      
       paddingHorizontal:24,
       width: '100%',
       backgroundColor:COLORS.bgPrimary,

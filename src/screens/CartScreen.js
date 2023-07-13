@@ -218,7 +218,7 @@ export default CartScreen
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: StatusBar.currentHeight,
+    
     top:0,
     width: '100%',
     backgroundColor: '#F5f5f5',
@@ -227,11 +227,9 @@ const styles = StyleSheet.create({
     height:80,
     paddingHorizontal:24,
     backgroundColor:'#F5f5f5',
-    paddingVertical:StatusBar.currentHeight,
-    top:-(StatusBar.currentHeight)
   },
   otherContainer:{
-    paddingTop: StatusBar.currentHeight,
+    
     width: '100%',
     backgroundColor: '#ffffff',
     paddingHorizontal:24,

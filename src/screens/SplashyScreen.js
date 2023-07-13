@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor:'#e69f14',
-      paddingTop: StatusBar.currentHeight,
+      
     },
     image: {
       width: 240,

@@ -319,7 +319,7 @@ btn2:{
     borderColor:'#E7EAEE',
 },
   container: {
-    paddingTop: StatusBar.currentHeight,
+    
     flex: 1,
     paddingHorizontal: 24,
     width: '100%',
