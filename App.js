@@ -53,11 +53,17 @@ export default function App() {
       };
     } catch (error) {
       console.error(error);
-      return {};
+      return {
+        categories: [],
+        products: [],
+        restaurants: [],
+      };
     }
   };
 
   const loadFontsAndData = async () => {
+    //Hide app.json splash
+    SplashScreen.hideAsync();
     try {
       await Font.loadAsync({
         Poppins_400Regular,
@@ -87,12 +93,7 @@ export default function App() {
     loadFontsAndData();
   }, []);
 
-  useEffect(() => {
-    // Hide the splash screen when the app is ready
-    if (isAppReady) {
-      SplashScreen.hideAsync();
-    }
-  }, [isAppReady]);
+
 
   if (!isAppReady) {
     // Render the custom splash screen while the app is loading
