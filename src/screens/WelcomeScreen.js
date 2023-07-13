@@ -32,9 +32,8 @@ const WelcomeScreen = () => {
         onNavigate.navigate('SignUpScreen')
     };
     const onPressGuestHandler = () => {
-        logout();
         updateOnboardingStatus();
-        onNavigate.navigate('Home');
+        onNavigate.navigate("Home");
     }
 
   return (

@@ -63,7 +63,11 @@ export const MainScreens = () => {
 }
 export const OnboardingStackScreens = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown:false}}>
+    <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName='OnboardingScreen'>
+    <Stack.Screen
+      name = "MainScreens"
+      component={MainScreens}
+    />
     <Stack.Screen
       name = "OnboardingScreen"
       component={OnboardingScreen}
@@ -91,10 +95,6 @@ export const OnboardingStackScreens = () => {
     <Stack.Screen
       name = "ResetPasswordScreen"
       component={ResetPasswordScreen}
-    />
-    <Stack.Screen
-      name = "MainScreens"
-      component={MainScreens}
     />
     <Stack.Screen
       name = "ProfileScreen"

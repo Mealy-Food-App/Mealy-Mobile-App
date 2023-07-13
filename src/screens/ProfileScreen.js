@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     container:{
         height:"100%",
         width:"100%",
-        paddingTop:StatusBar.currentHeight,
+        
         paddingHorizontal:24,
     },
     avatar:{

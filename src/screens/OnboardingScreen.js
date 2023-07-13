@@ -43,11 +43,9 @@ const OnboardingScreen =() => {
     const onNavigate = useNavigation();
 
     const onNavigationWelcome = () => {
-        logout()
         onNavigate.navigate("WelcomeScreen");
     };
     const onNavigationHome = () => {
-        logout()
         onNavigate.navigate('Home');
     }
     useInterval(() => {
