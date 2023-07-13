@@ -27,6 +27,10 @@ export default function App() {
   const [products, setProducts] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
 
+  React.useEffect(() => {
+    SplashScreen.hideAsync();
+  }, []);
+
   const checkOnboardingStatus = async () => {
     try {
       const onboardingStatus = await AsyncStorage.getItem('onboardingStatus');
@@ -63,7 +67,6 @@ export default function App() {
 
   const loadFontsAndData = async () => {
     //Hide app.json splash
-    SplashScreen.hideAsync();
     try {
       await Font.loadAsync({
         Poppins_400Regular,
