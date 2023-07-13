@@ -40,6 +40,10 @@ const HomeScreen = () => {
     return () => clearTimeout(timer);
   }, [searchPhrase, onNavigate]);
 
+  const openLeftDrawer = () => {
+    onNavigate.openDrawer();
+  };
+
   const onNavigateToCategory = (item) => {
     onNavigate.navigate('CategoryScreen', {
       title: item.name,
@@ -60,7 +64,7 @@ const HomeScreen = () => {
     <View style={styles.container}>
       {isLoggedIn === true && userData !== null ? (
         <View style={styles.headerContent}>
-          <HomeHeader />
+          <HomeHeader openLeftDrawer= {openLeftDrawer} />
           <View style={styles.titleContainer}>
             <Text style={styles.title}>Hello {userData.fullName.split(' ')[0].charAt(0).toUpperCase() + userData.fullName.split(' ')[0].slice(1)}</Text>
           </View>

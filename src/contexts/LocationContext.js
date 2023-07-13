@@ -14,9 +14,9 @@ export const LocationProvider = ({ children }) => {
   const [showTurnOn, setShowTurnOn] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    checkLocationEnabled();
-  }, []);
+  // useEffect(() => {
+  //   checkLocationEnabled();
+  // }, []);
 
   const checkLocationEnabled = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();

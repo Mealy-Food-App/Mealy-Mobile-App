@@ -22,6 +22,13 @@ import CategoryScreen from '../screens/CategoryScreen';
 import AllCategoriesScreen from '../screens/AllCategoriesScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import NotificationScreen from '../screens/NotificationScreen';
+import RecommendationScreen from "../screens/RecommendedScreen"
+import DealsScreen from "../screens/DealsScreen"
+import ChatScreen from "../screens/ChatScreen"
+import PaymentScreen from "../screens/PaymentScreen"
+import PreferenceScreen from "../screens/PreferenceScreen"
+
 
 const Stack = createNativeStackNavigator();
 
@@ -93,7 +100,35 @@ export const OnboardingStackScreens = () => {
       name = "ProfileScreen"
       component={ProfileScreen}
     />
-     <Stack.Screen
+    <Stack.Screen
+      name = "NotificationScreen"
+      component={NotificationScreen}
+    />
+    <Stack.Screen
+      name = "PreferenceScreen"
+      component={PreferenceScreen}
+    />
+    <Stack.Screen
+      name = "DealsScreen"
+      component={DealsScreen}
+    />
+    <Stack.Screen
+      name = "ChatScreen"
+      component={ChatScreen}
+    />
+    <Stack.Screen
+      name = "PaymentScreen"
+      component={PaymentScreen}
+    />
+    <Stack.Screen
+      name = "SettingsScreen"
+      component={SettingsScreen}
+    />
+    <Stack.Screen
+      name = "RecommendationScreen"
+      component={RecommendationScreen}
+    />
+    <Stack.Screen
       name = "SearchScreen"
       component={SearchScreen}
     />
@@ -122,6 +157,34 @@ export const AppStackScreens = () => {
     <Stack.Screen
       name = "ProfileScreen"
       component={ProfileScreen}
+    />
+    <Stack.Screen
+      name = "NotificationScreen"
+      component={NotificationScreen}
+    />
+    <Stack.Screen
+      name = "PreferenceScreen"
+      component={PreferenceScreen}
+    />
+    <Stack.Screen
+      name = "DealsScreen"
+      component={DealsScreen}
+    />
+    <Stack.Screen
+      name = "ChatScreen"
+      component={ChatScreen}
+    />
+    <Stack.Screen
+      name = "PaymentScreen"
+      component={PaymentScreen}
+    />
+    <Stack.Screen
+      name = "SettingsScreen"
+      component={SettingsScreen}
+    />
+    <Stack.Screen
+      name = "RecommendationScreen"
+      component={RecommendationScreen}
     />
     <Stack.Screen
       name = "SearchScreen"
