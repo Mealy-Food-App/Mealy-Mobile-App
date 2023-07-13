@@ -7,9 +7,6 @@
     "icon": "./src/assets/icon.png",
     "userInterfaceStyle": "light",
     "jsEngine": "hermes",
-    "splash": {
-      "backgroundColor": "#e69f14"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
