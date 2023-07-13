@@ -112,23 +112,31 @@ export default function App() {
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <NavigationContainer>
-        <LocationProvider>
-          <ProductsProvider initialData={{ categories, products, restaurants }}>
-            <AuthProvider>
-              <CartProvider>
-                <Stack.Navigator screenOptions={{ headerShown: false }}>
-                  {userOnboarded ? (
-                    <Stack.Screen name="AppStack" component={AppStackScreens} />
-                  ) : (
-                    <Stack.Screen name="OnboardingStack" component={OnboardingStackScreens} />
-                  )}
-                </Stack.Navigator>
-              </CartProvider>
-            </AuthProvider>
-          </ProductsProvider>
-        </LocationProvider>
-      </NavigationContainer> 
+      {userOnboarded ? (
+        <NavigationContainer>
+          <LocationProvider>
+            <ProductsProvider initialData={{ categories, products, restaurants }}>
+              <AuthProvider> 
+                <CartProvider>    
+                  <AppStackScreens/>
+                </CartProvider>
+              </AuthProvider>
+            </ProductsProvider>
+          </LocationProvider>
+        </NavigationContainer>  
+      ) : (
+        <NavigationContainer>
+          <LocationProvider>
+            <ProductsProvider initialData={{ categories, products, restaurants }}>
+              <AuthProvider>   
+                <CartProvider>  
+                  <OnboardingStackScreens/> 
+                </CartProvider>
+              </AuthProvider>
+            </ProductsProvider>
+          </LocationProvider>     
+        </NavigationContainer>
+      )}
     </View>
   );
 }
