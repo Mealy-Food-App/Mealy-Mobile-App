@@ -58,19 +58,7 @@ const HomeScreen = () => {
     onNavigate.navigate('MealyCategories');
   };
 
-    if (isLoading) {
-    return (
-      // Render a loading screen while checking location permissions
-      <Spinner
-      visible={isLoading}
-      color = "#00205C"
-      textContent='loading'
-      textStyle={styles.loadingText}
-      overlayColor = "#f5f5f5"
-    />
-    );
-  }
-  else if (showTurnOn){
+  if (showTurnOn){
     return(
       <Spinner
       visible={showTurnOn}
@@ -120,7 +108,7 @@ const HomeScreen = () => {
       )}
       <View style={styles.location}>
       <Image source={require("../assets/icons/location.png")} style={styles.locationicon} />
-      <Text style={styles.locationtext}>{userAddress}</Text>
+      <Text style={isLoading? (styles.loadingLocation) : (styles.locationtext)}>{isLoading ? 'Loading...': userAddress}</Text>
       </View>
       
       <Text numberOfLines={2} style={styles.subtitle}>
@@ -404,5 +392,14 @@ btn2:{
     textAlign:'center',
     alignSelf:'center',
     color:'#00205C'
+  },
+  loadingLocation:{
+    fontFamily:"Poppins_400Regular",
+    fontSize:16,
+    lineHeight:24,
+    textAlign:'center',
+    alignSelf:'center',
+    color:'#8f9295'
   }
+
 });

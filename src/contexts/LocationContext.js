@@ -1,10 +1,11 @@
-import React, {createContext,useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { Linking } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 export const LocationContext = createContext();
+
 export const LocationProvider = ({ children }) => {
   const navigation = useNavigation();
   const [userLocation, setUserLocation] = useState(null);
@@ -19,13 +20,13 @@ export const LocationProvider = ({ children }) => {
 
   const checkLocationEnabled = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
-  
+
     if (status === 'granted') {
       let isLocationEnabled = await Location.hasServicesEnabledAsync();
       await fetchUserLocation();
-  
+
       if (isLocationEnabled) {
-        await fetchUserLocation();
+        await fetchUserAddress(userLocation.coords);
         setIsLoading(false);
       } else {
         setIsLoading(false);
@@ -33,10 +34,10 @@ export const LocationProvider = ({ children }) => {
       }
     } else if (status === 'undetermined') {
       const { status } = await Location.requestForegroundPermissionsAsync();
-  
+
       if (status === 'granted') {
         const isLocationEnabled = await Location.hasServicesEnabledAsync();
-  
+
         if (isLocationEnabled) {
           await fetchUserLocation();
           setIsLoading(false);
@@ -53,7 +54,7 @@ export const LocationProvider = ({ children }) => {
       openAppSettings();
     }
   };
-  
+
   const showTurnOnLocationComponent = async () => {
     const providers = await Location.getProviderStatusAsync();
     if (!providers.networkAvailable) {
@@ -61,7 +62,6 @@ export const LocationProvider = ({ children }) => {
       setShowTurnOn(true);
     }
   };
-  
 
   const openAppSettings = () => {
     Linking.openSettings();
@@ -72,10 +72,7 @@ export const LocationProvider = ({ children }) => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status === 'granted') {
         const location = await Location.getCurrentPositionAsync({});
-        console.log([location])
         setUserLocation(location.coords);
-        await fetchUserAddress(location.coords);
-        setIsLoading(false);
       } else {
         setError('Location permission not granted');
       }
@@ -88,18 +85,17 @@ export const LocationProvider = ({ children }) => {
   const fetchUserAddress = async (coords) => {
     try {
       const { latitude, longitude } = coords;
-      const apiKey = 'AIzaSyBpv7YeMj0olbFPopHzdSWmSfGVnKkIymo';
+      const apiKey = 'YOUR_GOOGLE_MAPS_API_KEY';
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`
       );
-      console.log(response.data.results)
-      setUserAddress('Nairobi')
+
+      setUserAddress('Nairobi');
       // if (response.data.results.length > 0) {
       //   const { formatted_address } = response.data.results[0];
-
       //   setUserAddress(formatted_address);
       // } else {
-      //   setUserAddress('Nairobi')
+      //   setUserAddress('Nairobi');
       // }
     } catch (error) {
       console.log('Error fetching address:', error);
@@ -108,7 +104,19 @@ export const LocationProvider = ({ children }) => {
   };
 
   return (
-    <LocationContext.Provider value={{ userLocation, userAddress, isLoading, error, showTurnOn,setShowTurnOn, setIsLoading, fetchUserLocation, checkLocationEnabled }}>
+    <LocationContext.Provider
+      value={{
+        userLocation,
+        userAddress,
+        isLoading,
+        error,
+        showTurnOn,
+        setShowTurnOn,
+        setIsLoading,
+        fetchUserLocation,
+        checkLocationEnabled,
+      }}
+    >
       {children}
     </LocationContext.Provider>
   );

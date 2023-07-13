@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image, StatusBar, StyleSheet,Text, Dimensions, TouchableWithoutFeedback } from 'react-native';
 
-export default function SplashScreen() {
+export default function SplashyScreen() {
   return (
     <View style={styles.container}>
       {/* Your splash screen content */}

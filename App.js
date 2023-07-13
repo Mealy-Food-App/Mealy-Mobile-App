@@ -7,8 +7,9 @@ import * as Font from 'expo-font';
 import { Poppins_400Regular, Poppins_500Medium, Poppins_700Bold , Poppins_600SemiBold} from '@expo-google-fonts/poppins';
 import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold, Montserrat_700Bold } from '@expo-google-fonts/montserrat';
 import axios from 'axios';
+import * as SplashScreen from 'expo-splash-screen';
+import SplashyScreen from './src/screens/SplashyScreen';
 
-import SplashScreen from './src/screens/SplashScreen';
 import { AppStackScreens, OnboardingStackScreens } from './src/navigation/StackScreens';
 import { AuthProvider } from './src/contexts/AuthContext';
 import { CartProvider } from './src/contexts/CartContext';
@@ -57,7 +58,6 @@ export default function App() {
   };
 
   const loadFontsAndData = async () => {
-    console.log('Trigger');
     try {
       await Font.loadAsync({
         Poppins_400Regular,
@@ -87,27 +87,37 @@ export default function App() {
     loadFontsAndData();
   }, []);
 
+  useEffect(() => {
+    // Hide the splash screen when the app is ready
+    if (isAppReady) {
+      SplashScreen.hideAsync();
+    }
+  }, [isAppReady]);
+
+  if (!isAppReady) {
+    // Render the custom splash screen while the app is loading
+    return (
+      <SplashyScreen/>
+    );
+  }
+
   return (
     <NavigationContainer>
-      {!isAppReady ? (
-        <SplashScreen />
-      ) : (
-        <LocationProvider>
-          <ProductsProvider initialData={{ categories, products, restaurants }}>
-            <AuthProvider>
-              <CartProvider>
-                <Stack.Navigator screenOptions={{ headerShown: false }}>
-                  {userOnboarded ? (
-                    <Stack.Screen name="AppStack" component={AppStackScreens} />
-                  ) : (
-                    <Stack.Screen name="OnboardingStack" component={OnboardingStackScreens} />
-                  )}
-                </Stack.Navigator>
-              </CartProvider>
-            </AuthProvider>
-          </ProductsProvider>
-        </LocationProvider>
-      )}
+      <LocationProvider>
+        <ProductsProvider initialData={{ categories, products, restaurants }}>
+          <AuthProvider>
+            <CartProvider>
+              <Stack.Navigator screenOptions={{ headerShown: false }}>
+                {userOnboarded ? (
+                  <Stack.Screen name="AppStack" component={AppStackScreens} />
+                ) : (
+                  <Stack.Screen name="OnboardingStack" component={OnboardingStackScreens} />
+                )}
+              </Stack.Navigator>
+            </CartProvider>
+          </AuthProvider>
+        </ProductsProvider>
+      </LocationProvider>
     </NavigationContainer>
   );
 }
