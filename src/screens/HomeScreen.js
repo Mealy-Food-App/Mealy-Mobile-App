@@ -108,7 +108,7 @@ const HomeScreen = () => {
       )}
       <View style={styles.location}>
       <Image source={require("../assets/icons/location.png")} style={styles.locationicon} />
-      <Text style={!userAddress? (styles.loadingLocation) : (styles.locationtext)}>{!l ? 'Loading...': userAddress}</Text>
+      <Text style={!userAddress? (styles.loadingLocation) : (styles.locationtext)}>{!userAddress ? 'Loading...': userAddress}</Text>
       </View>
       
       <Text numberOfLines={2} style={styles.subtitle}>
