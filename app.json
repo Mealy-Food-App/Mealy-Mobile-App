@@ -10,6 +10,7 @@
       "image": "./src/assets/splash3.png",
       "resizeMode": "contain"
     },
+    "developmentMode": false,
     "userInterfaceStyle": "light",
     "jsEngine": "hermes",
     "assetBundlePatterns": [
