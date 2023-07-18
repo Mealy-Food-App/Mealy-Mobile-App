@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, FlatList, Text, StyleSheet, Image, Pressable, StatusBar, Dimensions } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { topDeals } from '../dummyData';
 import WeekOffer from '../components/WeekOffer';
 import Section from '../components/Section';
@@ -16,6 +16,7 @@ import HomeHeader from '../components/HomeHeader';
 import { LocationContext } from '../contexts/LocationContext';
 import Spinner from 'react-native-loading-spinner-overlay';
 import * as Location from 'expo-location';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const COLORS = {
   primary: '#00205C',
@@ -24,20 +25,31 @@ const COLORS = {
 };
 
 const HomeScreen = () => {
+  const insets = useSafeAreaInsets();
   const onNavigate = useNavigation();
+  const isFocused = useIsFocused();
   const [searchPhrase, setSearchPhrase] = useState("");
   const [clicked, setClicked] = useState(false);
   const { isLoggedIn, userData, status } = useContext(AuthContext);
   const { categories, products, restaurants } = useContext(ProductsContext);
 
   useEffect(() => {
+    // Clear searchPhrase when the screen is focused again
+    if (isFocused) {
+      setSearchPhrase('');
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       if (searchPhrase !== '') {
-        onNavigate.navigate('SearchScreen', searchPhrase);
+        onNavigate.navigate('SearchScreen', searchPhrase, setSearchPhrase);
       }
     }, 500); // 1000 milliseconds (1 second) delay
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+    }
   }, [searchPhrase, onNavigate]);
 
   const openLeftDrawer = () => {
@@ -60,11 +72,12 @@ const HomeScreen = () => {
   const handleShowAllCategories = () => {
     onNavigate.navigate('MealyCategories');
   };
-  return(
-    <View style={styles.container}>
+
+  return (
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       {isLoggedIn === true && userData !== null ? (
         <View style={styles.headerContent}>
-          <HomeHeader openLeftDrawer= {openLeftDrawer} />
+          <HomeHeader openLeftDrawer={openLeftDrawer} />
           <View style={styles.titleContainer}>
             <Text style={styles.title}>Hello {userData.fullName.split(' ')[0].charAt(0).toUpperCase() + userData.fullName.split(' ')[0].slice(1)}</Text>
           </View>
@@ -81,10 +94,10 @@ const HomeScreen = () => {
         </View>
       )}
       <View style={styles.location}>
-      <Image source={require("../assets/icons/location.png")} style={styles.locationicon} />
-      <Text style={styles.locationtext}>Nairobi</Text>
+        <Image source={require("../assets/icons/location.png")} style={styles.locationicon} />
+        <Text style={styles.locationtext}>Nairobi</Text>
       </View>
-      
+
       <Text numberOfLines={2} style={styles.subtitle}>
         What would you like to eat today?
       </Text>
@@ -108,11 +121,11 @@ const HomeScreen = () => {
         ]}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
-          if (item.id=== 'WeekOffer') {
-            return <WeekOffer style={{ width: '100%' }} data={products[0]} key = {item.id}/>;
-          } else if (item.id=== 'ExploreCategories') {
+          if (item.id === 'WeekOffer') {
+            return <WeekOffer style={{ width: '100%' }} data={products[0]} key={item.id} />;
+          } else if (item.id === 'ExploreCategories') {
             return (
-              <View key = {item.id}>
+              <View key={item.id}>
                 <Section title="Explore Categories" view="Show all" onPress={handleShowAllCategories} />
                 <FlatList
                   showsVerticalScrollIndicator={false}
@@ -120,10 +133,10 @@ const HomeScreen = () => {
                   data={categories}
                   horizontal
                   style={styles.flatCont}
-                  keyExtractor={(item) => item._id}
+                  keyExtractor={(item) => item._id +'c'}
                   renderItem={({ item, index }) => (
                     <CategoryItem
-                      key={item._id}
+                      key={item._id +'c'}
                       item={item}
                       backgroundColor="#F8F2F1"
                       marginLeft={index === 0 ? 0 : 8}
@@ -134,23 +147,23 @@ const HomeScreen = () => {
                 />
               </View>
             );
-          } else if (item === 'PopularAroundYou') {
+          } else if (item.id === 'PopularAroundYou') {
             return (
-              <View key = {item.id}>
+              <View key={item.id}>
                 <Section title="Popular Around You" view="View more" onPress={() => handleShowAll('PopularAroundScreen')} />
                 <FlatList
                   data={restaurants}
                   horizontal
                   showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => item._id + 're'}
                   style={{
                     borderRadius: 10,
-                    height:240,
+                    height: 240,
                   }}
                   renderItem={({ item, index }) => (
                     <PopularItem
-                      key={item._id}
+                      key={item._id +'re'}
                       data={item}
                       marginLeft={index === 0 ? 0 : 16}
                       marginRight={index === restaurants.length - 1 ? 0 : 0}
@@ -160,25 +173,25 @@ const HomeScreen = () => {
                 />
               </View>
             );
-          } else if (item.id=== 'RecommendedForYou') {
+          } else if (item.id === 'RecommendedForYou') {
             return (
-              <View key = {item.id}>
+              <View key={item.id}>
                 <Section title="Recommended For You" view="Show all" onPress={() => handleShowAll('RecommendedScreen')} />
                 <FlatList
                   showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
                   data={products}
                   horizontal
-                  keyExtractor={(item) => item._id}
+                  keyExtractor={(item) => item._id + 'p'}
                   style={{
                     backgroundColor: '#ffffff',
                     paddingVertical: 8,
                     borderRadius: 8,
-                    height:250
+                    height: 250,
                   }}
                   renderItem={({ item, index }) => (
                     <RecommendedItem
-                      key={item.id}
+                      key={item._id + 'p'}
                       data={item}
                       marginLeft={index === 0 ? 0 : 16}
                       marginRight={index === products.length - 1 ? 0 : 0}
@@ -188,9 +201,9 @@ const HomeScreen = () => {
                 />
               </View>
             );
-          } else if (item.id=== 'FeaturedRestaurants') {
+          } else if (item.id === 'FeaturedRestaurants') {
             return (
-              <View key ={4}>
+              <View key={item.id}>
                 <Section title="Featured Restaurants" view="Show all" onPress={() => handleShowAll('FeaturedScreen')} />
                 <FlatList
                   data={restaurants}
@@ -204,7 +217,7 @@ const HomeScreen = () => {
                   renderItem={({ item, index }) => (
                     <FeaturedItem
                       data={item}
-                      key={item.id}
+                      key={item._id + 'r'}
                       marginLeft={index === 0 || index % 2 === 0 ? 0 : 16}
                       onPressItem={() => onNavigation(item)}
                     />
@@ -212,7 +225,7 @@ const HomeScreen = () => {
                 />
               </View>
             );
-          } else if (item.id=== 'TopDeals') {
+          } else if (item.id === 'TopDeals') {
             return (
               <View key={5}>
                 <Section title="Top Deals" view="Show all" />
@@ -221,7 +234,7 @@ const HomeScreen = () => {
                   showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
                   horizontal
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => item.id + 't'}
                   style={{
                     backgroundColor: '#ffffff',
                     borderRadius: 10,
@@ -229,7 +242,7 @@ const HomeScreen = () => {
                   }}
                   renderItem={({ item, index }) => (
                     <TopDealItem
-                      key={item.id}
+                      key={item._id +'t'}
                       data={item}
                       marginLeft={index === 0 ? 0 : 16}
                       backgroundColor={index === 0 ? '#FFEBEB' : index === 1 ? 'rgba(20, 1, 0, 0.1)' : index === 2 ? '#F5EFF5' : '#fff1eb'}
@@ -244,82 +257,13 @@ const HomeScreen = () => {
         }}
       />
     </View>
-  )
-}
+  );
+};
 
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  container2:{
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    zIndex: 9999,
-    justifyContent:'center'
-
-},
-  loadingText:{
-    fontFamily:"Poppins_400Regular",
-    color:"#00205C"
-  },
-mybox:{
-    height:267,
-    elevation:4,
-    width:291,
-    alignSelf:'center',
-    backgroundColor:"#FFFFFF",
-    borderRadius:8,
-    justifyContent:'space-between'
-},
-titleHolder:{
-    borderTopLeftRadius:8,
-    borderTopRightRadius:8,
-    backgroundColor:"#E7EAEE",
-    height:42,
-    justifyContent:'center',
-    alignItems:'center'
-},
-titleLocation:{
-    color:"#00205C",
-    fontFamily:"Poppins_500Medium",
-    fontSize:16,
-    lineHeight:24,
-},
-midSection:{
-    alignItems:'center',
-    paddingVertical:20,
-    justifyContent:'space-between',
-    paddingHorizontal:16
-},
-normaltext:{
-    fontFamily:"Poppins_400Regular",
-    fontSize:14,
-    lineHeight:21,
-    textAlign:'center',
-    color:"#00205C"
-},
-btnholder:{
-    height:48,
-    flexDirection:'row',
-    justifyContent:'center'
-},
-btn1:{
-    borderTopWidth:2,
-    borderRightWidth:1,
-    borderColor:'#E7EAEE',
-    flex:0.5,
-    justifyContent:'center'
-},
-btn2:{
-    justifyContent:'center',
-    borderTopWidth:2,
-    flex:0.5,
-    borderLefttWidth:1,
-    borderColor:'#E7EAEE',
-},
   container: {
-    
     flex: 1,
     paddingHorizontal: 24,
     width: '100%',
@@ -350,30 +294,21 @@ btn2:{
   homeScroll: {
     width: '100%',
   },
-  location:{
-    flexDirection:'row',
-    alignItems:'center'
+  location: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  locationicon:{
-    width:16,
-    height:20,
-    marginRight:8
+  locationicon: {
+    width: 16,
+    height: 20,
+    marginRight: 8,
   },
-  locationtext:{
-    fontFamily:"Poppins_500Medium",
-    fontSize:20,
-    lineHeight:24,
-    textAlign:'center',
-    alignSelf:'center',
-    color:'#00205C'
+  locationtext: {
+    fontFamily: "Poppins_500Medium",
+    fontSize: 20,
+    lineHeight: 24,
+    textAlign: 'center',
+    alignSelf: 'center',
+    color: '#00205C'
   },
-  loadingLocation:{
-    fontFamily:"Poppins_400Regular",
-    fontSize:16,
-    lineHeight:24,
-    textAlign:'center',
-    alignSelf:'center',
-    color:'#8f9295'
-  }
-
 });

@@ -1,4 +1,4 @@
-import { StyleSheet,StatusBar, Text, TextInput, View, Button, Image, TouchableOpacity, TouchableHighlight, ScrollView,Alert, Pressable, ToastAndroid} from 'react-native'
+import { StyleSheet, StatusBar, Text, TextInput, View, Button, Image, TouchableOpacity, TouchableHighlight, ScrollView, Alert, Pressable, ToastAndroid } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { Formik, yupToFormErrors } from 'formik'
 import * as yup from 'yup'
@@ -8,61 +8,61 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import CustomAlert from '../components/Alert'
 import { AuthContext } from '../contexts/AuthContext'
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-
-const COLORS ={primary:'#00205C', btnPrimary:'#E69F14', bgPrimary:'#F5F5F5', }
-
+const COLORS = { primary: '#00205C', btnPrimary: '#E69F14', bgPrimary: '#F5F5F5', }
 
 export default LogInScreen = () => {
   const onNavigate = useNavigation();
-  const {isLoggedIn, userData, status,login} = useContext(AuthContext);
-  const [spinner, setSpinner] = useState(false)
+  const { isLoggedIn, userData, status, login } = useContext(AuthContext);
+  const [spinner, setSpinner] = useState(false);
+  const insets = useSafeAreaInsets();
 
-  const handleLogin= async (values) => {
+  const handleLogin = async (values) => {
     setSpinner(true);
-    await login(values.email, values.password) ;
+    await login(values.email, values.password);
     setSpinner(false);
   }
 
   const onPressSignUpHandler = () => {
-    onNavigate.navigate('SignUpScreen')
+    onNavigate.navigate('SignUpScreen');
   };
   const onPressForgotPasswordHandler = () => {
-      onNavigate.navigate('ForgotPasswordScreen')
+    onNavigate.navigate('ForgotPasswordScreen');
   }
 
   const userInput = {
-    width:'100%',
+    width: '100%',
     borderWidth: 2,
     borderColor: '#E69F14',
     borderRadius: 8,
-    fontFamily:'Poppins_400Regular',
+    fontFamily: 'Poppins_400Regular',
     flexDirection: 'row',
-    height:48,
+    height: 48,
   };
   const userInputText = {
-    width:274,
-    fontFamily:'Poppins_400Regular',    
+    width: 274,
+    fontFamily: 'Poppins_400Regular',
     paddingHorizontal: 16,
-    paddingVertical:10,
-    color:COLORS.primary
+    paddingVertical: 10,
+    color: COLORS.primary
   };
 
   const inputIcon = {
-    width:21,
-    height:22,
-    resizeMode:'contain'
+    width: 21,
+    height: 22,
+    resizeMode: 'contain'
   };
-  const validButton ={
-    color:COLORS.btnPrimary,
+  const validButton = {
+    color: COLORS.btnPrimary,
     fontFamily: "Poppins_600SemiBold",
-    fontSize:14 ,borderColor:"rgba(230, 159, 20, 0.5)",
+    fontSize: 14, borderColor: "rgba(230, 159, 20, 0.5)",
     title: "Sign In"
   }
-  const invalidButton ={
-    color:'rgba(230, 159, 20, 0.5)',
+  const invalidButton = {
+    color: 'rgba(230, 159, 20, 0.5)',
     fontFamily: "Poppins_600SemiBold",
-    fontSize:14 ,borderColor:"rgba(230, 159, 20, 0.5)",
+    fontSize: 14, borderColor: "rgba(230, 159, 20, 0.5)",
     title: "Sign In"
   }
   const [passwordVisibility, setPasswordVisibility] = useState(true);
@@ -71,132 +71,132 @@ export default LogInScreen = () => {
     setPasswordVisibility(!passwordVisibility)
   };
   return (
-    <ScrollView style={styles.container}>
-    {status !== '' && <CustomAlert props ={{title:'Sign In', message:status}}/>}
-    {isLoggedIn ? (
-      <>
-        <Text>Welcome, {userData?.fullName}!</Text>
-      </>
-    ) :(
-      <>
-      <Spinner
-        visible={spinner}
-        color ={COLORS.btnPrimary}
-        textStyle={styles.loadingText}
-        overlayColor ='rgba(0, 6, 20, 0.75)'
-      />
-      <Text style={styles.title}>Sign In</Text>
-      <Text style= {styles.subtitle}>Kindly provide the following details to sign in.</Text>
-      <Formik
-        initialValues={{
-          email: '',
-          password: '',
-          rememberMe:false,
-        }}
-        onSubmit={values => handleLogin(values)}
-        validationSchema={yup.object().shape({
-          email: yup
-            .string()
-            .email('Email address is invalid')
-            .required('Email address required.'),
-          password: yup
-            .string()
-            .required('Password is required.'),
-        })}
-      >
-         {({ values, handleChange,setFieldValue, errors, setFieldTouched, touched, isValid, handleSubmit }) => (
-            <View style = {styles.formContainer}>
-              <Text style= {styles.label}>Email</Text>
-              <View style = {userInput}>
-                <View style={styles.inputIconContainer}>
-                  <Image source={require('../assets/icons/email.png')} style={inputIcon}/>
+    <ScrollView style={[styles.container, { paddingTop: insets.top }]}>
+      {status !== '' && <CustomAlert props={{ title: 'Sign In', message: status }} />}
+      {isLoggedIn === true && userData !== null ? (
+        <>
+          <Text>Welcome, {userData?.fullName}!</Text>
+        </>
+      ) : (
+        <>
+          <Spinner
+            visible={spinner}
+            color={COLORS.btnPrimary}
+            textStyle={styles.loadingText}
+            overlayColor='rgba(0, 6, 20, 0.75)'
+          />
+          <Text style={styles.title}>Sign In</Text>
+          <Text style={styles.subtitle}>Kindly provide the following details to sign in.</Text>
+          <Formik
+            initialValues={{
+              email: '',
+              password: '',
+              rememberMe: false,
+            }}
+            onSubmit={values => handleLogin(values)}
+            validationSchema={yup.object().shape({
+              email: yup
+                .string()
+                .email('Email address is invalid')
+                .required('Email address required.'),
+              password: yup
+                .string()
+                .required('Password is required.'),
+            })}
+          >
+            {({ values, handleChange, setFieldValue, errors, setFieldTouched, touched, isValid, handleSubmit }) => (
+              <View style={styles.formContainer}>
+                <Text style={styles.label}>Email</Text>
+                <View style={userInput}>
+                  <View style={styles.inputIconContainer}>
+                    <Image source={require('../assets/icons/email.png')} style={inputIcon} />
+                  </View>
+                  <TextInput
+                    value={values.email}
+                    style={userInputText}
+                    onChangeText={handleChange('email')}
+                    onBlur={() => setFieldTouched('email')}
+                    placeholder='BengtPeace24@gmail.com'
+                  />
                 </View>
-                <TextInput
-                  value = {values.email}
-                  style = {userInputText}
-                  onChangeText={handleChange('email')}
-                  onBlur = {() => setFieldTouched('email')}
-                  placeholder='BengtPeace24@gmail.com'
-                />
-              </View>        
-              {touched.email && errors.email &&
-                <Text style = {styles.formerror}>{errors.email}</Text>
-              }
-              
-              <Text style= {styles.label}>Password</Text>
-              <View style = {userInput} >
-                <View style={styles.inputIconContainer}>
-                  <Image source ={require('../assets/icons/pwd.png')} style={inputIcon}/>
-                </View>
-                <TextInput
-                  value = {values.password}
-                  style = {userInputText}
-                  onChangeText={handleChange('password')}
-                  placeholder='. . . . . .'
-                  onBlur={() => setFieldTouched('password')}
-                  secureTextEntry ={passwordVisibility}
-                />
-                <TouchableOpacity style={{position:'absolute', top: 12, right:16, height:40}} onPressIn= {managePasswordVisiblity}>
-                  <Image source = {passwordVisibility ? require('../assets/icons/openeye.png') : require('../assets/icons/eye-off.png')} style={{width: 18, height:18, tintColor: COLORS.primary}}/>
-                </TouchableOpacity>
-              </View>
+                {touched.email && errors.email &&
+                  <Text style={styles.formerror}>{errors.email}</Text>
+                }
 
-              {touched.password && errors.password &&
-                <Text style ={styles.formerror} >{errors.password}</Text>
-              } 
-                            <View style={styles.checkboxContainer} >
-                <Checkbox
-                          style={styles.checkbox}
-                          value={values.rememberMe}
-                          onValueChange={(value) => setFieldValue('rememberMe', value)}
-                          color={isChecked ? COLORS.primary : COLORS.primary}
-                />
-                <View style={styles.checkboxTextView}>
-                    <Text style={styles.checkboxText }>
+                <Text style={styles.label}>Password</Text>
+                <View style={userInput} >
+                  <View style={styles.inputIconContainer}>
+                    <Image source={require('../assets/icons/pwd.png')} style={inputIcon} />
+                  </View>
+                  <TextInput
+                    value={values.password}
+                    style={userInputText}
+                    onChangeText={handleChange('password')}
+                    placeholder='. . . . . .'
+                    onBlur={() => setFieldTouched('password')}
+                    secureTextEntry={passwordVisibility}
+                  />
+                  <TouchableOpacity style={{ position: 'absolute', top: 12, right: 16, height: 40 }} onPressIn={managePasswordVisiblity}>
+                    <Image source={passwordVisibility ? require('../assets/icons/openeye.png') : require('../assets/icons/eye-off.png')} style={{ width: 18, height: 18, tintColor: COLORS.primary }} />
+                  </TouchableOpacity>
+                </View>
+
+                {touched.password && errors.password &&
+                  <Text style={styles.formerror} >{errors.password}</Text>
+                }
+                <View style={styles.checkboxContainer} >
+                  <Checkbox
+                    style={styles.checkbox}
+                    value={values.rememberMe}
+                    onValueChange={(value) => setFieldValue('rememberMe', value)}
+                    color={isChecked ? COLORS.primary : COLORS.primary}
+                  />
+                  <View style={styles.checkboxTextView}>
+                    <Text style={styles.checkboxText}>
                       Remember Me?
                     </Text>
+                  </View>
                 </View>
+                <View style={styles.forgotPasswordContainer}>
+                  <Pressable style={styles.forgotPassword} onPress={onPressForgotPasswordHandler}>
+                    <Text style={styles.forgotPasswordText}>Forgort Password?</Text>
+                  </Pressable>
+                </View>
+                <TouchableOpacity disabled={!isValid} style={{ width: '100%', marginTop: 40 }} onPressIn={handleSubmit}>
+                  <BigButton props={isValid ? validButton : invalidButton} />
+                </TouchableOpacity>
               </View>
-              <View style= {styles.forgotPasswordContainer}>
-                <Pressable style = {styles.forgotPassword} onPress={onPressForgotPasswordHandler}>
-                    <Text style = {styles.forgotPasswordText}>Forgort Password?</Text>
-                </Pressable>
-              </View>                             
-              <TouchableOpacity disabled = {!isValid} style = {{width:'100%', marginTop:40}} onPressIn={handleSubmit}>
-                <BigButton props={isValid ? validButton : invalidButton} />
+            )}
+          </Formik>
+          <View style={styles.horizontalDivider}>
+            <View style={styles.horizontal}></View>
+            <Text style={styles.horizontalText}>or</Text>
+            <View style={styles.horizontal}></View>
+          </View>
+          <View style={styles.footerBox}>
+            <Text style={styles.footerText}>Continue Using</Text>
+            <View style={styles.authSocial}>
+              <TouchableOpacity style={styles.authSocialImage}>
+                <Image style={{ width: 48, height: 48 }} source={require('../assets/icons/fb.png')} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.authSocialImage}>
+                <Image style={{ width: 48, height: 48 }} source={require('../assets/icons/google.png')} />
               </TouchableOpacity>
             </View>
-         )}
-      </Formik>
-      <View style={styles.horizontalDivider}>
-        <View style={styles.horizontal}></View>
-        <Text style={styles.horizontalText}>or</Text>
-        <View style= {styles.horizontal}></View>
-      </View>
-      <View style = {styles.footerBox}>
-        <Text style={styles.footerText}>Continue Using</Text>
-        <View style = {styles.authSocial}>
-          <TouchableOpacity style= {styles.authSocialImage}>
-              <Image style={{width:48, height: 48}} source={require('../assets/icons/fb.png')}/>
-          </TouchableOpacity>
-          <TouchableOpacity style= {styles.authSocialImage}>
-            <Image style={{width:48, height: 48}} source={require('../assets/icons/google.png')}/>
-          </TouchableOpacity>
-        </View>
-        <View style={{flexDirection:'row', justifyContent:'center'}}>
-          <Text style = {styles.footerText} >
-            Don't have an Account?
-          </Text>
-          <TouchableHighlight onPressIn={onPressSignUpHandler} >
-            <Text style = {styles.footerTextBold}>
-            &nbsp;
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+              <Text style={styles.footerText}>
+                Don't have an Account?
+              </Text>
+              <TouchableHighlight onPressIn={onPressSignUpHandler} >
+                <Text style={styles.footerTextBold}>
+                  &nbsp;
                Sign Up
             </Text>
-            </TouchableHighlight>
-        </View>
-      </View>
-    </>
-    )}
+              </TouchableHighlight>
+            </View>
+          </View>
+        </>
+      )}
     </ScrollView>
   )
 }
@@ -204,122 +204,119 @@ export default LogInScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
-    paddingHorizontal:24,
+    paddingHorizontal: 24,
     width: '100%',
-    backgroundColor:COLORS.bgPrimary,
+    backgroundColor: COLORS.bgPrimary,
   },
-  title:{
-      marginTop: 8,
-      color:COLORS.primary,
-      fontSize: 32,
-      fontFamily: 'Poppins_400Regular',
-      lineHeight: 48
+  title: {
+    marginTop: 8,
+    color: COLORS.primary,
+    fontSize: 32,
+    fontFamily: 'Poppins_400Regular',
+    lineHeight: 48
   },
-  subtitle:{
-      marginTop: 8,
-      color:COLORS.primary,
-      fontSize: 12,
-      fontFamily: 'Poppins_400Regular',
-      lineHeight:18
+  subtitle: {
+    marginTop: 8,
+    color: COLORS.primary,
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    lineHeight: 18
   },
-  formContainer:{
-    marginTop:16,
+  formContainer: {
+    marginTop: 16,
     maxHeight: 560,
-
   },
-  label:{
+  label: {
     marginBottom: 8,
-    color:COLORS.primary,
+    color: COLORS.primary,
     fontSize: 14,
     fontFamily: 'Poppins_500Medium',
-    lineHeight:21,
-    marginTop:22,
+    lineHeight: 21,
+    marginTop: 22,
   },
-  inputIconContainer:{
-    paddingVertical:10,
-    paddingLeft:16
+  inputIconContainer: {
+    paddingVertical: 10,
+    paddingLeft: 16
   },
-  formerror:{
-    color:'#E90808',
+  formerror: {
+    color: '#E90808',
   },
-  horizontalDivider:{
-    flexDirection:'row',
+  horizontalDivider: {
+    flexDirection: 'row',
     width: '100%',
-    paddingHorizontal:2
+    paddingHorizontal: 2
   },
-  horizontalText:{
+  horizontalText: {
     fontSize: 16,
     fontFamily: 'Poppins_400Regular',
-    color:COLORS.primary,
-    paddingHorizontal:9,
+    color: COLORS.primary,
+    paddingHorizontal: 9,
     width: '16%',
-    textAlign:'center'
+    textAlign: 'center'
   },
-  horizontal:{
-    justifySelf:'center',
-    alignSelf:'center',
+  horizontal: {
+    justifySelf: 'center',
+    alignSelf: 'center',
     width: '41.5%',
     height: 1,
-    backgroundColor:COLORS.primary,
+    backgroundColor: COLORS.primary,
   },
-  checkboxContainer:{
+  checkboxContainer: {
     width: '100%',
-    marginTop:8,
+    marginTop: 8,
     flexDirection: 'row'
   },
-  checkboxTextView:{
+  checkboxTextView: {
     width: 280,
-    paddingLeft:8,
+    paddingLeft: 8,
   },
-  checkboxText:{
+  checkboxText: {
     textDecorationLine: "none",
-    color:COLORS.primary,
+    color: COLORS.primary,
     fontFamily: 'Montserrat_400Regular',
-    fontSize:12,
-    textAlign:'justify',
-    lineHeight:20,
+    fontSize: 12,
+    textAlign: 'justify',
+    lineHeight: 20,
   },
-  forgotPasswordContainer:{
+  forgotPasswordContainer: {
     width: '100%',
-    flexDirection:'row',
-    justifyContent:'flex-end',
-    marginVertical:2.5,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginVertical: 2.5,
   },
   forgotPassword: {
-    marginRight:0,
-    paddingRight:0,
-    height:20,
+    marginRight: 0,
+    paddingRight: 0,
+    height: 20,
   },
-  forgotPasswordText:{
-    fontFamily:'Montserrat_400Regular',
-    fontSize:12,
-    lineHeight:20,
-    textAlign:'right',
-    color:COLORS.primary,
+  forgotPasswordText: {
+    fontFamily: 'Montserrat_400Regular',
+    fontSize: 12,
+    lineHeight: 20,
+    textAlign: 'right',
+    color: COLORS.primary,
   },
-
-  footerText:{
-    lineHeight:24,
-    fontFamily:'Poppins_400Regular',
-    fontSize:16,
-    color:COLORS.primary,
-    textAlign:'center'
+  footerText: {
+    lineHeight: 24,
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 16,
+    color: COLORS.primary,
+    textAlign: 'center'
   },
-  authSocial:{
-    flexDirection:'row',
-    justifyContent:'space-between',
-    marginTop:16,
-    width:'100%',
-    paddingVertical:12,
-    paddingHorizontal:86,
-    marginBottom:8,
+  authSocial: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 16,
+    width: '100%',
+    paddingVertical: 12,
+    paddingHorizontal: 86,
+    marginBottom: 8,
   },
-  footerTextBold:{
-    lineHeight:24,
-    fontFamily:'Poppins_500Medium',
-    fontSize:16,
-    color:COLORS.primary,
-    textAlign:'center',
+  footerTextBold: {
+    lineHeight: 24,
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 16,
+    color: COLORS.primary,
+    textAlign: 'center',
   },
 })

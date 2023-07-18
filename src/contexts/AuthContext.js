@@ -8,8 +8,9 @@ const BASE_URL= 'https://mealy-backend-app.onrender.com/api/mealy'
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState();
   const [userData, setUserData] = useState(null);
+  const [userToken, setUserToken] = useState(null);
   const [status, setStatus] = useState('');
   const onNavigate = useNavigation();
 
@@ -60,10 +61,12 @@ export const AuthProvider = ({ children }) => {
       const loginresponse =response.data;
       const user = response.data.data.user;
       const status = loginresponse.status;
+      const token= loginresponse.login_token;
+      console.log(token);
       if (status === 'success')
       {
       // Update the user state if registration is successful
-        await AsyncStorage.setItem('isLoggedIn', 'true');
+        // await AsyncStorage.setItem('userToken', token);
         await AsyncStorage.setItem('userData', JSON.stringify(user));
         setIsLoggedIn(true);
         setUserData(user);
@@ -113,10 +116,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     // Perform logout logic and reset the user state
     setIsLoggedIn(false);
     setUserData(null);
+    await AsyncStorage.removeItem('userData');
   };
 
   const forgotPassword = async(email) => {

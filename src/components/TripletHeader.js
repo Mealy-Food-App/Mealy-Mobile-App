@@ -43,11 +43,12 @@ export default TripletHeader
 
 const styles = StyleSheet.create({
     header:{
-        backgroundColor:'#F5f5f5',
+        backgroundColor:'#ffffff',
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-between',
         paddingVertical:0,
+        marginBottom:8
     },
     arrowLeft:{
       width:24,

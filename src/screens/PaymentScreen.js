@@ -1,9 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const PaymentScreen = () => {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <Text>PaymentScreen</Text>
     </View>
   )
@@ -11,4 +14,8 @@ const PaymentScreen = () => {
 
 export default PaymentScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  }
+})

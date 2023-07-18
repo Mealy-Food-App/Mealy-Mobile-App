@@ -35,7 +35,6 @@ const slides =[
 ]
 
 const OnboardingScreen =() => {
-    const {isLoggedIn,userData,logout, status} = useContext(AuthContext);
     const imageRef = useRef();
     const [active, setActive] = useState(0);
     const indexRef = useRef(active);
@@ -46,7 +45,7 @@ const OnboardingScreen =() => {
         onNavigate.navigate("WelcomeScreen");
     };
     const onNavigationHome = () => {
-        onNavigate.navigate('Home');
+        onNavigate.navigate('MainScreens', { screen: 'BottomTabScreens' });
     }
     useInterval(() => {
         if (active < Number(slides?.length) - 1) {

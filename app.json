@@ -41,7 +41,10 @@
           "locationAlwaysAndWhenInUsePermission": "Allow Mealy to use your location."
         }
       ]
-    ]
+    ],
+    "packagerOpts": {
+      "assetExts": ["svg"]
+    }
   },
   "name": "mealy_app"
 }

@@ -4,9 +4,9 @@ import SmallButton from './SmallButton'
 
 
 const itemWidth= Dimensions.get('screen').width - 48
-const FoodProductItem = ({data, marginTop, marginBottom}) => {
+const FoodProductItem = ({data, marginTop, marginBottom, onPressItem}) => {
   return (
-    <View style={[styles.item, {marginBottom:marginBottom, marginTop:marginTop}]}>
+    <Pressable style={[styles.item, {marginBottom:marginBottom, marginTop:marginTop}]} onPress={onPressItem}>
         <Image style={styles.itemContentImage} source={{ uri: data.image[0]}} />
         <View style={styles.itemContentText}>
             <View style={{gap:8}}>
@@ -30,7 +30,7 @@ const FoodProductItem = ({data, marginTop, marginBottom}) => {
                 <SmallButton props={{borderColor:'#E69f14',color:'#E69f14', title: "Add to cart", fontFamily: "Poppins_500Medium", fontSize:14, width:96}}/>
             </Pressable>
         </View>
-    </View>
+    </Pressable>
   )
 }
 
