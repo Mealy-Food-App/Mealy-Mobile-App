@@ -151,7 +151,6 @@ const ProductDetailScreen = () => {
     addToCart(FoodItem);
     onNavigate.navigate('CartScreen');
   }
-  console.log(item)
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <ScrollView

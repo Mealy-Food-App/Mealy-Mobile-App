@@ -1,11 +1,10 @@
-import { View, Image, Text, TouchableOpacity, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { View, Image, Text, Pressable, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { React,useState, useCallback, useContext } from "react";
 import { CartContext } from "../contexts/CartContext";
 
 const CartItem = ({ OrderItem, children, props}) =>{
     const {decreaseQuantity} = useContext(CartContext);
     const {increaseQuantity} = useContext(CartContext);
-    const {removeFromCart} = useContext(CartContext);
 
     const handleDecrease = () => {
         const FoodItem = {
@@ -19,7 +18,6 @@ const CartItem = ({ OrderItem, children, props}) =>{
         }
         increaseQuantity(FoodItem);
     }
-    console.log(OrderItem)
 
     
     return(
@@ -38,23 +36,23 @@ const CartItem = ({ OrderItem, children, props}) =>{
                 <View style={styles.cartTotal}>
                         <Text style={styles.OrderItemPrice}>{OrderItem.total}</Text>
                         <View style= {styles.cartShortcut}> 
-                            <TouchableOpacity
+                            <Pressable
                                     style ={styles.add}
                                     onPressIn = {handleDecrease}>                  
                                 <Image
                                     source={require('../assets/icons/minus.png')}
                                     style={styles.cartShortcutIcon}
                                 />
-                            </TouchableOpacity>
+                            </Pressable>
                             <Text style={styles.cartShortcutText}>{OrderItem.quantity}</Text>
-                            <TouchableOpacity 
+                            <Pressable 
                                 style ={styles.add}
                                 onPressIn = {handleIncrease}>
                             <Image
                                 source={require('../assets/icons/plus.png')}
                                 style={styles.cartShortcutIcon}
                             />
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                 </View>
             </View>

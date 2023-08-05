@@ -4,7 +4,6 @@ import {orderHistories} from '../dummyData';
 import OrderHistoryItem from "./OrderHistoryItem";
 
 const orderHistoryItems = orderHistories.flatMap((history) => history.data);
-console.log(orderHistoryItems)
 const renderSeparator = () => {
   return (
     <View

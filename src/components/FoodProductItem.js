@@ -1,10 +1,41 @@
 import { Pressable, StyleSheet, Text, View ,Dimensions, Image} from 'react-native'
-import React from 'react'
+import React, { useContext, useState} from 'react'
 import SmallButton from './SmallButton'
+import { CartContext } from '../contexts/CartContext';
 
 
 const itemWidth= Dimensions.get('screen').width - 48
 const FoodProductItem = ({data, marginTop, marginBottom, onPressItem}) => {
+    const { addToCart, cartItems } = useContext(CartContext);
+    const [total, setTotal] = useState(Number(data.price))
+    const [quantity, setQuantity] = useState(1);
+    const existingItem = cartItems.find((cartItem) => cartItem.id === data._id);
+    const addProductToCart = async() => {
+        if (existingItem){
+            setQuantity((existingItem.quantity + 1));
+            setTotal((existingItem.quantity + 1) * Number(data.price));
+          }
+        const FoodItem = {
+        id: data._id,
+        name: data.name,
+        itemPrice: Number(data.price),
+        total: total,
+        image: data.image[0],
+        quantity: 1, // Set the initial quantity to 1 for a new item
+        restaurant: data.restaurant,
+        itemDesc: data.description,
+        customization: {
+            itemSize: 'standard',
+            itemSpicy: 'non-spicy',
+            itemExtra: 'none',
+            itemSoda: 'fanta',
+            itemSpecial: '',
+        },
+        };
+        await addToCart(FoodItem);
+        Alert.alert(`1 ${data.name} added`);
+    };
+    
   return (
     <Pressable style={[styles.item, {marginBottom:marginBottom, marginTop:marginTop}]} onPress={onPressItem}>
         <Image style={styles.itemContentImage} source={{ uri: data.image[0]}} />
@@ -26,7 +57,7 @@ const FoodProductItem = ({data, marginTop, marginBottom, onPressItem}) => {
                 <Image source={require('../assets/icons/star.png')} style={styles.star}/>
                 <Text style={styles.ratingtext}>4.4</Text>
             </View>
-            <Pressable style={styles.button}>
+            <Pressable style={styles.button} onPressIn={addProductToCart}>
                 <SmallButton props={{borderColor:'#E69f14',color:'#E69f14', title: "Add to cart", fontFamily: "Poppins_500Medium", fontSize:14, width:96}}/>
             </Pressable>
         </View>

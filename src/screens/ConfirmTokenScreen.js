@@ -36,7 +36,6 @@ const ConfirmTokenScreen = () => {
 
   const handleConfirmToken = async (token) => {
     setSpinner(true);
-    console.log(token)
     await confirmToken(token)
     setSpinner(false);
   }

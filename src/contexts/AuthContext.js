@@ -61,18 +61,17 @@ export const AuthProvider = ({ children }) => {
       const loginresponse =response.data;
       const user = response.data.data.user;
       const status = loginresponse.status;
-      const token= loginresponse.login_token;
-      console.log(token);
+      const loggedintoken = response.data.data.login_token;
       if (status === 'success')
       {
       // Update the user state if registration is successful
         // await AsyncStorage.setItem('userToken', token);
         await AsyncStorage.setItem('userData', JSON.stringify(user));
+        await AsyncStorage.setItem('loggedintoken', loggedintoken);
         setIsLoggedIn(true);
         setUserData(user);
-        console.log(user)
         showAlert('Login successful');
-        onNavigate.navigate('BottomTabScreens', { screen: 'Home' });
+        onNavigate.navigate('MainScreens')
 
       }else{
         showAlert('Login failed');
@@ -103,9 +102,8 @@ export const AuthProvider = ({ children }) => {
         await AsyncStorage.setItem('userData', JSON.stringify(user));
         setIsLoggedIn(true);
         setUserData(user);
-        console.log(user);
         showAlert('Account Registration successful');
-        onNavigate.navigate('BottomTabScreens', { screen: 'Home' });
+        onNavigate.navigate('MainScreens')
       }else{
         showAlert('Account Registration failed');
       }
@@ -132,8 +130,6 @@ export const AuthProvider = ({ children }) => {
         email
       });
       const status = response.data.message
-      console.log(response);
-      console.log("hdhhdhdh", status)
       if (status === 'Reset email sent'){
         showAlert('Account verification code sent to email. Enter token to verify your account');
         onNavigate.navigate('ConfirmTokenScreen')
@@ -178,7 +174,6 @@ export const AuthProvider = ({ children }) => {
       });
 
       const status = response.data.message
-      console.log(status)
       // if (status === 'Token confirmed'){
       //   showAlert('Token confirmation was succesful');
       //   onNavigate.navigate('ResetPasswordSreen')
@@ -190,27 +185,45 @@ export const AuthProvider = ({ children }) => {
       showAlert('Token confirmation was unsuccessful')
     }
   };
-  const updateUser = async(values) => {
+  const updateUser = async(value) => {
+    console.log("update");
+    console.log(value);
+    const loggedintoken = await AsyncStorage.getItem('loggedintoken');
+    console.log(loggedintoken);
+    const userstr = await AsyncStorage.getItem('userData');
+    const usrobj = JSON.parse(userstr);
+    const userid = usrobj._id;
+    console.log(userid);
+    console.log(`${BASE_URL}/user/updateuser/${userid}`);
+
     try {
-      let fullName = values.fullName
-      let phoneNumber = values.phone;
-      let userAddress = values.userAddress;
-      // Make the API call to register the user
-      console.log(userData._id)
-      const response = await axios.put(`${BASE_URL}/user/updateuser/${userData._id}`, {
-        phoneNumber,
-        userAddress        
+      const response = await axios.put(`${BASE_URL}/user/updateuser/${userid}`,
+      value,
+      {
+        headers: {
+          Authorization: `Bearer ${loggedintoken}`,
+        },
       });
-
+      
+      // Process the response data here
+      const updateresponse =response.data;
+      console.log(updateresponse);
+      const user = response.data.data.updatedUser;
+      console.log(user);
+      const status = updateresponse.status;
+      console.log(status);
+      if (status === 'Success')
+      {
       // Update the user state if registration is successful
-      setUser(response.data.user);
-
-      // Return the API response
-      return response.data;
+      await AsyncStorage.setItem('userData', JSON.stringify(user));
+      setUserData(user);
+      showAlert('User profile updated succefully');
+      }else{
+        showAlert('User profile update failed');
+      }      
     } catch (error) {
-      // Handle any errors that occur during registration
-      console.error('Update failed:', error);
-      throw error;
+      showAlert('Error sending request:', error);
+      console.error('Error sending request:', error);
     }
   };
 

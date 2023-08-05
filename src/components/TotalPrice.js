@@ -5,7 +5,6 @@ import React, { useContext, useState } from 'react';
 
 const TotalPrice = () => {
     const {finalTotal} = useContext(CartContext);
-    console.log(finalTotal);
     const discount = () =>{
         if (finalTotal !== 0){
             return (finalTotal / 98).toFixed(2);

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image, TextInput, Pressable } from 'react-native';
 import React, { useContext, useState, useRef } from 'react';
-import LeftNavHeader from '../components/LeftNavHeader';
+import AccountHeader from '../components/AccountHeader';
 import { AuthContext } from '../contexts/AuthContext';
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -28,16 +28,18 @@ const ProfileScreen = () => {
   };
 
   // Update user
-  const handleSavePhonePress = async (values) => {
-    await updateUser(values);
+  const handleSavePhonePress = async (value) => {
+    console.log(value)
+    await updateUser(value);
     setPhoneIsEditable(false);
   };
-  const handleSaveNamePress = async (values) => {
-    await updateUser(values);
+  const handleSaveNamePress = async (value) => {
+    await updateUser(value);
     setNameIsEditable(false);
   };
-  const handleSaveAddressPress = async (values) => {
-    await updateUser(values);
+  const handleSaveAddressPress = async (value) => {
+    console.log(value);
+    await updateUser(value);
     setAddressIsEditable(false);
   };
 
@@ -45,7 +47,7 @@ const ProfileScreen = () => {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <LeftNavHeader props={{ title: 'Profile' }} />
+      <AccountHeader props={{ title: 'Profile' }} />
       <Image source={require('../assets/images/user.png')} style={styles.avatar} />
       <Formik
         initialValues={{
@@ -177,6 +179,51 @@ const ProfileScreen = () => {
           )}
         </Formik>
       </View>
+      {/* <View style={styles.profileDetails}>
+        <Text style={styles.profileTitle}>Payment Details</Text>
+        <Formik
+          initialValues={{
+            phoneNumber: userData.phoneNumber || 'Not set',
+          }}
+          onSubmit={handleSavePhonePress}
+          validationSchema={yup.object().shape({
+            phoneNumber: yup.string().matches(/^\d{10}$/, 'Please enter a valid 10-digit phone number'),
+          })}
+        >
+          {({ values, handleChange, handleSubmit, isValid }) => (
+            <View style={styles.profileContentContainer}>
+              <View style={styles.InputSave}>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    ref={inputPhoneRef}
+                    value={values.phoneNumber}
+                    onChangeText={handleChange('phoneNumber')}
+                    editable={isPhoneEditable}
+                    style={styles.profileContent}
+                    caretColor="#00205c"
+                  />
+                </View>
+                <>
+                  {!isPhoneEditable ? (
+                    <Pressable onPress={handleEditPhonePress}>
+                      <View style={styles.edit}>
+                        <Text style={styles.editText}>Edit</Text>
+                        <Image source={require('../assets/icons/edit.png')} style={styles.editIcon} />
+                      </View>
+                    </Pressable>
+                  ) : (
+                    <Pressable onPress={handleSubmit} disabled={!isValid}>
+                      <View style={!isValid ? styles.inValidSave : styles.save}>
+                        <Text style={styles.saveText}>Save</Text>
+                      </View>
+                    </Pressable>
+                  )}
+                </>
+              </View>
+            </View>
+          )}
+        </Formik>
+      </View> */}
     </View>
   );
 };

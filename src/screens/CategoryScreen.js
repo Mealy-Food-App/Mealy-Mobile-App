@@ -1,6 +1,7 @@
 import { StatusBar, StyleSheet, ScrollView, FlatList, Text, View, Dimensions } from 'react-native';
 import React, { useEffect, useState, useContext } from 'react';
 import { useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import ScreenHeader from '../components/ScreenHeader';
 import SearchBar from '../components/SearchBar';
 import { ProductsContext } from '../contexts/ProductsContext';
@@ -11,6 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const Tab = createMaterialTopTabNavigator();
 
 function AllTab({ props }) {
+  const onNavigate = useNavigation();
   const { products } = useContext(ProductsContext);
   const [filteredItems, setFilteredItems] = useState([]);
   const actualSearchPhrase = props.searchPhrase.toLowerCase();
@@ -30,6 +32,12 @@ function AllTab({ props }) {
     setFilteredItems(filtered);
   }, [actualSearchPhrase]);
 
+  const navigateToProduct  = (item) => {
+    onNavigate.navigate('ProductDetailScreen', {
+      productDetails: item,
+    });
+  };
+
   return (
     <FlatList
       data={filteredItems}
@@ -39,13 +47,14 @@ function AllTab({ props }) {
         backgroundColor: '#f5f5f5',
       }}
       renderItem={({ item, index }) => (
-        <FoodProductItem marginTop={8} marginBottom={8} data={item} onPressItem={() => onNavigation(item)} />
+        <FoodProductItem marginTop={8} marginBottom={8} data={item} onPressItem={() => navigateToProduct(item)} />
       )}
     />
   );
 }
 
 function PopularTab({ props }) {
+  const onNavigate = useNavigation();
   const { products } = useContext(ProductsContext);
   const [filteredItems, setFilteredItems] = useState([]);
   const actualSearchPhrase = props.searchPhrase.toLowerCase();
@@ -56,6 +65,7 @@ function PopularTab({ props }) {
     return productCategory.indexOf(categoryName) !== -1;
   });
 
+
   useEffect(() => {
     const filtered = categoryItems.filter((categoryItem) => {
       const productName = categoryItem.name.toLowerCase();
@@ -65,6 +75,11 @@ function PopularTab({ props }) {
     setFilteredItems(filtered);
   }, [actualSearchPhrase]);
 
+  const navigateToProduct  = (item) => {
+    onNavigate.navigate('ProductDetailScreen', {
+      productDetails: item,
+    });
+  };
   return (
     <FlatList
       data={filteredItems}
@@ -74,13 +89,14 @@ function PopularTab({ props }) {
         backgroundColor: '#f5f5f5',
       }}
       renderItem={({ item, index }) => (
-        <FoodProductItem marginTop={8} marginBottom={8} data={item} onPressItem={() => onNavigation(item)} />
+        <FoodProductItem marginTop={8} marginBottom={8} data={item} onPressItem={() => navigateToProduct(item)} />
       )}
     />
   );
 }
 
 function TrendingTab({ props }) {
+  const onNavigate = useNavigation();
   const { products } = useContext(ProductsContext);
   const [filteredItems, setFilteredItems] = useState([]);
   const actualSearchPhrase = props.searchPhrase.toLowerCase();
@@ -100,6 +116,11 @@ function TrendingTab({ props }) {
     setFilteredItems(filtered);
   }, [actualSearchPhrase]);
 
+  const navigateToProduct  = (item) => {
+    onNavigate.navigate('ProductDetailScreen', {
+      productDetails: item,
+    });
+  };
   return (
     <FlatList
       data={filteredItems}
@@ -109,13 +130,14 @@ function TrendingTab({ props }) {
         backgroundColor: '#f5f5f5',
       }}
       renderItem={({ item, index }) => (
-        <FoodProductItem marginTop={8} marginBottom={8} data={item} onPressItem={() => onNavigation(item)} />
+        <FoodProductItem marginTop={8} marginBottom={8} data={item} onPressItem={() => navigateToProduct(item)} />
       )}
     />
   );
 }
 
 function NewestTab({ props }) {
+  const onNavigate = useNavigation();
   const { products } = useContext(ProductsContext);
   const [filteredItems, setFilteredItems] = useState([]);
   const actualSearchPhrase = props.searchPhrase.toLowerCase();
@@ -135,6 +157,12 @@ function NewestTab({ props }) {
     setFilteredItems(filtered);
   }, [actualSearchPhrase]);
 
+  const navigateToProduct  = (item) => {
+    onNavigate.navigate('ProductDetailScreen', {
+      productDetails: item,
+    });
+  };
+
   return (
     <FlatList
       data={filteredItems}
@@ -144,7 +172,7 @@ function NewestTab({ props }) {
         backgroundColor: '#f5f5f5',
       }}
       renderItem={({ item, index }) => (
-        <FoodProductItem marginTop={8} marginBottom={8} data={item} onPressItem={() => onNavigation(item)} />
+        <FoodProductItem marginTop={8} marginBottom={8} data={item} onPressItem={() => navigateToProduct(item)} />
       )}
     />
   );

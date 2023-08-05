@@ -5,7 +5,6 @@ import { StarRatingDisplay } from 'react-native-star-rating-widget'
 const windowWidth = Dimensions.get('window').width;
 const featuredItemWidth = (windowWidth - 64) / 2;
 const FeaturedItem = ({data, marginLeft, marginRight, onPressItem, children}) => {
-    console.log(data)
   return (
     <View style={[styles.featured,{marginLeft: marginLeft,margin: marginRight,}]}>
         <View style={styles.ImageBackground}>

@@ -17,6 +17,8 @@ import { LocationContext } from '../contexts/LocationContext';
 import Spinner from 'react-native-loading-spinner-overlay';
 import * as Location from 'expo-location';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { CartContext } from '../contexts/CartContext';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast, } from 'react-native-alert-notification';
 
 const COLORS = {
   primary: '#00205C',
@@ -32,13 +34,16 @@ const HomeScreen = () => {
   const [clicked, setClicked] = useState(false);
   const { isLoggedIn, userData, status } = useContext(AuthContext);
   const { categories, products, restaurants } = useContext(ProductsContext);
+  const  {userAddress } = useContext(LocationContext);
 
+  console.log("address", userAddress);
   useEffect(() => {
     // Clear searchPhrase when the screen is focused again
     if (isFocused) {
       setSearchPhrase('');
     }
   }, [isFocused]);
+  
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -73,6 +78,7 @@ const HomeScreen = () => {
     onNavigate.navigate('MealyCategories');
   };
 
+
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       {isLoggedIn === true && userData !== null ? (
@@ -95,7 +101,11 @@ const HomeScreen = () => {
       )}
       <View style={styles.location}>
         <Image source={require("../assets/icons/location.png")} style={styles.locationicon} />
-        <Text style={styles.locationtext}>Nairobi</Text>
+        {userAddress != '' ?
+        <Text style={styles.locationtext}>{userAddress}</Text>
+        :
+        <Text style={styles.loadinglocationtext}>Loading location ...</Text>
+        }
       </View>
 
       <Text numberOfLines={2} style={styles.subtitle}>
@@ -187,7 +197,7 @@ const HomeScreen = () => {
                     backgroundColor: '#ffffff',
                     paddingVertical: 8,
                     borderRadius: 8,
-                    height: 250,
+                    height: 260,
                   }}
                   renderItem={({ item, index }) => (
                     <RecommendedItem
@@ -305,10 +315,18 @@ const styles = StyleSheet.create({
   },
   locationtext: {
     fontFamily: "Poppins_500Medium",
-    fontSize: 20,
+    fontSize: 14,
     lineHeight: 24,
     textAlign: 'center',
     alignSelf: 'center',
     color: '#00205C'
+  },
+  loadinglocationtext: {
+    fontFamily: "Poppins_500Medium",
+    fontSize: 14,
+    lineHeight: 24,
+    textAlign: 'center',
+    alignSelf: 'center',
+    color: 'rgba(0, 32, 92, 0.50)'
   },
 });
