@@ -33,8 +33,7 @@ const TotalPrice = () => {
     }
     return(
         <View style= {{
-            elevation: 3,
-            backgroundColor: '#f5f5f5',
+            backgroundColor: '#ebebeb',
             height:320,
             borderRadius:12,
             marginTop: 20,

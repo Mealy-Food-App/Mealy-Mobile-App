@@ -104,7 +104,7 @@ const HomeScreen = () => {
         {userAddress != '' ?
         <Text style={styles.locationtext}>{userAddress}</Text>
         :
-        <Text style={styles.loadinglocationtext}>Loading location ...</Text>
+        <Text style={styles.loadinglocationtext}>Loading current location</Text>
         }
       </View>
 
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
   },
   locationtext: {
     fontFamily: "Poppins_500Medium",
-    fontSize: 14,
+    fontSize: 15,
     lineHeight: 24,
     textAlign: 'center',
     alignSelf: 'center',

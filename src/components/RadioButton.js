@@ -1,19 +1,54 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
 
-const RadioButton = ({ options, selectedOption, onSelect }) => {
+const RadioButton = ({ data, onSelect }) => {
+  const [userOption, setUserOption] = useState('');
+  useEffect(() => {
+    const defaultOption = data.find(option => option.value.priceOption === 0);
+    if (defaultOption) {
+      onSelect(defaultOption.value);
+      handleSelect(defaultOption.value);
+    }
+  }, []);
+  const handleSelect = (value) => {
+    const defaultOption = data.find(option => option.value.priceOption === 0);
+    if (defaultOption) {
+      if (value != userOption && value != defaultOption.value)
+      {
+        onSelect(value);
+        setUserOption(value)
+      } else {
+        onSelect(defaultOption.value);
+        setUserOption(defaultOption.value)
+      }
+    }else {
+      if (value != userOption)
+      {
+        onSelect(value);
+        setUserOption(value)
+      } else {
+        onSelect('');
+        setUserOption('')
+      }
+    }
+
+  }
   return (
     <View>
-      {options.map((option) => (
+      {data.map((option) => (
         <TouchableOpacity
-          key={option}
+          key={option.value._id}
           style={styles.radioButton}
-          onPress={() => onSelect(option)}
+          onPress={() => handleSelect(option.value)}
         >
-
-          <Text style= {styles.optionText}>{option}</Text>
+          <View style={styles.opt}>
+            <Text style= {styles.optionText}>{option.value.nameOption}</Text>
+            <Text style= {styles.optionPrice}>{option.value.priceOption}</Text>
+          </View>
           <View style={styles.radioButtonIcon}>
-            {selectedOption === option && <View style={styles.radioButtonInner} />}
+            {userOption._id === option.value._id &&
+              <View style={styles.radioButtonInner}/> 
+            }
           </View>
         </TouchableOpacity>
       ))}
@@ -24,31 +59,57 @@ const RadioButton = ({ options, selectedOption, onSelect }) => {
 const styles = StyleSheet.create({
   radioButton: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems:'center',
+    justifyContent:'space-between',
     marginBottom: 10,
-    justifyContent:'space-between'
+    marginHorizontal:8
   },
   radioButtonIcon: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#00205C',
+    width: 22,
+    height: 22,
+    borderRadius:11,
+    borderWidth:2,
+    borderColor:"#00205c",
+    backgroundColor: "#ffffff",
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
   },
   radioButtonInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: '#00205C',
+    width: 14,
+    height: 14,
+    borderRadius:8,
+    tintColor:"#00205c",
+    backgroundColor:'#00205c'
+  },
+  radioButtonInneradd: {
+    width: 14,
+    height: 14,
+    borderRadius:8,
+    tintColor:"transparent",
+    backgroundColor:'#ffffff'
+  },
+  opt:{
+    width:'50%',
+    flexDirection:'row',
+    justifyContent:'space-between',
   },
   optionText:{
-    fontFamily:'Montserrat_400Regular',
-    fontSize:14,
-    lineHeight:17.07,
-    color:"#00205C"
+    textAlign:'left',
+    justifyContent:'flex-start',
+    fontFamily:'Montserrat_500Medium',
+    fontSize:12,
+    lineHeight:14,
+    color:"#E69F14",
+    
+  },
+  optionPrice:{
+    fontFamily:'Montserrat_500Medium',
+    justifyContent:'flex-start',
+    fontSize:12,
+    lineHeight:14,
+    color:"#00205C",
+    marginLeft:40
   }
 });
 

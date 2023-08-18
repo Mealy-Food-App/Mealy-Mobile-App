@@ -6,6 +6,7 @@ import { BlurView } from 'expo-blur';
 
 const width = Dimensions.get('window').width -48;
 const WeekOffer = ({ data}) => {
+  console.log(data);
   return (
     <View style={styles.meal}>
       <Text style = {styles.title}>Meal of the week</Text>

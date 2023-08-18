@@ -1,69 +1,35 @@
-import { StyleSheet, Text, View, Image, TextInput, StatusBar, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, StatusBar, Dimensions, ScrollView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
 import React, { useState, useCallback, useContext, useEffect } from 'react'
 import { useRoute } from '@react-navigation/native'
 import { StarRatingDisplay } from 'react-native-star-rating-widget';
-import RadioButton from '../components/CustomizationButtons';
-import { Pressable } from 'react-native';
+import ScreenHeader from '../components/ScreenHeader';
 import BigButton from '../components/BigButton';
 import { CartContext } from '../contexts/CartContext';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import AccordionComponent from '../components/AccordionComponent';
 
 const imageWidth = Dimensions.get("screen").width;
-const size = [
-  { value: 'Standard' },
-  { value: 'Big' },
-  { value: 'Family' },
-];
-const spicy = [
-  { value: 'Spicy' },
-  { value: 'Non-Spicy' },
-];
-const extra = [
-  { value: 'Onions' },
-  { value: 'Ham' },
-  { value: 'Mozzarella' },
-  { value: 'Mushrooms' },
-]
-const sodaFlavor = [
-  { value: 'Fanta' },
-  { value: 'Coke' },
-  { value: 'Passion' },
-];
 const ProductDetailScreen = () => {
   const insets = useSafeAreaInsets()
+  const [headerBackground, setHeaderBackground] = useState('rgba(255, 255, 255, 0.3)')
   const onNavigate = useNavigation();
   const route = useRoute();
   item = route.params.productDetails
-  console.log(item.id);
+  const mealCustomization = item.mealCustomizations;
+  console.log("mealCustomization:", mealCustomization);
   const { addToCart, cartItems } = useContext(CartContext);
-
-  //Show or fide accordion items
-  const [sizeShown, setSizeShown] = useState(false);
-  const [spicyShown, setSpicyShown] = useState(false);
-  const [extrasShown, setExtrasShown] = useState(false);
-  const [sodaShown, setSodaShown] = useState(false);
-  const [specialShown, setSpecialShown] = useState(false);
-
   //Read more or less
   const [textShown, setTextShown] = useState(false); //To show ur remaining Text
   const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
 
   //Add to cart
   const existingItem = cartItems.find((cartItem) => cartItem.id === item._id);
-  const [showBottom, setShowBottom] = useState(false)
-  const [price, setPrice] = useState(Number(item.price));
-  const [quantity, setQuantity] = useState((existingItem !== undefined ? existingItem.quantity : 0));
-  const [isValid, setIsValid] = useState(false);
-  const [foodSize, setFoodSize] = useState(size[0].value);
-  const [foodSpicy, setFoodSpicy] = useState(spicy[0].value);
-  const [foodExtra, setFoodExtra] = useState(extra[0].value);
-  const [foodSoda, setFoodSoda] = useState(spicy[0].value);
-  const [foodSpecial, setFoodSpecial] = useState(null);
+  const [totalPrice, setTotalPrice] = useState(Number(item.price));
+  const [quantity, setQuantity] = useState(1)
+  const [productTotal, setProductTotal] = useState(Number(item.price)) 
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
-  // const handlePressSize = (value) =>{
-
-  // }
 
   const toggleNumberOfLines = () => { //To toggle the show text or hide it
     setTextShown(!textShown);
@@ -73,61 +39,53 @@ const ProductDetailScreen = () => {
     setLengthMore(e.nativeEvent.lines.length >= 4); //to check the text is more than 4 lines or not
     // console.log(e.nativeEvent);
   }, []);
-
-  const handleSize = () => {
-    setSizeShown(!sizeShown);
-  }
-  const handleSpicy = () => {
-    setSpicyShown(!spicyShown)
-  }
-  const handleExtras = () => {
-    setExtrasShown(!extrasShown)
-  }
-  const handleSoda = () => {
-    setSodaShown(!sodaShown)
-  }
-  const handleSpecial = () => {
-    setSpecialShown(!specialShown)
-  }
-
   const addQuantity = () => {
-    if ((quantity + 1) > 0) {
-      setIsValid(true)
-    }
     setQuantity((quantity + 1));
-    setShowBottom(true)
   }
   const reduceQuantity = () => {
-    if ((quantity - 1) < 1) {
-      setShowBottom(false)
-      setIsValid(false)
-    }
-    if (quantity > 0)
+    if (quantity > 1)
       setQuantity((quantity - 1));
 
   };
 
   useEffect(() => {
-    setPrice((quantity * item.price))
+    setProductTotal((quantity * totalPrice))
   });
 
-  const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
-    const paddingToBottom = 20;
-    return layoutMeasurement.height + contentOffset.y >=
-      contentSize.height - paddingToBottom;
+  useEffect(() => {
+    const total_options = () => {
+      let sum = 0;
+      for (const key in selectedOptions)
+      {
+        if (selectedOptions.hasOwnProperty(key)) {
+          if (selectedOptions[key].priceOption)
+          {
+            sum += selectedOptions[key].priceOption;
+          }
+        }
+      }   
+      return (sum)
+    }
+    console.log (total_options())
+    total = Number(item.price) + total_options();
+    console.log(total)
+    setTotalPrice(total)
+  })
+
+  const handleScroll = (event) => {
+    const scrollOffsetY = event.nativeEvent.contentOffset.y;
+
+    // You can adjust the threshold value as needed
+    const threshold = 200;
+
+    if (scrollOffsetY > threshold) {
+      setHeaderBackground('#f5f5f5');
+    } else {
+      setHeaderBackground('rgba(255, 255, 255, 0.3)');
+    }
   };
-  const enableShowBottom = () => {
-    useEffect(() => {
-      if (quantity > 0) {
-        setIsValid(true)
-        setShowBottom(true)
-      }
-    })
 
-  }
-
-  const validButton = { color: '#E69f14', borderColor: "#E69f14", title: `Add ${quantity} to Cart . N${price.toLocaleString()}`, fontFamily: "Poppins_500Medium", fontSize: 18 }
-  const invalidButton = { color: 'rgba(230, 159, 20, 0.5)', borderColor: "rgba(230, 159, 20, 0.5)", title: `Add to Cart`, fontFamily: "Poppins_500Medium", fontSize: 18 }
+  const validButton = { color: '#E69f14', borderColor: "#E69f14", title: `Add ${quantity} to Cart . N${productTotal.toLocaleString()}`, fontFamily: "Poppins_500Medium", fontSize: 18 }
 
 
   const handleAddToCart = () => {
@@ -135,41 +93,33 @@ const ProductDetailScreen = () => {
       id: item._id,
       name: item.name,
       itemPrice: Number(item.price),
-      total: price,
+      total: productTotal,
       image: item.image[0],
       quantity: quantity,
-      restaurant: 'Froyo Restaurant',
+      restaurant: item.restaurant,
       itemDesc: item.description,
-      customization: {
-        itemSize: foodSize,
-        itemSpicy: foodSpicy,
-        itemExtra: foodExtra,
-        itemSoda: foodSoda,
-        itemSpecial: foodSpecial,
-      }
+      customization: selectedOptions
     }
     addToCart(FoodItem);
     onNavigate.navigate('CartScreen');
   }
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={styles.container}>
+      <View style={[styles.header, {backgroundColor:headerBackground}]}>
+        <ScreenHeader props={{ title: '' }} />
+      </View>
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={400}
-        onScroll={({ nativeEvent }) => {
-          if (isCloseToBottom(nativeEvent)) {
-            enableShowBottom
-          }
-        }}
+        onScroll= {handleScroll}
       >
         <Image
           source={{ uri: item.image[0] }}
           resizeMode="cover"
-          style={{ height: 280, width: imageWidth, borderBottomLeftRadius: 26, borderBottomRightRadius: 26 }}
+          style={{ height: 320,width:imageWidth,position:'absolute', top:-(insets.top), paddingHorizontal:24,borderBottomLeftRadius: 26, borderBottomRightRadius: 26 }}
         />
-        {/* <FoodDetailsHeaderContent/> */}
-        <View style={{ paddingHorizontal: 24 }}>
+        <View style = {{marginBottom:60}}>
           <View style={styles.details}>
             <View style={styles.detailsHeader}>
               <Text style={styles.itemName}>
@@ -225,100 +175,29 @@ const ProductDetailScreen = () => {
                 : null
             }
           </View>
-          <View style={styles.descriptionContainerf}>
+          <View style={styles.descriptionContainer}>
+          {mealCustomization.length != 0 &&
+            <>
             <Text style={styles.title}>Customize your Meal</Text>
-            <View style={styles.accordion}>
-              <View style={styles.accordHeader}>
-                <Text style={styles.titleCustomize}>Size</Text>
-                <Pressable style={styles.arrowsContainer} onPress={handleSize}>
-                  {sizeShown === false ?
-                    <Image source={require('../assets/icons/arrowdown.png')} style={styles.arrows} /> :
-                    <Image source={require('../assets/icons/arrowup.png')} style={styles.arrows} />}
-                </Pressable>
-              </View>
-              {sizeShown && <RadioButton data={size} />}
-            </View>
-            <View style={styles.accordion}>
-              <View style={styles.accordHeader}>
-                <Text style={styles.titleCustomize}>Spicy or non-spicy</Text>
-                <Pressable style={styles.arrowsContainer} onPress={handleSpicy}>
-                  {spicyShown === false ?
-                    <Image source={require('../assets/icons/arrowdown.png')} style={styles.arrows} /> :
-                    <Image source={require('../assets/icons/arrowup.png')} style={styles.arrows} />}
-                </Pressable>
-              </View>
-              {spicyShown && <RadioButton data={spicy} />}
-            </View>
-            <View style={styles.accordion}>
-              <View style={styles.accordHeader}>
-                <Text style={styles.titleCustomize}>Extras</Text>
-                <Pressable style={styles.arrowsContainer} onPress={handleExtras}>
-                  {extrasShown === false ?
-                    <Image source={require('../assets/icons/arrowdown.png')} style={styles.arrows} /> :
-                    <Image source={require('../assets/icons/arrowup.png')} style={styles.arrows} />}
-                </Pressable>
-              </View>
-              {extrasShown && <RadioButton data={extra} />}
-            </View>
-            <View style={styles.accordion}>
-              <View style={styles.accordHeader}>
-                <Text style={styles.titleCustomize}>Choose your soda flavour</Text>
-                <Pressable style={styles.arrowsContainer} onPress={handleSoda}>
-                  {sodaShown === false ?
-                    <Image source={require('../assets/icons/arrowdown.png')} style={styles.arrows} /> :
-                    <Image source={require('../assets/icons/arrowup.png')} style={styles.arrows} />}
-                </Pressable>
-              </View>
-              {sodaShown && <RadioButton data={sodaFlavor} />}
-            </View>
-            <View style={styles.accordion}>
-              <View style={styles.accordHeader}>
-                <Text style={styles.titleCustomize}>Special instructions</Text>
-                <Pressable style={styles.arrowsContainer} onPress={handleSpecial}>
-                  {specialShown === false ?
-                    <Image source={require('../assets/icons/arrowdown.png')} style={styles.arrows} /> :
-                    <Image source={require('../assets/icons/arrowup.png')} style={styles.arrows} />}
-                </Pressable>
-              </View>
-              {specialShown && <TextInput
-                style={styles.specialInstructions}
-                multiline={true}
-                numberOfLines={4}
-                // onChangeText={(text) => this.setState({text})}
-                // value
-              />}
-            </View>
+            
+            <AccordionComponent 
+              data={mealCustomization}
+              selectedOptions = {selectedOptions} 
+              setSelectedOptions = {setSelectedOptions}
+            />
+            </>}
           </View>
 
         </View>
 
       </ScrollView>
-      {showBottom === true && <View style={styles.BottomContainer}>
-        <View style={styles.cartShortcut}>
-          <TouchableOpacity
-            style={styles.add}
-            onPressIn={reduceQuantity}>
-            <Image
-              source={require('../assets/icons/minus.png')}
-              style={styles.cartShortcutIcon}
-            />
-          </TouchableOpacity>
-          <Text style={styles.cartShortcutText}>{quantity}</Text>
-          <TouchableOpacity
-            style={styles.add}
-            onPressIn={addQuantity}>
-            <Image
-              source={require('../assets/icons/plus.png')}
-              style={styles.cartShortcutIcon}
+        <View style={styles.fixedbtn}>
+          <TouchableOpacity onPressIn={handleAddToCart}>
+            <BigButton
+              props={ validButton}
             />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPressIn={handleAddToCart}>
-          <BigButton
-            props={isValid ? validButton : invalidButton}
-          />
-        </TouchableOpacity>
-      </View>}
     </View>
   )
 }
@@ -331,16 +210,25 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#F6F6F6',
   },
+  header:{
+    paddingTop:StatusBar.currentHeight,
+    position:'absolute',
+    zIndex:999,
+    paddingHorizontal:24,
+    width:imageWidth,
+  },
   details: {
-    marginTop: 24,
+    paddingTop:304,
     width: "100%",
     justifyContent: 'center',
+    paddingHorizontal:24
   },
   detailsHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     height: 32,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom:16
   },
   itemName: {
     fontFamily: 'Poppins_500Medium',
@@ -396,7 +284,8 @@ const styles = StyleSheet.create({
   },
   descriptionContainer: {
     marginTop: 16,
-    marginBottom: 32
+    marginBottom: 32,
+    paddingHorizontal:24,
   },
   descriptionContainerf: {
     marginTop: 16,
@@ -423,6 +312,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -20,
     right: 0,
+    paddingHorizontal:24
   },
   titleCustomize: {
     marginBottom: 8,
@@ -443,39 +333,22 @@ const styles = StyleSheet.create({
     color: "#00205C",
     marginVertical: 16
   },
-  accordion: {
-    marginBottom: 8
-  },
-  accordHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    height: 40,
-    backgroundColor: '#ebebeb',
-    paddingLeft: 8,
-    alignItems: 'center',
-    borderRadius: 4,
-  },
-  arrows: {
-    width: 18,
-    height: 18,
-    tintColor: "#00205C"
-  },
-  arrowsContainer: {
-    width: 40,
-    height: 40,
-    alignItems: 'center',
-    padding: 8
-  },
-  BottomContainer: {
+  fixedbtn:{
     position: 'absolute',
     bottom: 0,
     left: 0,
-    right: 0,
-    width: '100%',
-    backgroundColor: "#575B5B",
-    paddingHorizontal: 24,
-    paddingVertical: 16
+    right: 10,
+    marginHorizontal: 16,
   },
+  // BottomContainer: {
+  //   position: 'absolute',
+  //   bottom: 0,
+  //   left: 0,
+  //   right: 0,
+  //   width: '100%',
+  //   backgroundColor:"#ffffff",
+  //   paddingHorizontal: 24,
+  // },
   add: {
     width: 30,
     height: 32,

@@ -28,7 +28,7 @@ export const CartProvider = ({ children }) => {
       // If the item already exists in the cart, update its quantity
       const updatedItems = cartItems.map((cartItem) => {
         if (cartItem.id === item.id) {
-          return { ...cartItem, quantity: item.quantity,total: (item.total) };
+          return { ...cartItem, quantity: cartItem.quantity + item.quantity,total: (cartItem.total + item.total) };
         }
         return cartItem;
       });

@@ -63,8 +63,7 @@ export default CartItem;
 
 const styles = StyleSheet.create({
     item:{
-        elevation: 3,
-        backgroundColor: "#E6ECEF",
+        backgroundColor: "#F5f5f5",
         marginTop: 8,
         marginBottom: 6,
         padding: 8,

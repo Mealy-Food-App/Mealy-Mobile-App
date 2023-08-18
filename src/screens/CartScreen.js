@@ -13,10 +13,10 @@ import TotalPrice from '../components/TotalPrice';
 import { Formik, yupToFormErrors } from 'formik';
 import * as yup from 'yup';
 import { Pressable } from 'react-native';
-import RadioButton from '../components/RadioButton';
+import CartRadioButtons from '../components/CartRadioButtons';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
+import { LocationContext } from '../contexts/LocationContext';
 const COLORS = { primary: '#00205C', btnPrimary: '#E69F14', bgPrimary: '#F5F5F5' }
 
 
@@ -24,6 +24,7 @@ const CartScreen = () => {
   const { isLoggedIn, userData, status, login } = useContext(AuthContext);
   const { cartItems, removeFromCart, clearCart, increaseQuantity, decreaseQuantity } = useContext(CartContext);
   const [selectedOption, setSelectedOption] = useState('Home Delivery');
+  const  {userAddress } = useContext(LocationContext);
 
   const handleSelectOption = (option) => {
     setSelectedOption(option);
@@ -40,11 +41,10 @@ const CartScreen = () => {
     removeFromCart(itemId);
   };
   const userInput = {
-    elevation: 0.2,
     width: '100%',
-    backgroundColor: '#F3F6F7',
+    backgroundColor: '#ffffff',
     borderWidth: 1,
-    borderColor: '#ebebeb',
+    borderColor: '#d6d6d6',
     borderRadius: 8,
     fontFamily: 'Poppins_400Regular',
     flexDirection: 'row',
@@ -74,11 +74,6 @@ const CartScreen = () => {
     textAlign: 'center',
     fontFamily: 'Poppins_400Regular',
   };
-  const renderStickyHeader = () => (
-    <View style={styles.header}>
-      <TripletHeader props={{ title: 'Your Cart' }} />
-    </View>
-  );
 
   const insets = useSafeAreaInsets();
 
@@ -91,22 +86,21 @@ const CartScreen = () => {
             <Empty props={{ message: "Looks like you haven't added anything to your cart yet" }} />
           </View>
         ) : (
+        <>
+          <View style={[styles.header,{ paddingTop:insets.top}]} >
+            <TripletHeader props={{ title: 'Your Cart' }} />
+          </View>
           <FlatList
-            style={[styles.container, { paddingTop: insets.top }]}
+            style={[styles.container]}
             data={[
-              { key: 'header' },
               { key: 'swipeListView' },
               { key: 'coupon' },
               { key: 'delivery' },
               { key: 'totalPrice' },
             ]}
             showsVerticalScrollIndicator={false}
-            stickyHeaderIndices={[0]}
-            ListHeaderComponent={renderStickyHeader}
             renderItem={({ item }) => {
-              if (item.key === 'header') {
-                return null;
-              } else if (item.key === 'swipeListView') {
+              if (item.key === 'swipeListView') {
                 return (
                   <View>
                     <SwipeListView
@@ -116,7 +110,7 @@ const CartScreen = () => {
                       rightOpenValue={-75}
                       scrollEnabled={true}
                       style={{
-                        elevation: 1,
+                        elevation:3,
                         paddingVertical: 8,
                         height: 360,
                         top:0,
@@ -124,8 +118,9 @@ const CartScreen = () => {
                         borderBottomRightRadius:12,
                         borderBottomLeftRadius: 12,
                         paddingHorizontal: 8,
-                        marginHorizontal: 8,
+                        marginHorizontal: 16,
                         overflow: 'scroll',
+                        marginBottom:40
                       }}
                       vertical
                       keyExtractor={(item) => item.id.toString()}
@@ -176,11 +171,11 @@ const CartScreen = () => {
                 return (
                   <View style={styles.delivery}>
                     <Text style={styles.sectiontitle}>Delivery Option</Text>
-                    <RadioButton options={['Home Delivery', 'Pick up']} selectedOption={selectedOption} onSelect={handleSelectOption} />
+                    <CartRadioButtons options={['Home Delivery', 'Pick up']} selectedOption={selectedOption} onSelect={handleSelectOption} />
                     <View style={styles.location}>
                       <View style={styles.locationHolder}>
                         <Text style={styles.locationBig}>Nairobi</Text>
-                        <Text style={styles.locationSmall}>1336 Pluto, Cyber Arm</Text>
+                        <Text style={styles.locationSmall}>{userData.deliveryAddress ? userData.deliveryAddress : userAddress}</Text>
                       </View>
                       <Pressable>
                         <Text style={styles.changeadd}>Change Address</Text>
@@ -195,6 +190,7 @@ const CartScreen = () => {
             }}
             keyExtractor={(item) => item.key}
           />
+          </>
         )
       ) : (
         <View style={[styles.otherContainer, { paddingTop: insets.top }]}>
@@ -209,13 +205,17 @@ const CartScreen = () => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    backgroundColor: '#F5f5f5',
+    backgroundColor: '#ffffff',
     padding:0,
+    marginTop:80,
   },
   header: {
+    position:'absolute',
+    top:0,
+    left:0,
+    right:0,
     paddingHorizontal: 24,
     backgroundColor: '#ffffff',
-    marginBottom:4,
   },
   otherContainer: {
     width: '100%',
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
   hiddenDelete: {
     borderRadius: 12,
     backgroundColor: '#FFEBEB',
-    width: '99%',
+    width: '95%',
     height: 100,
     flexDirection: 'column',
     textAlign: 'center',
@@ -249,14 +249,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     height: 100,
     borderRadius: 10,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#ebebeb',
     paddingHorizontal: 16,
     paddingVertical: 16,
     justifyContent: 'center',
-    elevation: 1,
   },
   delivery: {
-    elevation: 1,
     marginVertical: 8,
     marginHorizontal: 8,
     height: 200,
@@ -273,7 +271,6 @@ const styles = StyleSheet.create({
     lineHeight: 19.5,
   },
   location: {
-    elevation: 4,
     justifyContent: 'space-between',
     flexDirection: 'row',
     backgroundColor: '#ffffff',

@@ -119,6 +119,7 @@ const ProfileScreen = () => {
                           editable={isPhoneEditable}
                           style={styles.profileContent}
                           caretColor="#00205c"
+                          placeholder='0700000000'
                         />
                       </View>
                       <>
@@ -165,6 +166,7 @@ const ProfileScreen = () => {
                         editable={isAddressEditable}
                         style={styles.profileContent}
                         caretColor="#00205c"
+                        placeholder='location address, Apt./offce/floor'
                       />
                     </View>
                     <>
