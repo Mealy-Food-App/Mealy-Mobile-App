@@ -6,7 +6,7 @@ import { AuthContext } from '../contexts/AuthContext';
 
 
 
-const ScreenHeader = ({props}) => {
+const RestHeader = ({props}) => {
   const onNavigate = useNavigation();
   const {cartItems} = useContext(CartContext)
   const {isLoggedIn} = useContext(AuthContext)
@@ -33,19 +33,21 @@ const ScreenHeader = ({props}) => {
           <View style={styles.basketnum}>
             <Text style={styles.cartnum}>{cartItems.length}</Text>
           </View>
-          <Image source={require('../assets/icons/cart4.png')} style={styles.cart}/>
+          <View style={styles.basket}>
+            <Image source={require('../assets/icons/cart4.png')} style={styles.cart}/>
+          </View>
           </>
           ): (
-          <>
+          <View style={styles.basket}>
             <Image source={require('../assets/icons/cart2.png')} style={styles.cart}/>
-          </>
+          </View>
           )}
         </TouchableOpacity>}
     </View>
   )
 }
 
-export default ScreenHeader
+export default RestHeader
 
 const styles = StyleSheet.create({
     headerContainer:{
@@ -63,11 +65,20 @@ const styles = StyleSheet.create({
         height:24,
         borderRadius:24,
     },
+    basket:{
+      width:24,
+      height:24,
+      padding:4,
+      backgroundColor:'#fff',
+      borderWidth:1,
+      borderColor:'#00205C',
+      borderRadius:12,
+      alignItems:'center'
+    },
     cart:{
-      width:26,
-      height:26,
-      borderRadius:26,
-      tintColor:'#00205C'
+      width:16,
+      height:16,
+      tintColor:'#00205c',
     },
     arrowLeftContainer:{
       width:48,
@@ -92,15 +103,13 @@ const styles = StyleSheet.create({
       right:-6,
       top:0,
       alignItems:'center',
-      backgroundColor:'#fff', 
+      backgroundColor:'#00205C', 
       position:'absolute',
-      zIndex:99999,
-      borderColor:"#00205c",
-      borderWidth:0.5
+      zIndex:99999
     },
     cartnum:{
       color:'#E69F14',           
       fontSize:10,      
       fontFamily:'Poppins_700Bold'
-    }
+  }
 })

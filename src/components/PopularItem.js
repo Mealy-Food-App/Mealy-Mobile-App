@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View,ImageBackground,Image } from 'react-native'
+import { StyleSheet, Text, View,ImageBackground,Image, Pressable} from 'react-native'
 import React from 'react'
 import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
 import ItemHeader from './ItemHeader';
 
 const PopularItem = ({data, marginLeft, marginRight, onPressItem, children}) => {
   return (
-    <View style={[styles.popular,{marginLeft: marginLeft,margin: marginRight,}]}>
+    <Pressable style={[styles.popular,{marginLeft: marginLeft,margin: marginRight,}]} onPress={onPressItem}>
         <View style={styles.ImageBackground}>
         <ImageBackground source={{ uri: data.image}} 
         style ={{
@@ -40,7 +40,7 @@ const PopularItem = ({data, marginLeft, marginRight, onPressItem, children}) => 
                 <Text style={styles.smallText}>{data.estimatedDeliveryTime}</Text>
             </View>
         </View>
-    </View>
+    </Pressable>
   )
 }
 

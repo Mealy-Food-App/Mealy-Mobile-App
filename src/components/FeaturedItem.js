@@ -1,4 +1,4 @@
-import { StyleSheet,Dimensions, Text, View, Image, ImageBackground } from 'react-native'
+import { StyleSheet,Dimensions, Text, View, Image, ImageBackground, Pressable } from 'react-native'
 import React from 'react'
 import { StarRatingDisplay } from 'react-native-star-rating-widget'
 
@@ -6,7 +6,7 @@ const windowWidth = Dimensions.get('window').width;
 const featuredItemWidth = (windowWidth - 64) / 2;
 const FeaturedItem = ({data, marginLeft, marginRight, onPressItem, children}) => {
   return (
-    <View style={[styles.featured,{marginLeft: marginLeft,margin: marginRight,}]}>
+    <Pressable style={[styles.featured,{marginLeft: marginLeft,margin: marginRight,}]} onPress={onPressItem}>
         <View style={styles.ImageBackground}>
         <ImageBackground source={{ uri: data.image}} 
         style ={{
@@ -37,7 +37,7 @@ const FeaturedItem = ({data, marginLeft, marginRight, onPressItem, children}) =>
             <Text style={styles.contentTextSpecialty} numberOfLines={1}>{data.specialty}</Text>
         </View>
         <StarRatingDisplay style={{position:'absolute', left:0, bottom:12}}rating={data.rating} color={'#00205c'} starSize={13} enableHalfStar={true}/>
-    </View>
+    </Pressable>
   )
 }
 

@@ -117,9 +117,14 @@ const ProductDetailScreen = () => {
         <Image
           source={{ uri: item.image[0] }}
           resizeMode="cover"
-          style={{ height: 320,width:imageWidth,position:'absolute', top:-(insets.top), paddingHorizontal:24,borderBottomLeftRadius: 26, borderBottomRightRadius: 26 }}
+          style={{ height: 320,width:imageWidth, top:-(insets.top), paddingHorizontal:24,borderBottomLeftRadius: 26, borderBottomRightRadius: 26 }}
         />
-        <View style = {{marginBottom:60}}>
+        <View style = {{marginBottom:60, marginTop:-24}}>
+            <View style={styles.detailsRest}>
+              <Text style={[styles.restName, {textAlign:'center'}]}>
+                {item.restaurant}
+              </Text>
+            </View>
           <View style={styles.details}>
             <View style={styles.detailsHeader}>
               <Text style={styles.itemName}>
@@ -217,11 +222,29 @@ const styles = StyleSheet.create({
     paddingHorizontal:24,
     width:imageWidth,
   },
-  details: {
-    paddingTop:304,
-    width: "100%",
+  
+  details: { 
     justifyContent: 'center',
-    paddingHorizontal:24
+    paddingHorizontal:24,    
+  },
+  detailsRest: {
+    marginVertical:8,
+    marginHorizontal:'auto',
+    alignSelf:'center',
+    width:160,
+    justifyContent: 'center',
+    alignContent:'center',
+    paddingHorizontal:24,
+    paddingVertical:8,
+    backgroundColor:"#00205c",
+    opacity:0.9,
+    borderRadius:16
+  },
+  restName: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 16,
+    lineHeight: 19.5,
+    color: '#fff',
   },
   detailsHeader: {
     flexDirection: 'row',

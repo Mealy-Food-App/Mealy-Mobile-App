@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
     },
     headerText:{
         fontFamily:'Poppins_400Regular',
-        fontSize:28,
-        lineHeight:42,
+        fontSize:24,
+        lineHeight:32,
         color:'#00205C'
     }
 })

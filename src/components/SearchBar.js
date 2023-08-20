@@ -10,7 +10,7 @@ const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked,setShowFi
       <Image  source={require('../assets/icons/search.png')} style={styles.searchIcon}/>
       <TextInput
         style={styles.input}
-        placeholder="search for meal"
+        placeholder="Search for a meal"
         value={searchPhrase}
         onChangeText={setSearchPhrase}
         onFocus={() => {
@@ -54,10 +54,10 @@ const styles = StyleSheet.create({
         marginBottom:16
     },
     searchIcon:{
-      width:14,
-      height:14, 
+      width:24,
+      height:24, 
       alignSelf:'center',
-      marginLeft:8  
+      marginLeft:16 
     },
     input: {
       fontSize: 14,

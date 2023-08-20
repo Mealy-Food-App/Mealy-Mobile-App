@@ -63,9 +63,10 @@ export default CartItem;
 
 const styles = StyleSheet.create({
     item:{
+        elevation:4,
         backgroundColor: "#F5f5f5",
         marginTop: 8,
-        marginBottom: 6,
+        marginBottom: 8,
         padding: 8,
         borderRadius: 10,
         width:"100%",
@@ -135,6 +136,8 @@ const styles = StyleSheet.create({
         width:72,
         flexDirection:'row',
         backgroundColor:'#d6d6d6',
+        borderColor:"#d8d9d8",
+        borderWidth:0.5,
         height:38,
         borderRadius:8,
         justifyContent:'space-between',

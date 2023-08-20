@@ -28,6 +28,7 @@ import DealsScreen from "../screens/DealsScreen"
 import ChatScreen from "../screens/ChatScreen"
 import PaymentScreen from "../screens/PaymentScreen"
 import PreferenceScreen from "../screens/PreferenceScreen"
+import RestaurantScreen from '../screens/RestaurantScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -129,6 +130,10 @@ export const OnboardingStackScreens = () => {
       component={RecommendationScreen}
     />
     <Stack.Screen
+      name = "RestaurantScreen"
+      component={RestaurantScreen}
+    />
+    <Stack.Screen
       name = "SearchScreen"
       component={SearchScreen}
     />
@@ -185,6 +190,10 @@ export const AppStackScreens = () => {
     <Stack.Screen
       name = "RecommendationScreen"
       component={RecommendationScreen}
+    />
+    <Stack.Screen
+      name = "RestaurantScreen"
+      component={RestaurantScreen}
     />
     <Stack.Screen
       name = "SearchScreen"

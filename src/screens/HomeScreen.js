@@ -73,6 +73,11 @@ const HomeScreen = () => {
       productDetails: item,
     });
   };
+  const onNavigateToRestaurant = (item) => {
+    onNavigate.navigate('RestaurantScreen', {
+      restaurant: item,
+    });
+  };
 
   const handleShowAllCategories = () => {
     onNavigate.navigate('MealyCategories');
@@ -177,7 +182,7 @@ const HomeScreen = () => {
                       data={item}
                       marginLeft={index === 0 ? 0 : 16}
                       marginRight={index === restaurants.length - 1 ? 0 : 0}
-                      onPressItem={() => onNavigation(item)}
+                      onPressItem={() => onNavigateToRestaurant(item)}
                     />
                   )}
                 />
@@ -229,7 +234,7 @@ const HomeScreen = () => {
                       data={item}
                       key={item._id + 'r'}
                       marginLeft={index === 0 || index % 2 === 0 ? 0 : 16}
-                      onPressItem={() => onNavigation(item)}
+                      onPressItem={() => onNavigateToRestaurant(item)}
                     />
                   )}
                 />
