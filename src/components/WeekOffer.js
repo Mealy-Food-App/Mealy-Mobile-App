@@ -3,12 +3,12 @@ import React from 'react'
 import ItemHeader from './ItemHeader';
 import ItemFooter from './ItemFooter';
 import { BlurView } from 'expo-blur';
+import { Pressable } from 'react-native';
 
 const width = Dimensions.get('window').width -48;
-const WeekOffer = ({ data}) => {
-  console.log(data);
+const WeekOffer = ({ data, onPressOffer}) => {
   return (
-    <View style={styles.meal}>
+    <Pressable style={styles.meal} onPress={onPressOffer}>
       <Text style = {styles.title}>Meal of the week</Text>
       <View style={styles.mealContent}>  
         <ImageBackground source={{ uri: data.image[0]}}
@@ -29,7 +29,7 @@ const WeekOffer = ({ data}) => {
           <ItemFooter data={data}/>
         </ImageBackground> 
       </View>
-    </View>
+    </Pressable>
   )
 }
 

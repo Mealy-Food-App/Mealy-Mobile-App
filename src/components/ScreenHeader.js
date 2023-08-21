@@ -12,7 +12,7 @@ const ScreenHeader = ({props}) => {
   const {isLoggedIn} = useContext(AuthContext)
   
   const onNavigationHome = () => {
-    onNavigate.navigate("Home");
+    onNavigate.goBack()
   }
   const onNavigationCart = () => {
     onNavigate.navigate("Cart");
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     headerContainer:{
       flexDirection:'row',
       justifyContent:'space-between',      
-      height:42,
+      height:56,
       marginBottom:8,
     },
     header:{
@@ -81,8 +81,8 @@ const styles = StyleSheet.create({
     },
     headerText:{
         fontFamily:'Poppins_400Regular',
-        fontSize:24,
-        lineHeight:52,
+        fontSize:18,
+        lineHeight:56,
         color:'#00205C',
     },
     basketnum:{

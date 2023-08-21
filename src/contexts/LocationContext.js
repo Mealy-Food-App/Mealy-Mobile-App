@@ -10,8 +10,10 @@ export const LocationProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  console.log(userAddress);
   useEffect(() => {
     checkLocationPermissions();
+    console.log(userAddress);
   }, []);
 
   const checkLocationPermissions = async () => {
@@ -47,6 +49,7 @@ export const LocationProvider = ({ children }) => {
   const fetchUserAddress = async (coords) => {
     try {
       const { latitude, longitude } = coords;
+      console.log(coords)
       const response = await axios.get(
         `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
       );
@@ -54,7 +57,27 @@ export const LocationProvider = ({ children }) => {
       if (response.data && response.data.address) {
         console.log(response.data);
         const { suburb, road, city} = response.data.address;
-        setUserAddress(`${suburb}, ${road}, ${city}`);
+        let userAddress = '';
+        if (suburb) {
+          userAddress += suburb;
+        }
+
+        if (road) {
+          if (userAddress) {
+            userAddress += `, ${road}`;
+          } else {
+            userAddress += road;
+          }
+        }
+
+        if (city) {
+          if (userAddress) {
+            userAddress += `, ${city}`;
+          } else {
+            userAddress += city;
+          }
+        }
+        setUserAddress(userAddress);
       } else {
         setError('No address found for the given coordinates');
       }

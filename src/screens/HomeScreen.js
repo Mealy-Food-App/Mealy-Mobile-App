@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { View, FlatList, Text, StyleSheet, Image, Pressable, StatusBar, Dimensions } from 'react-native';
+import React, { useContext, useState, useEffect, useRef } from 'react';
+import { View, FlatList, Text, StyleSheet, Image, Pressable} from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { topDeals } from '../dummyData';
 import WeekOffer from '../components/WeekOffer';
@@ -14,11 +14,8 @@ import { AuthContext } from '../contexts/AuthContext';
 import { ProductsContext } from '../contexts/ProductsContext';
 import HomeHeader from '../components/HomeHeader';
 import { LocationContext } from '../contexts/LocationContext';
-import Spinner from 'react-native-loading-spinner-overlay';
-import * as Location from 'expo-location';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { CartContext } from '../contexts/CartContext';
-import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast, } from 'react-native-alert-notification';
+import debounce from 'lodash.debounce';
 
 const COLORS = {
   primary: '#00205C',
@@ -31,12 +28,17 @@ const HomeScreen = () => {
   const onNavigate = useNavigation();
   const isFocused = useIsFocused();
   const [searchPhrase, setSearchPhrase] = useState("");
+  const [headerColor, setHeaderColor] = useState('#fff');
   const [clicked, setClicked] = useState(false);
-  const { isLoggedIn, userData, status } = useContext(AuthContext);
+  const { isLoggedIn, userData, userRecommendations } = useContext(AuthContext);
   const { categories, products, restaurants } = useContext(ProductsContext);
   const  {userAddress } = useContext(LocationContext);
+  const [recommendations, setRecommendations] = useState([]);
+  const [showSearch, setShowSearch] = useState(false)
 
-  console.log("address", userAddress);
+
+  const flatListRef = useRef(null);
+
   useEffect(() => {
     // Clear searchPhrase when the screen is focused again
     if (isFocused) {
@@ -46,6 +48,12 @@ const HomeScreen = () => {
   
 
   useEffect(() => {
+    if (userRecommendations.length == 0){
+      const firstten = products.slice(0, 10);
+      setRecommendations(firstten)
+    }else{
+      setRecommendations(userRecommendations)
+    }
     const timer = setTimeout(() => {
       if (searchPhrase !== '') {
         onNavigate.navigate('SearchScreen', searchPhrase, setSearchPhrase);
@@ -73,60 +81,68 @@ const HomeScreen = () => {
       productDetails: item,
     });
   };
+  const onNavigateToOffer = (item) => {
+    onNavigate.navigate('OfferDetailScreen', {
+      productDetails: item,
+    });
+  };
   const onNavigateToRestaurant = (item) => {
     onNavigate.navigate('RestaurantScreen', {
       restaurant: item,
     });
   };
-
-  const handleShowAllCategories = () => {
-    onNavigate.navigate('MealyCategories');
+  const handleShowAll = (screenName) => {
+    onNavigate.navigate(screenName);
   };
+  const handleScroll = (offsetY) => {
+    if (offsetY > 4) {
+      handleScrollDown();
+    } else {
+      handleScrollUp();
+    }
+  }
+
+  const handleScrollUp = () => {
+      setHeaderColor('#fff')
+      setShowSearch(false);
+  };
+  const handleScrollDown = () => {
+    setHeaderColor('rgba(0, 32, 92, 0.005)')
+    setShowSearch(true);
+  };
+  handlePressSearch = () => {
+    if (flatListRef.current && showSearch) {
+      const searchBarOffset = 0
+      flatListRef.current.scrollToOffset({ offset: searchBarOffset, animated: true });
+    }
+  }
+
 
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      {isLoggedIn === true && userData !== null ? (
-        <View style={styles.headerContent}>
-          <HomeHeader openLeftDrawer={openLeftDrawer} />
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>Hello {userData.fullName.split(' ')[0].charAt(0).toUpperCase() + userData.fullName.split(' ')[0].slice(1)}</Text>
-          </View>
-        </View>
-      ) : (
-        <View style={styles.headerContent}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>Hello There</Text>
-            <Image
-              source={require('../assets/icons/wave.png')}
-              style={{ width: 36, height: 34, resizeMode: 'contain', alignSelf: 'center', marginLeft: 8 }}
-            />
-          </View>
-        </View>
-      )}
-      <View style={styles.location}>
-        <Image source={require("../assets/icons/location.png")} style={styles.locationicon} />
-        {userAddress != '' ?
-        <Text style={styles.locationtext}>{userAddress}</Text>
-        :
-        <Text style={styles.loadinglocationtext}>Loading current location</Text>
-        }
+      <View style= {{marginTop:-(insets.top), paddingTop:(insets.top), paddingBottom:16, paddingHorizontal:24, backgroundColor:headerColor, gap:8}}>
+        <HomeHeader openLeftDrawer={openLeftDrawer} />
+        {showSearch && <Pressable onPress={handlePressSearch} style={{width:80, position:'absolute', top:(insets.top), right:'50%'}}>
+          <View style= {styles.searchButton}>
+            <Image  source={require('../assets/icons/search.png')} style={styles.searchIcon}/>
+            <View style={styles.smallIcon}>
+              <Image source = {require('../assets/icons/filter.png')} />
+            </View>
+          </View>          
+        </Pressable>}
       </View>
-
-      <Text numberOfLines={2} style={styles.subtitle}>
-        What would you like to eat today?
-      </Text>
-      <SearchBar
-        searchPhrase={searchPhrase}
-        setSearchPhrase={setSearchPhrase}
-        clicked={clicked}
-        setClicked={setClicked}
-      />
-
       <FlatList
+        ref={flatListRef} 
         style={styles.homeScroll}
         showsVerticalScrollIndicator={false}
+        scrollEventThrottle={300}
+        onScroll={(event) => {
+          const offsetY = event.nativeEvent.contentOffset.y;
+          handleScroll(offsetY);
+        }}
         data={[
+          {id: 'Header'},
           { id: 'WeekOffer' },
           { id: 'ExploreCategories' },
           { id: 'PopularAroundYou' },
@@ -136,12 +152,54 @@ const HomeScreen = () => {
         ]}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
-          if (item.id === 'WeekOffer') {
-            return <WeekOffer style={{ width: '100%' }} data={products[0]} key={item.id} />;
+          if (item.id === 'Header') {
+            return (
+              <>
+              {isLoggedIn === true && userData !== null ? (
+                <View style={styles.headerContent}>
+                  <View style={styles.titleContainer}>
+                    <Text style={styles.title}>Hello {userData.fullName.split(' ')[0].charAt(0).toUpperCase() + userData.fullName.split(' ')[0].slice(1)}</Text>
+                  </View>
+                </View>
+              ) : (
+                <View style={styles.headerContent}>
+                  <View style={styles.titleContainer}>
+                    <Text style={styles.title}>Hello There</Text>
+                    <Image
+                      source={require('../assets/icons/wave.png')}
+                      style={{ width: 36, height: 34, resizeMode: 'contain', alignSelf: 'center', marginLeft: 8 }}
+                    />
+                  </View>
+                </View>
+              )}
+              <View style={styles.location}>
+                <Image source={require("../assets/icons/location.png")} style={styles.locationicon} />
+                {userAddress != '' ?
+                <Text ellipsizeMode='tail' numberOfLines={1} style={styles.locationtext}>{userAddress}</Text>
+                :
+                <Text style={styles.loadinglocationtext}>Loading current location</Text>
+                }
+              </View>
+        
+              <Text numberOfLines={2} style={styles.subtitle} >
+                What would you like to eat today?
+              </Text>
+              <SearchBar
+                searchPhrase={searchPhrase}
+                setSearchPhrase={setSearchPhrase}
+                clicked={clicked}
+                setClicked={setClicked}
+              />
+
+            </>
+            )
+
+          }else if (item.id === 'WeekOffer') {
+            return <WeekOffer style={{ width: '100%' }} data={products[0]} key={item.id} onPressOffer={() => onNavigateToOffer(products[0])}/>;
           } else if (item.id === 'ExploreCategories') {
             return (
               <View key={item.id}>
-                <Section title="Explore Categories" view="Show all" onPress={handleShowAllCategories} />
+                <Section title="Explore Categories" view="Show all" onPress={() => handleShowAll('MealyCategories')} />
                 <FlatList
                   showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
@@ -195,7 +253,7 @@ const HomeScreen = () => {
                 <FlatList
                   showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
-                  data={products}
+                  data={recommendations}
                   horizontal
                   keyExtractor={(item) => item._id + 'p'}
                   style={{
@@ -219,7 +277,7 @@ const HomeScreen = () => {
           } else if (item.id === 'FeaturedRestaurants') {
             return (
               <View key={item.id}>
-                <Section title="Featured Restaurants" view="Show all" onPress={() => handleShowAll('FeaturedScreen')} />
+                <Section title="Featured Restaurants" view="Show all" onPress={() => handleShowAll('FeaturedRestaurantsScreen')} />
                 <FlatList
                   data={restaurants}
                   numColumns={2}
@@ -280,16 +338,13 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 24,
     width: '100%',
     backgroundColor: '#FFFFFF',
   },
-  headerContent: {},
   titleContainer: {
-    marginTop: 24,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginTop: 16,
+    marginTop: 8,
     marginBottom: 8,
   },
   title: {
@@ -299,7 +354,7 @@ const styles = StyleSheet.create({
     lineHeight: 48,
   },
   subtitle: {
-    width: 240,
+    width: '80%',
     marginVertical: 8,
     color: 'rgba(0, 32, 92, 0.50)',
     fontFamily: 'Poppins_400Regular',
@@ -308,6 +363,7 @@ const styles = StyleSheet.create({
   },
   homeScroll: {
     width: '100%',
+    paddingHorizontal: 24,
   },
   location: {
     flexDirection: 'row',
@@ -324,7 +380,8 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'center',
     alignSelf: 'center',
-    color: '#00205C'
+    color: '#00205C',
+    maxWidth:'100%'
   },
   loadinglocationtext: {
     fontFamily: "Poppins_500Medium",
@@ -334,4 +391,25 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: 'rgba(0, 32, 92, 0.50)'
   },
+  searchButton:{
+    borderWidth:1,
+    borderColor:'#E69F14',
+    flexDirection:'row',
+    borderRadius:8,
+    marginTop:8,
+    marginBottom:16,
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  smallIcon:{
+    flex:0.5,
+    padding:4,
+    borderTopRightRadius:8,
+    borderBottomRightRadius:8,
+    backgroundColor:'#E69F14'
+  },
+  searchIcon:{
+    flex:0.5,
+    margin:4,
+  }
 });

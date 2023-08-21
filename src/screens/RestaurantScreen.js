@@ -18,11 +18,6 @@ const RestaurantScreen = () => {
     const route = useRoute();
     restaurant = route.params.restaurant
     const { products } = useContext(ProductsContext);
-
-
-    // console.log(restaurant.products)
-    // console.log(products)
-
     const filteredProducts = products.filter(product => restaurant.products.includes(product._id));
     const handleScroll = (event) => {
         const scrollOffsetY = event.nativeEvent.contentOffset.y;

@@ -25,7 +25,12 @@ export default function App() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState();
+  const [userData, setUserData] = useState(null);
+  const [userRecommendations, setUserRecommendations] = useState([]);
+  const [userOrderHistory, setUserOrderHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+ 
 
   useEffect(() => {
     async function prepare() {
@@ -42,10 +47,25 @@ export default function App() {
         });
         await checkOnboardingStatus();
         const data = await fetchData();
-  
+        
         setCategories(data.categories);
         setProducts(data.products);
         setRestaurants(data.restaurants);
+        setUserOrderHistory(data.userOrderHistory)
+        if (data.userRecommendations.length > 0){
+          const processedData = data.userRecommendations.map(item => item.product);
+          const filteredData = processedData.filter(item => item !== undefined);
+          setUserRecommendations(filteredData);
+        }else{
+          const firstten = products.slice(0, 10);
+          setUserRecommendations(firstten);
+        }
+        const userstr = await AsyncStorage.getItem('userData');
+        const loggedintoken = await AsyncStorage.getItem('loggedintoken');
+        if (userstr != null && loggedintoken != null){
+          const usrobj = JSON.parse(userstr);
+          setUserData(usrobj);
+        }
       } catch (e) {
         console.warn(e);
       } finally {
@@ -69,24 +89,59 @@ export default function App() {
   };
 
   const fetchData = async () => {
+    const userstr = await AsyncStorage.getItem('userData');
+    const loggedintoken = await AsyncStorage.getItem('loggedintoken');
     try {
-      const [categoriesResponse, productsResponse, restaurantsResponse] = await Promise.all([
-        axios.get(`${BASE_URL}/home/categories`),
-        axios.get(`${BASE_URL}/product/products`),
-        axios.get(`${BASE_URL}/home/list/restaurants`),
-      ]);
 
-      return {
-        categories: categoriesResponse.data.data,
-        products: productsResponse.data.data,
-        restaurants: restaurantsResponse.data.data,
-      };
+      if (userstr != null && loggedintoken != null){
+        const usrobj = JSON.parse(userstr);
+        const userid = usrobj._id;
+        const [categoriesResponse, productsResponse, restaurantsResponse,  userRecommendationsResponse, userOrderHistoryResponse] = await Promise.all([
+          axios.get(`${BASE_URL}/home/categories`),
+          axios.get(`${BASE_URL}/product/products`),
+          axios.get(`${BASE_URL}/home/list/restaurants`),
+          axios.get(`${BASE_URL}/user/recommendations/${userid}`, 
+          {
+            headers: {
+              Authorization: `Bearer ${loggedintoken}`,
+            },
+          }),
+          axios.get(`${BASE_URL}/user/orderhistory`,
+          {
+            headers: {
+              Authorization: `Bearer ${loggedintoken}`,
+            },
+          })
+        ]);
+
+        return {
+          categories: categoriesResponse.data.data,
+          products: productsResponse.data.data,
+          restaurants: restaurantsResponse.data.data,
+          userRecommendations:userRecommendationsResponse.data.data,
+          userOrderHistory:userOrderHistoryResponse.data.data
+        };
+      }else{
+        const [categoriesResponse, productsResponse, restaurantsResponse] = await Promise.all([
+          axios.get(`${BASE_URL}/home/categories`),
+          axios.get(`${BASE_URL}/product/products`),
+          axios.get(`${BASE_URL}/home/list/restaurants`)
+        ]);
+
+        return {
+          categories: categoriesResponse.data.data,
+          products: productsResponse.data.data,
+          restaurants: restaurantsResponse.data.data
+        };
+      }
     } catch (error) {
       console.error(error);
       return {
         categories: [],
         products: [],
         restaurants: [],
+        userRecommendations:[],
+        userOrderHistory:[]
       };
     }
   };
@@ -107,7 +162,7 @@ export default function App() {
         <NavigationContainer>
           <LocationProvider>
             <ProductsProvider initialData={{ categories, products, restaurants }}>
-              <AuthProvider>
+              <AuthProvider initialData={{userData, userOrderHistory, userRecommendations}}>
                 <CartProvider>
                   {userOnboarded ? <AppStackScreens /> : <OnboardingStackScreens />}
                 </CartProvider>

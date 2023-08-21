@@ -26,7 +26,7 @@ const FeaturedItem = ({data, marginLeft, marginRight, onPressItem, children}) =>
             </View>
             <View style={styles.small}>
                 <Image source={require('../assets/icons/clock.png')} style={styles.smallIcon}/>
-                <Text style={styles.smallText}>{data.duration}</Text>
+                <Text style={styles.smallText}>{data.estimatedDeliveryTime} Min</Text>
             </View>
         </View>
         </ImageBackground>

@@ -11,7 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AccordionComponent from '../components/AccordionComponent';
 
 const imageWidth = Dimensions.get("screen").width;
-const ProductDetailScreen = () => {
+const OfferDetailScreen = () => {
   const insets = useSafeAreaInsets()
   const [headerBackground, setHeaderBackground] = useState('rgba(255, 255, 255, 0.3)')
   const onNavigate = useNavigation();
@@ -125,6 +125,13 @@ const ProductDetailScreen = () => {
           resizeMode="cover"
           style={{ height: 320,width:imageWidth, top:-(insets.top), paddingHorizontal:24,borderBottomLeftRadius: 26, borderBottomRightRadius: 26 }}
         />
+        <View style={{justifyContent:'center',alignItems:'center',backgroundColor:'#00205C', paddingHorizontal:2, paddingVertical:4, borderRadius:8, width:64, position:'absolute', top: 240, left:16}}>
+        <Image
+          source={require('../assets/icons/offer.png')}
+          resizeMode="cover"
+          style={{ height: 40,width:60}}
+        />
+        </View>
         <View style = {{marginBottom:60, marginTop:-24}}>
             <Pressable style={styles.detailsRest} onPress ={handleOpenRestaurant}>
               <Text style={[styles.restName, {textAlign:'center'}]}>
@@ -213,7 +220,7 @@ const ProductDetailScreen = () => {
   )
 }
 
-export default ProductDetailScreen
+export default OfferDetailScreen
 
 const styles = StyleSheet.create({
   container: {

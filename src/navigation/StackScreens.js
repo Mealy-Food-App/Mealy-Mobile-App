@@ -21,6 +21,7 @@ import SearchScreen from '../screens/SearchScreen';
 import CategoryScreen from '../screens/CategoryScreen';
 import AllCategoriesScreen from '../screens/AllCategoriesScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
+import OfferDetailScreen from '../screens/OfferDetailSreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import RecommendationScreen from "../screens/RecommendedScreen"
@@ -29,6 +30,9 @@ import ChatScreen from "../screens/ChatScreen"
 import PaymentScreen from "../screens/PaymentScreen"
 import PreferenceScreen from "../screens/PreferenceScreen"
 import RestaurantScreen from '../screens/RestaurantScreen';
+import FeaturedRestaurantScreen from '../screens/FeaturedRestaurantsScreen';
+import PopularAroundScreen from '../screens/PopularAroundScreen';
+import RecommendedScreen from '../screens/RecommendedScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -149,6 +153,22 @@ export const OnboardingStackScreens = () => {
       name = "ProductDetailScreen"
       component={ProductDetailScreen}
     />
+    <Stack.Screen
+      name = "OfferDetailScreen"
+      component={OfferDetailScreen}
+    />
+    <Stack.Screen
+      name = "RecommendedScreen"
+      component={RecommendedScreen}
+    />
+    <Stack.Screen
+      name = "PopularAroundScreen"
+      component={PopularAroundScreen}
+    />
+        <Stack.Screen
+      name = "FeaturedRestaurantsScreen"
+      component={FeaturedRestaurantScreen}
+    />
   </Stack.Navigator>
   )
 }
@@ -207,9 +227,25 @@ export const AppStackScreens = () => {
       name = "MealyCategories"
       component={AllCategoriesScreen}
     />
+        <Stack.Screen
+      name = "RecommendedScreen"
+      component={RecommendedScreen}
+    />
+    <Stack.Screen
+      name = "PopularAroundScreen"
+      component={PopularAroundScreen}
+    />
+        <Stack.Screen
+      name = "FeaturedRestaurantsScreen"
+      component={FeaturedRestaurantScreen}
+    />
     <Stack.Screen
       name = "ProductDetailScreen"
       component={ProductDetailScreen}
+    />
+    <Stack.Screen
+      name = "OfferDetailScreen"
+      component={OfferDetailScreen}
     />
     <Stack.Screen
       name = "LogInScreen"

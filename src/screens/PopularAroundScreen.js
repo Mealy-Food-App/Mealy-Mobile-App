@@ -5,27 +5,16 @@ import ScreenHeader from '../components/ScreenHeader';
 import SearchBar from '../components/SearchBar';
 import { ProductsContext } from '../contexts/ProductsContext';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import FoodProductItem from '../components/FoodProductItem';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import RestaurantItem from '../components/RestaurantItem';
 
 
 const Tab = createMaterialTopTabNavigator();
 
 function AllTab({ searchPhrase }) {
   const onNavigate = useNavigation();
-  const { products } = useContext(ProductsContext);
-  const [filteredItems, setFilteredItems] = useState([]);
-  const actualSearchPhrase = searchPhrase.toLowerCase();
-
-  useEffect(() => {
-    const filtered = products.filter((product) => {
-      const productName = product.name.toLowerCase();
-      const productCategory = product.category.toLowerCase();
-      return productName.indexOf(actualSearchPhrase) !== -1 || productCategory.indexOf(actualSearchPhrase) !== -1;
-    });
-    setFilteredItems(filtered);
-  }, [actualSearchPhrase]);
+  const { restaurants } = useContext(ProductsContext);
 
   const onNavigateToItem = (item) => {
     onNavigate.navigate('ProductDetailScreen', {
@@ -36,14 +25,14 @@ function AllTab({ searchPhrase }) {
 
   return (
     <FlatList
-      data={filteredItems}
+      data={restaurants}
       keyExtractor={(item) => item._id}
       showsVerticalScrollIndicator={false}
       style={{
         backgroundColor: '#ffffff',
       }}
       renderItem={({ item, index }) => (
-        <FoodProductItem 
+        <RestaurantItem 
         marginTop={8}
         marginBottom={8} 
         data={item}
@@ -55,18 +44,7 @@ function AllTab({ searchPhrase }) {
 
 function PopularTab({ searchPhrase }) {
   const onNavigate = useNavigation();
-  const { products } = useContext(ProductsContext);
-  const [filteredItems, setFilteredItems] = useState([]);
-  const actualSearchPhrase = searchPhrase.toLowerCase();
-
-  useEffect(() => {
-    const filtered = products.filter((product) => {
-      const productName = product.name.toLowerCase();
-      const productCategory = product.category.toLowerCase();
-      return productName.indexOf(actualSearchPhrase) !== -1 || productCategory.indexOf(actualSearchPhrase) !== -1;
-    });
-    setFilteredItems(filtered);
-  }, [actualSearchPhrase]);
+  const { restaurants } = useContext(ProductsContext);
 
   const onNavigateToItem = (item) => {
     onNavigate.navigate('ProductDetailScreen', {
@@ -76,14 +54,14 @@ function PopularTab({ searchPhrase }) {
 
   return (
     <FlatList
-      data={filteredItems}
+      data={restaurants}
       keyExtractor={(item) => item._id}
       showsVerticalScrollIndicator={false}
       style={{
         backgroundColor: '#ffffff',
       }}
       renderItem={({ item, index }) => (
-        <FoodProductItem 
+        <RestaurantItem 
         marginTop={8} 
         marginBottom={8} 
         data={item} onPressItem={() => onNavigateToItem(item)} 
@@ -95,18 +73,7 @@ function PopularTab({ searchPhrase }) {
 
 function TrendingTab({ searchPhrase }) {
   const onNavigate = useNavigation();
-  const { products } = useContext(ProductsContext);
-  const [filteredItems, setFilteredItems] = useState([]);
-  const actualSearchPhrase = searchPhrase.toLowerCase();
-
-  useEffect(() => {
-    const filtered = products.filter((product) => {
-      const productName = product.name.toLowerCase();
-      const productCategory = product.category.toLowerCase();
-      return productName.indexOf(actualSearchPhrase) !== -1 || productCategory.indexOf(actualSearchPhrase) !== -1;
-    });
-    setFilteredItems(filtered);
-  }, [actualSearchPhrase]);
+  const { restaurants } = useContext(ProductsContext);
 
   const onNavigateToItem = (item) => {
     onNavigate.navigate('ProductDetailScreen', {
@@ -116,14 +83,14 @@ function TrendingTab({ searchPhrase }) {
 
   return (
     <FlatList
-      data={filteredItems}
+      data={restaurants}
       keyExtractor={(item) => item._id}
       showsVerticalScrollIndicator={false}
       style={{
         backgroundColor: '#ffffff',
       }}
       renderItem={({ item, index }) => (
-        <FoodProductItem marginTop={8} marginBottom={8} data={item} onPressItem={() => onNavigateToItem(item)} key ={item._id} />
+        <RestaurantItem marginTop={8} marginBottom={8} data={item} onPressItem={() => onNavigateToItem(item)} key ={item._id} />
       )}
     />
   );
@@ -131,18 +98,7 @@ function TrendingTab({ searchPhrase }) {
 
 function NewestTab({ searchPhrase }) {
   const onNavigate = useNavigation();
-  const { products } = useContext(ProductsContext);
-  const [filteredItems, setFilteredItems] = useState([]);
-  const actualSearchPhrase = searchPhrase.toLowerCase();
-
-  useEffect(() => {
-    const filtered = products.filter((product) => {
-      const productName = product.name.toLowerCase();
-      const productCategory = product.category.toLowerCase();
-      return productName.indexOf(actualSearchPhrase) !== -1 || productCategory.indexOf(actualSearchPhrase) !== -1;
-    });
-    setFilteredItems(filtered);
-  }, [actualSearchPhrase]);
+  const { restaurants } = useContext(ProductsContext);
 
   const onNavigateToItem = (item) => {
     onNavigate.navigate('ProductDetailScreen', {
@@ -152,14 +108,14 @@ function NewestTab({ searchPhrase }) {
   
   return (
     <FlatList
-      data={filteredItems}
+      data={restaurants}
       keyExtractor={(item) => item._id}
       showsVerticalScrollIndicator={false}
       style={{
         backgroundColor: '#ffffff',
       }}
       renderItem={({ item, index }) => (
-        <FoodProductItem marginTop={8} marginBottom={8} data={item} onPressItem={() => onNavigateToItem(item)} key ={item._id} />
+        <RestaurantItem marginTop={8} marginBottom={8} data={item} onPressItem={() => onNavigateToItem(item)} key ={item._id} />
       )}
     />
   );
@@ -203,28 +159,28 @@ const SearchTabs = ({ searchPhrase }) => {
       }}
     >
       <Tab.Screen name="All">{() => <AllTab searchPhrase={searchPhrase} />}</Tab.Screen>
-      <Tab.Screen name="Popular">{() => <PopularTab searchPhrase={searchPhrase} />}</Tab.Screen>
-      <Tab.Screen name="Trending">{() => <TrendingTab searchPhrase={searchPhrase} />}</Tab.Screen>
+      <Tab.Screen name="Nearest">{() => <PopularTab searchPhrase={searchPhrase} />}</Tab.Screen>
+      <Tab.Screen name="Top-Rated">{() => <TrendingTab searchPhrase={searchPhrase} />}</Tab.Screen>
       <Tab.Screen name="Newest">{() => <NewestTab searchPhrase={searchPhrase} />}</Tab.Screen>
     </Tab.Navigator>
   );
 };
 
-const RecommendedScreen = () => {
+const PopularAroundScreen = () => {
   const insets = useSafeAreaInsets();
   const [searchPhrase, setSearchPhrase] = useState('');
   const [clicked, setClicked] = useState(false);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <ScreenHeader props={{ title: 'Recommendations'}} />
+      <ScreenHeader props={{ title: 'Popular Around' }} />
       <SearchBar searchPhrase={searchPhrase} setSearchPhrase={setSearchPhrase} clicked={clicked} setClicked={setClicked} />
       <SearchTabs searchPhrase={searchPhrase} />
     </View>
   );
 };
 
-export default RecommendedScreen;
+export default PopularAroundScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -33,11 +33,11 @@ const PopularItem = ({data, marginLeft, marginRight, onPressItem, children}) => 
         <View style={styles.contentFooter}>
             <View style={styles.small}>
                 <Image source={require('../assets/icons/location.png')} style={styles.smallIcon}/>
-                <Text style={styles.smallText}>{data.distance}Km</Text>
+                <Text style={styles.smallText}>{data.distance} Km</Text>
             </View>
             <View style={styles.small}>
                 <Image source={require('../assets/icons/clock.png')} style={styles.smallIcon}/>
-                <Text style={styles.smallText}>{data.estimatedDeliveryTime}</Text>
+                <Text style={styles.smallText}>{data.estimatedDeliveryTime} Min</Text>
             </View>
         </View>
     </Pressable>

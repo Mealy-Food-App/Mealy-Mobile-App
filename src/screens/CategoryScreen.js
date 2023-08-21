@@ -44,7 +44,7 @@ function AllTab({ props }) {
       keyExtractor={(item) => item.id}
       showsVerticalScrollIndicator={false}
       style={{
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#ffffff',
       }}
       renderItem={({ item, index }) => (
         <FoodProductItem marginTop={8} marginBottom={8} data={item} onPressItem={() => navigateToProduct(item)} />
@@ -86,7 +86,7 @@ function PopularTab({ props }) {
       keyExtractor={(item) => item.id}
       showsVerticalScrollIndicator={false}
       style={{
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#ffffff',
       }}
       renderItem={({ item, index }) => (
         <FoodProductItem marginTop={8} marginBottom={8} data={item} onPressItem={() => navigateToProduct(item)} />
@@ -127,7 +127,7 @@ function TrendingTab({ props }) {
       keyExtractor={(item) => item.id}
       showsVerticalScrollIndicator={false}
       style={{
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#ffffff',
       }}
       renderItem={({ item, index }) => (
         <FoodProductItem marginTop={8} marginBottom={8} data={item} onPressItem={() => navigateToProduct(item)} />
@@ -169,7 +169,7 @@ function NewestTab({ props }) {
       keyExtractor={(item) => item.id}
       showsVerticalScrollIndicator={false}
       style={{
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#ffffff',
       }}
       renderItem={({ item, index }) => (
         <FoodProductItem marginTop={8} marginBottom={8} data={item} onPressItem={() => navigateToProduct(item)} />
@@ -208,7 +208,7 @@ const SearchTabs = ({ props }) => {
 
         tabBarStyle: {
           justifyContent: 'space-evenly',
-          backgroundColor: '#f5f5f5',
+          backgroundColor: '#ffffff',
           width: Dimensions.get('screen').width - 48,
           height: 38,
           padding: 0,
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 24,
     width: '100%',
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#ffffff',
   },
   innerContainer: {
     marginTop: 24,

@@ -7,16 +7,21 @@ import { useNavigation } from '@react-navigation/native';
 const BASE_URL= 'https://mealy-backend-app.onrender.com/api/mealy'
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children, initialData }) => {
   const [isLoggedIn, setIsLoggedIn] = useState();
-  const [userData, setUserData] = useState(null);
-  const [userToken, setUserToken] = useState(null);
+  const [userData, setUserData] = useState(initialData.userData || []);
+  const [userRecommendations, setUserRecommendations] = useState(initialData.userRecommendations || []);
+  const [userOrderHistory, setUserOrderHistory] = useState(initialData.userOrderHistory || []);
   const [status, setStatus] = useState('');
   const onNavigate = useNavigation();
 
-  useEffect(() => {
-    checkLoginStatus();
-    retrieveUserData();
+  useEffect(() => {    
+    if (userData.length == 0){
+        checkLoginStatus();
+        retrieveUserData();
+    }else{
+      setIsLoggedIn(true)
+    }
   }, []);
 
   const showAlert = (message) => {
@@ -70,9 +75,10 @@ export const AuthProvider = ({ children }) => {
         await AsyncStorage.setItem('loggedintoken', loggedintoken);
         setIsLoggedIn(true);
         setUserData(user);
+        retrieveUserOrderHistory();
+        retrieveUserRecommendation();
         showAlert('Login successful');
         onNavigate.navigate('MainScreens')
-
       }else{
         showAlert('Login failed');
       }
@@ -186,15 +192,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
   const updateUser = async(value) => {
-    console.log("update");
-    console.log(value);
     const loggedintoken = await AsyncStorage.getItem('loggedintoken');
-    console.log(loggedintoken);
     const userstr = await AsyncStorage.getItem('userData');
     const usrobj = JSON.parse(userstr);
     const userid = usrobj._id;
-    console.log(userid);
-    console.log(`${BASE_URL}/user/updateuser/${userid}`);
 
     try {
       const response = await axios.put(`${BASE_URL}/user/updateuser/${userid}`,
@@ -207,11 +208,8 @@ export const AuthProvider = ({ children }) => {
       
       // Process the response data here
       const updateresponse =response.data;
-      console.log(updateresponse);
       const user = response.data.data.updatedUser;
-      console.log(user);
       const status = updateresponse.status;
-      console.log(status);
       if (status === 'Success')
       {
       // Update the user state if registration is successful
@@ -223,7 +221,43 @@ export const AuthProvider = ({ children }) => {
       }      
     } catch (error) {
       showAlert('Error sending request:', error);
-      console.error('Error sending request:', error);
+    }
+  };
+  const retrieveUserOrderHistory= async () => {
+    const loggedintoken = await AsyncStorage.getItem('loggedintoken');
+    try {
+      const response = await axios.get(`${BASE_URL}/user/orderhistory`,
+      {
+        headers: {
+          Authorization: `Bearer ${loggedintoken}`,
+        },
+      });
+    } catch (error) {
+      console.log('Error retrieving user order history:', error);
+    }
+  };
+  const retrieveUserRecommendation = async () => {
+    const userstr = await AsyncStorage.getItem('userData');
+    const usrobj = JSON.parse(userstr);
+    const userid = usrobj._id;
+    const loggedintoken = await AsyncStorage.getItem('loggedintoken');
+    try {
+      const response = await axios.get(`${BASE_URL}/user/recommendations/${userid}`,
+      {
+        headers: {
+          Authorization: `Bearer ${loggedintoken}`,
+        },
+      });
+      const recData = response.data.data
+      if (recData.length > 0){
+        const processedData = recData.map(item => item.product);
+        const filteredData = processedData.filter(item => item !== undefined);
+        setUserRecommendations(filteredData);
+      }else{
+        setUserRecommendations([]);
+      }
+    } catch (error) {
+      console.log('Error retrieving user order history:', error);
     }
   };
 
@@ -231,6 +265,7 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        userRecommendations,
         status,
         userData,
         isLoggedIn,
