@@ -16,9 +16,9 @@ function AllTab({ searchPhrase }) {
   const onNavigate = useNavigation();
   const { restaurants } = useContext(ProductsContext);
 
-  const onNavigateToItem = (item) => {
-    onNavigate.navigate('ProductDetailScreen', {
-      productDetails: item,
+  const onNavigateToRestaurant = (item) => {
+    onNavigate.navigate('RestaurantScreen', {
+      restaurant: item,
     });
   };
   
@@ -36,7 +36,7 @@ function AllTab({ searchPhrase }) {
         marginTop={8}
         marginBottom={8} 
         data={item}
-        onPressItem={() => onNavigateToItem(item)} />
+        onPressItem={() => onNavigateToRestaurant(item)} />
       )}
     />
   );
@@ -46,9 +46,9 @@ function PopularTab({ searchPhrase }) {
   const onNavigate = useNavigation();
   const { restaurants } = useContext(ProductsContext);
 
-  const onNavigateToItem = (item) => {
-    onNavigate.navigate('ProductDetailScreen', {
-      productDetails: item,
+  const onNavigateToRestaurant = (item) => {
+    onNavigate.navigate('RestaurantScreen', {
+      restaurant: item,
     });
   };
 
@@ -64,7 +64,7 @@ function PopularTab({ searchPhrase }) {
         <RestaurantItem 
         marginTop={8} 
         marginBottom={8} 
-        data={item} onPressItem={() => onNavigateToItem(item)} 
+        data={item} onPressItem={() => onNavigateToRestaurant(item)} 
         key ={item._id} />
       )}
     />
@@ -75,9 +75,9 @@ function TrendingTab({ searchPhrase }) {
   const onNavigate = useNavigation();
   const { restaurants } = useContext(ProductsContext);
 
-  const onNavigateToItem = (item) => {
-    onNavigate.navigate('ProductDetailScreen', {
-      productDetails: item,
+  const onNavigateToRestaurant = (item) => {
+    onNavigate.navigate('RestaurantScreen', {
+      restaurant: item,
     });
   };
 
@@ -90,7 +90,7 @@ function TrendingTab({ searchPhrase }) {
         backgroundColor: '#ffffff',
       }}
       renderItem={({ item, index }) => (
-        <RestaurantItem marginTop={8} marginBottom={8} data={item} onPressItem={() => onNavigateToItem(item)} key ={item._id} />
+        <RestaurantItem marginTop={8} marginBottom={8} data={item} onPressItem={() => onNavigateToRestaurant(item)} key ={item._id} />
       )}
     />
   );
@@ -100,9 +100,9 @@ function NewestTab({ searchPhrase }) {
   const onNavigate = useNavigation();
   const { restaurants } = useContext(ProductsContext);
 
-  const onNavigateToItem = (item) => {
-    onNavigate.navigate('ProductDetailScreen', {
-      productDetails: item,
+  const onNavigateToRestaurant = (item) => {
+    onNavigate.navigate('RestaurantScreen', {
+      restaurant: item,
     });
   };
   
@@ -115,7 +115,7 @@ function NewestTab({ searchPhrase }) {
         backgroundColor: '#ffffff',
       }}
       renderItem={({ item, index }) => (
-        <RestaurantItem marginTop={8} marginBottom={8} data={item} onPressItem={() => onNavigateToItem(item)} key ={item._id} />
+        <RestaurantItem marginTop={8} marginBottom={8} data={item} onPressItem={() => onNavigateToRestaurant(item)} key ={item._id} />
       )}
     />
   );
