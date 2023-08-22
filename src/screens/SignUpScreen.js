@@ -84,7 +84,165 @@ const SignUpScreen = () => {
         textStyle={styles.loadingText}
         overlayColor='rgba(0, 6, 20, 0.75)'
       />
-      {/* rest of the code */}
+            <Text style={styles.title}>Sign Up</Text>
+      <Text style= {styles.subtitle}>Kindly provide the following details to create an account.</Text>
+      <Formik
+        initialValues={{
+          username: '',
+          email: '',
+          password: '',
+          agree: false,
+        }}
+        onSubmit={(values, {resetForm}) => {
+          handleRegistration(values)
+          // resetForm(
+          //   values.username = '',
+          //   values.email ='',
+          //   values.password = '',
+          //   values.agree = false
+          // )
+        }}
+        validationSchema={yup.object().shape({
+          username: yup
+            .string()
+            .required('Full name required.'),
+          email: yup
+            .string()
+            .email('Email address is invalid')
+            .required('Email address required.'),
+          password: yup
+            .string()
+            .matches(PWD_REGEX,
+            "Password must contain one uppercase, one lowercase, one number, one special case character")
+            .min(8, 'Password less than 8 characters.')
+            .required('Password is required.'),
+          agree: yup
+            .boolean()
+            .oneOf([true],  'You must accept the terms and conditions')
+        })}
+      >
+        {({ values, handleChange,setFieldValue, errors, setFieldTouched, touched, isValid, handleSubmit }) => (
+          <View style = {styles.formContainer}>
+            <Text style= {styles.label}>Full Name</Text>
+            <View style = {userInput}>
+                <View style={styles.inputIconContainer}>
+                  <Image source={require('../assets/icons/name.png')} style={inputIcon}/>
+                </View>
+                <TextInput
+                  value = {values.username}
+                  style = {userInputText}
+                  onChangeText={handleChange('username')}
+                  onBlur={() => setFieldTouched('username')}
+                  placeholder='Bengt Peace'
+                  />
+              </View>
+
+              {touched.username && errors.username &&
+                <Text style = {styles.formerror}>{errors.username}</Text>
+              }
+              <Text style= {styles.label}>Email</Text>
+              <View style = {userInput}>
+                <View style={styles.inputIconContainer}>
+                  <Image source={require('../assets/icons/email.png')} style={inputIcon}/>
+                </View>
+                <TextInput
+                  value = {values.email}
+                  style = {userInputText}
+                  onChangeText={handleChange('email')}
+                  onBlur = {() => setFieldTouched('email')}
+                  placeholder='BengtPeace24@gmail.com'
+                />
+              </View>
+
+              {touched.email && errors.email &&
+                <Text style = {styles.formerror}>{errors.email}</Text>
+              }
+              <Text style= {styles.label}>Password</Text>
+              <View style = {userInput} >
+                <View style={styles.inputIconContainer}>
+                  <Image source ={require('../assets/icons/pwd.png')} style={inputIcon}/>
+                </View>
+                <TextInput
+                  value = {values.password}
+                  style = {userInputText}
+                  onChangeText={handleChange('password')}
+                  placeholder='. . . . . .'
+                  onBlur={() => setFieldTouched('password')}
+                  secureTextEntry ={passwordVisibility}
+                />
+                <TouchableOpacity style={{position:'absolute', top: 12, right:16, height:40}} onPressIn= {managePasswordVisiblity}>
+                  <Image source = {passwordVisibility ? require('../assets/icons/openeye.png') : require('../assets/icons/eye-off.png')} style={{width: 18, height:18, tintColor: COLORS.primary}}/>
+                </TouchableOpacity>
+              </View>
+
+              {touched.password && errors.password &&
+                <Text style ={styles.formerror} >{errors.password}</Text>
+              }
+              <View style={styles.checkboxContainer} >
+                <Checkbox
+                          style={styles.checkbox}
+                          value={values.agree}
+                          onBlur={() => setFieldTouched('agree')}
+                          onValueChange={(value) => setFieldValue('agree', value)}
+                          color={isChecked ? COLORS.primary : COLORS.primary}
+                />
+                <View style={styles.checkboxTextView}>
+                    <Text numberOfLines ={2} style={styles.checkboxText }>
+                      By clicking on this you have agreed to the 
+                    </Text>
+                    <View style={{flexDirection:'row'}}>
+                      <Pressable>
+                      <Text style ={styles.checkboxLink}>Terms and Conditions</Text>
+                      </Pressable>
+                      <Text style={styles.checkboxLinkand}>
+                        &nbsp;
+                        and
+                        &nbsp;
+                      </Text>
+                      <Pressable >
+                        <Text style ={styles.checkboxLink}>Privacy Policy.</Text>
+                      </Pressable>
+                    </View>
+                </View>
+              </View>
+              {touched.agree && errors.agree &&
+                <Text style = {styles.formerror}>{errors.agree}</Text>
+              }
+
+              <TouchableOpacity disabled = {!isValid} style = {{width:'100%'}} onPressIn={handleSubmit}>
+                <BigButton props={isValid ? validButton : invalidButton} />
+              </TouchableOpacity>
+            </View>
+        )}
+
+      </Formik>
+      <View style={styles.horizontalDivider}>
+        <View style={styles.horizontal}></View>
+        <Text style={styles.horizontalText}>or</Text>
+        <View style= {styles.horizontal}></View>
+      </View>
+      <View style = {styles.footerBox}>
+        <Text style={styles.footerText}>Continue Using</Text>
+        <View style = {styles.authSocial}>
+          <TouchableOpacity style= {styles.authSocialImage}>
+              <Image style={{width:48, height: 48}} source={require('../assets/icons/fb.png')}/>
+          </TouchableOpacity>
+          <TouchableOpacity style= {styles.authSocialImage}>
+            <Image style={{width:48, height: 48}} source={require('../assets/icons/google.png')}/>
+          </TouchableOpacity>
+        </View>
+        <View style={{flexDirection:'row', justifyContent:'center', marginBottom:40}}>
+          <Text style = {styles.footerText} >
+            Already have an Account?
+          </Text>
+          <TouchableHighlight onPressIn={onPressSignInHandler} >
+            <Text style = {styles.footerTextBold}>
+                &nbsp;
+               Sign In
+            </Text>
+            </TouchableHighlight>
+        </View>
+      </View>
     </ScrollView>
   )
 }
